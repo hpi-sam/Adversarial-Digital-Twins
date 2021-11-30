@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mlsdm:Activity xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:mlexpressions="http://www.mdelab.de/mlexpressions/1.0" xmlns:mlexpressions.mlcallactions="http://www.mdelab.de/mlexpressions/mlcallactions/1.0" xmlns:mlsdm="http://www.mdelab.de/mlsdm/1.0" xmlns:mlstorypatterns="http://www.mdelab.de/mlstorypatterns/1.0" uuid="_jw0SEBX4EeaCffB3hrsq4w" name="E_CF2">
+  <edges uuid="_BO32EBX6EeaCffB3hrsq4w" source="_0HTYUhX4EeaCffB3hrsq4w" target="_-VGCABX4EeaCffB3hrsq4w"/>
+  <edges uuid="_QJN_IxaiEeaEgs5Mddy-fA" source="_LT3ZABYOEeaEgs5Mddy-fA" target="_vFNKoBasEeaEgs5Mddy-fA" guardType="END"/>
+  <edges uuid="_YntOYxaiEeaEgs5Mddy-fA" source="_-VGCABX4EeaCffB3hrsq4w" target="_NNtQQBaiEeaEgs5Mddy-fA" guardType="FAILURE"/>
+  <edges uuid="_QBgk4RazEeaEgs5Mddy-fA" source="_vFNKoBasEeaEgs5Mddy-fA" target="_NNtQQBaiEeaEgs5Mddy-fA"/>
+  <edges uuid="_RyVdgBdcEeauFrHocIOK3g" source="_-VGCABX4EeaCffB3hrsq4w" target="_Zek9MBdsEea44poxr6ukeQ" guardType="SUCCESS"/>
+  <edges uuid="_Sv7HIBdcEeauFrHocIOK3g" source="_QT5JkBdcEeauFrHocIOK3g" target="_LT3ZABYOEeaEgs5Mddy-fA"/>
+  <edges uuid="_pb7xwBdsEea44poxr6ukeQ" source="_Zek9MBdsEea44poxr6ukeQ" target="_QT5JkBdcEeauFrHocIOK3g" guardType="SUCCESS"/>
+  <edges uuid="_0qhxIBdsEea44poxr6ukeQ" source="_Zek9MBdsEea44poxr6ukeQ" target="_uTxDYBdsEea44poxr6ukeQ" guardType="FAILURE"/>
+  <edges uuid="_6ihfQBdsEea44poxr6ukeQ" source="_uTxDYBdsEea44poxr6ukeQ" target="_2E4PQBdsEea44poxr6ukeQ" guardType="FAILURE"/>
+  <edges uuid="_AgOMwBdtEea44poxr6ukeQ" source="_2E4PQBdsEea44poxr6ukeQ" target="_7bCboBdsEea44poxr6ukeQ" guardType="FAILURE"/>
+  <edges uuid="_GoXPsBdtEea44poxr6ukeQ" source="_uTxDYBdsEea44poxr6ukeQ" target="_EopasBdtEea44poxr6ukeQ" guardType="SUCCESS"/>
+  <edges uuid="_Jl4JsBdtEea44poxr6ukeQ" source="_2E4PQBdsEea44poxr6ukeQ" target="_HqNHMBdtEea44poxr6ukeQ" guardType="SUCCESS"/>
+  <edges uuid="_LY7bsBdtEea44poxr6ukeQ" source="_7bCboBdsEea44poxr6ukeQ" target="_KfFpoBdtEea44poxr6ukeQ" guardType="SUCCESS"/>
+  <edges uuid="_P7vfkBdtEea44poxr6ukeQ" source="_EopasBdtEea44poxr6ukeQ" target="_LT3ZABYOEeaEgs5Mddy-fA"/>
+  <edges uuid="_QcVrMBdtEea44poxr6ukeQ" source="_HqNHMBdtEea44poxr6ukeQ" target="_LT3ZABYOEeaEgs5Mddy-fA"/>
+  <edges uuid="_Q3L0IBdtEea44poxr6ukeQ" source="_KfFpoBdtEea44poxr6ukeQ" target="_LT3ZABYOEeaEgs5Mddy-fA"/>
+  <edges uuid="_a9mqgBdtEea44poxr6ukeQ" source="_7bCboBdsEea44poxr6ukeQ" target="_NNtQQBaiEeaEgs5Mddy-fA" guardType="FAILURE"/>
+  <nodes xsi:type="mlsdm:InitialNode" uuid="_0HTYUhX4EeaCffB3hrsq4w" outgoingEdges="_BO32EBX6EeaCffB3hrsq4w"/>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_-VGCABX4EeaCffB3hrsq4w" outgoingEdges="_YntOYxaiEeaEgs5Mddy-fA _RyVdgBdcEeauFrHocIOK3g" incomingEdges="_BO32EBX6EeaCffB3hrsq4w" name="Check negative arcitectural utility pattern">
+    <storyPattern uuid="_-VGCARX4EeaCffB3hrsq4w">
+      <storyPatternLinks xsi:type="mlstorypatterns:StoryPatternLink" uuid="_i2q50BX_EeaCffB3hrsq4w" source="_FnYR8BX7EeaCffB3hrsq4w" target="_-iXaQBX-EeaCffB3hrsq4w">
+        <feature xsi:type="ecore:EReference" href="http://www.mdelab.de/morisia/comparch#//Rule/handles"/>
+      </storyPatternLinks>
+      <storyPatternLinks xsi:type="mlstorypatterns:StoryPatternLink" uuid="_oVw_wBX_EeaCffB3hrsq4w" source="_-iXaQBX-EeaCffB3hrsq4w" target="_KzP9EBX_EeaCffB3hrsq4w">
+        <feature xsi:type="ecore:EReference" href="http://www.mdelab.de/morisia/comparch#//Issue/affectedComponent"/>
+      </storyPatternLinks>
+      <storyPatternLinks xsi:type="mlstorypatterns:StoryPatternLink" uuid="_5KvY0BX_EeaCffB3hrsq4w" source="_KzP9EBX_EeaCffB3hrsq4w" target="_tNs_EBX_EeaCffB3hrsq4w">
+        <feature xsi:type="ecore:EReference" href="http://www.mdelab.de/morisia/comparch#//Component/providedInterfaces"/>
+      </storyPatternLinks>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_FnYR8BX7EeaCffB3hrsq4w" name="rule" outgoingLinks="_i2q50BX_EeaCffB3hrsq4w" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Rule"/>
+      </storyPatternObjects>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_-iXaQBX-EeaCffB3hrsq4w" name="cf2" outgoingLinks="_oVw_wBX_EeaCffB3hrsq4w" incomingLinks="_i2q50BX_EeaCffB3hrsq4w" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//CF2"/>
+      </storyPatternObjects>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_KzP9EBX_EeaCffB3hrsq4w" name="component" outgoingLinks="_5KvY0BX_EeaCffB3hrsq4w" incomingLinks="_oVw_wBX_EeaCffB3hrsq4w">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+        <constraints xsi:type="mlexpressions:MLStringExpression" uuid="_XI_KsBX_EeaCffB3hrsq4w" expressionString="self.state=ComponentLifeCycle::STARTED" expressionLanguageID="OCL"/>
+      </storyPatternObjects>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_tNs_EBX_EeaCffB3hrsq4w" name="providedInterface" incomingLinks="_5KvY0BX_EeaCffB3hrsq4w">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//ProvidedInterface"/>
+        <constraints xsi:type="mlexpressions:MLStringExpression" uuid="_2ktKsBX_EeaCffB3hrsq4w" expressionString="self.failures->size() >= 5" expressionLanguageID="OCL"/>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_Zek9MBdsEea44poxr6ukeQ" outgoingEdges="_pb7xwBdsEea44poxr6ukeQ _0qhxIBdsEea44poxr6ukeQ" incomingEdges="_RyVdgBdcEeauFrHocIOK3g" name="Restart component?">
+    <storyPattern uuid="_Zek9MRdsEea44poxr6ukeQ">
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_c9IHsBdsEea44poxr6ukeQ" name="rule" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//RestartComponent"/>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:ExpressionActivityNode" uuid="_QT5JkBdcEeauFrHocIOK3g" outgoingEdges="_Sv7HIBdcEeauFrHocIOK3g" incomingEdges="_pb7xwBdsEea44poxr6ukeQ" name="Restart component">
+    <expressions xsi:type="mlexpressions.mlcallactions:CallActionExpression" uuid="_TmEE8hdcEeauFrHocIOK3g">
+      <callActions xsi:type="mlsdm:ActivityCallAction" uuid="_T6OXGxdcEeauFrHocIOK3g">
+        <parameters uuid="_Wprm8RdcEeauFrHocIOK3g" name="component">
+          <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+          <valueExpression xsi:type="mlexpressions:MLStringExpression" uuid="_YAzx8hdcEeauFrHocIOK3g" expressionString="component" expressionLanguageID="OCL"/>
+        </parameters>
+        <activity href="adaptation/RestartComponent.mlsdm#_yjPkQBdbEeauFrHocIOK3g"/>
+      </callActions>
+    </expressions>
+  </nodes>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_uTxDYBdsEea44poxr6ukeQ" outgoingEdges="_6ihfQBdsEea44poxr6ukeQ _GoXPsBdtEea44poxr6ukeQ" incomingEdges="_0qhxIBdsEea44poxr6ukeQ" name="Leightweight redeploy component?">
+    <storyPattern uuid="_uTxDYRdsEea44poxr6ukeQ">
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_y71asBdsEea44poxr6ukeQ" name="rule" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//LwRedeployComponent"/>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:ExpressionActivityNode" uuid="_EopasBdtEea44poxr6ukeQ" outgoingEdges="_P7vfkBdtEea44poxr6ukeQ" incomingEdges="_GoXPsBdtEea44poxr6ukeQ" name="Leightweight redeploy component">
+    <expressions xsi:type="mlexpressions.mlcallactions:CallActionExpression" uuid="_8rZv8hdvEea44poxr6ukeQ">
+      <callActions xsi:type="mlsdm:ActivityCallAction" uuid="_9ExSOxdvEea44poxr6ukeQ">
+        <parameters uuid="__7Y6ARdvEea44poxr6ukeQ" name="component">
+          <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+          <valueExpression xsi:type="mlexpressions:MLStringExpression" uuid="_Bf-SMhdwEea44poxr6ukeQ" expressionString="component" expressionLanguageID="OCL"/>
+        </parameters>
+        <activity href="adaptation/LwRedeployComponent.mlsdm#_BgNuUBdmEeauFrHocIOK3g"/>
+      </callActions>
+    </expressions>
+  </nodes>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_2E4PQBdsEea44poxr6ukeQ" outgoingEdges="_AgOMwBdtEea44poxr6ukeQ _Jl4JsBdtEea44poxr6ukeQ" incomingEdges="_6ihfQBdsEea44poxr6ukeQ" name="Heavyweight redeploy component?">
+    <storyPattern uuid="_2E4PQRdsEea44poxr6ukeQ">
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_4XDtQBdsEea44poxr6ukeQ" name="rule" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//HwRedeployComponent"/>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:ExpressionActivityNode" uuid="_HqNHMBdtEea44poxr6ukeQ" outgoingEdges="_QcVrMBdtEea44poxr6ukeQ" incomingEdges="_Jl4JsBdtEea44poxr6ukeQ" name="Heavyweight redeploy component">
+    <expressions xsi:type="mlexpressions.mlcallactions:CallActionExpression" uuid="_hi_CMhhhEeaubrQROZ3beQ">
+      <callActions xsi:type="mlsdm:ActivityCallAction" uuid="_jKiO2xhhEeaubrQROZ3beQ">
+        <parameters uuid="_znNcoRhhEeaubrQROZ3beQ" name="component">
+          <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+          <valueExpression xsi:type="mlexpressions:MLStringExpression" uuid="_5hg34hhhEeaubrQROZ3beQ" expressionString="component" expressionLanguageID="OCL"/>
+        </parameters>
+        <activity href="adaptation/HwRedeployComponent.mlsdm#_5xSV8Bd0Eea44poxr6ukeQ"/>
+      </callActions>
+    </expressions>
+  </nodes>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_7bCboBdsEea44poxr6ukeQ" outgoingEdges="_LY7bsBdtEea44poxr6ukeQ _a9mqgBdtEea44poxr6ukeQ" incomingEdges="_AgOMwBdtEea44poxr6ukeQ" name="Replace component?">
+    <storyPattern uuid="_7bCboRdsEea44poxr6ukeQ">
+      <storyPatternLinks xsi:type="mlstorypatterns:StoryPatternLink" uuid="_dJy4MBqBEeaXJM5Ek5AWKw" source="_-FG1MBdsEea44poxr6ukeQ" target="_Zb-ioBqBEeaXJM5Ek5AWKw">
+        <feature xsi:type="ecore:EReference" href="http://www.mdelab.de/morisia/comparch#//ReplaceComponent/alternativeComponentType"/>
+      </storyPatternLinks>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_-FG1MBdsEea44poxr6ukeQ" name="rule" outgoingLinks="_dJy4MBqBEeaXJM5Ek5AWKw" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//ReplaceComponent"/>
+      </storyPatternObjects>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_Zb-ioBqBEeaXJM5Ek5AWKw" name="altComponentType" incomingLinks="_dJy4MBqBEeaXJM5Ek5AWKw">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//ComponentType"/>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:ExpressionActivityNode" uuid="_KfFpoBdtEea44poxr6ukeQ" outgoingEdges="_Q3L0IBdtEea44poxr6ukeQ" incomingEdges="_LY7bsBdtEea44poxr6ukeQ" name="Replace component">
+    <expressions xsi:type="mlexpressions.mlcallactions:CallActionExpression" uuid="_HncaUhhuEeaKAMVq-_H_Mw">
+      <callActions xsi:type="mlsdm:ActivityCallAction" uuid="_IJLOaxhuEeaKAMVq-_H_Mw">
+        <parameters uuid="_LQSwURhuEeaKAMVq-_H_Mw" name="component">
+          <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+          <valueExpression xsi:type="mlexpressions:MLStringExpression" uuid="_M_HCkhhuEeaKAMVq-_H_Mw" expressionString="component" expressionLanguageID="OCL"/>
+        </parameters>
+        <parameters uuid="_iFkOoRqBEeaXJM5Ek5AWKw" name="altComponentType">
+          <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//ComponentType"/>
+          <valueExpression xsi:type="mlexpressions:MLStringExpression" uuid="_kVXHAhqBEeaXJM5Ek5AWKw" expressionString="altComponentType" expressionLanguageID="OCL"/>
+        </parameters>
+        <activity href="adaptation/ReplaceComponent.mlsdm#_HpfRQBg4Eeaas5O4vKYohg"/>
+      </callActions>
+    </expressions>
+  </nodes>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_LT3ZABYOEeaEgs5Mddy-fA" outgoingEdges="_QJN_IxaiEeaEgs5Mddy-fA" incomingEdges="_Sv7HIBdcEeauFrHocIOK3g _P7vfkBdtEea44poxr6ukeQ _QcVrMBdtEea44poxr6ukeQ _Q3L0IBdtEea44poxr6ukeQ" name="Remove failures" semantics="FOR_EACH_FRESH_MATCH">
+    <storyPattern uuid="_LT3ZARYOEeaEgs5Mddy-fA" name="">
+      <storyPatternLinks xsi:type="mlstorypatterns:StoryPatternLink" uuid="_8Wtv4BafEeaEgs5Mddy-fA" source="_sbELgBafEeaEgs5Mddy-fA" target="_1MvcgBafEeaEgs5Mddy-fA">
+        <feature xsi:type="ecore:EReference" href="http://www.mdelab.de/morisia/comparch#//ProvidedInterface/failures"/>
+      </storyPatternLinks>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_sbELgBafEeaEgs5Mddy-fA" name="providedInterface" outgoingLinks="_8Wtv4BafEeaEgs5Mddy-fA" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//ProvidedInterface"/>
+      </storyPatternObjects>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_1MvcgBafEeaEgs5Mddy-fA" modifier="DESTROY" name="failure" incomingLinks="_8Wtv4BafEeaEgs5Mddy-fA">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Failure"/>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_vFNKoBasEeaEgs5Mddy-fA" outgoingEdges="_QBgk4RazEeaEgs5Mddy-fA" incomingEdges="_QJN_IxaiEeaEgs5Mddy-fA" name="Remove CF and rule markers">
+    <storyPattern uuid="_vFNKoRasEeaEgs5Mddy-fA">
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_9Gt0ABagEeaEgs5Mddy-fA" modifier="DESTROY" name="rule" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Rule"/>
+      </storyPatternObjects>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_JrfL0BdUEeaVcLnYrK0Rfg" modifier="DESTROY" name="cf2" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//CF2"/>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:ActivityFinalNode" uuid="_NNtQQBaiEeaEgs5Mddy-fA" incomingEdges="_YntOYxaiEeaEgs5Mddy-fA _QBgk4RazEeaEgs5Mddy-fA _a9mqgBdtEea44poxr6ukeQ"/>
+  <parameters uuid="_-Sz4MhX6EeaCffB3hrsq4w" name="cf2">
+    <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//CF2"/>
+  </parameters>
+  <parameters uuid="_HKDbIhX6EeaCffB3hrsq4w" name="rule">
+    <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Rule"/>
+  </parameters>
+</mlsdm:Activity>
