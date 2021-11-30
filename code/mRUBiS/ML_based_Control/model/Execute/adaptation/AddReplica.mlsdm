@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mlsdm:Activity xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:mlexpressions="http://www.mdelab.de/mlexpressions/1.0" xmlns:mlexpressions.mlcallactions="http://www.mdelab.de/mlexpressions/mlcallactions/1.0" xmlns:mlsdm="http://www.mdelab.de/mlsdm/1.0" xmlns:mlstorypatterns="http://www.mdelab.de/mlstorypatterns/1.0" uuid="_yjPkQBdbEeauFrHocIOK3g" name="AddReplica">
+  <edges uuid="_ICrhUBdcEeauFrHocIOK3g" source="_ZuFTcOTGEee4dJuC7olYRA" target="_HXpnUBdcEeauFrHocIOK3g" guardType="BOOLEAN">
+    <guardExpression xsi:type="mlexpressions:MLStringExpression" uuid="_5hfsoOTEEee4dJuC7olYRA" expressionString="(component.performance-component.performanceOld)/component.performance&lt;0.01" expressionLanguageID="OCL"/>
+  </edges>
+  <edges uuid="_qedp8BdlEeauFrHocIOK3g" source="_nqXKoBdlEeauFrHocIOK3g" target="_BdiZUBdcEeauFrHocIOK3g"/>
+  <edges uuid="_qI2cwOTGEee4dJuC7olYRA" source="_ZuFTcOTGEee4dJuC7olYRA" target="_BdiZUBdcEeauFrHocIOK3g" guardType="ELSE"/>
+  <edges uuid="_ni-UwOTIEee4dJuC7olYRA" source="_BdiZUBdcEeauFrHocIOK3g" target="_HXpnUBdcEeauFrHocIOK3g" guardType="FAILURE"/>
+  <edges uuid="_F66FEOTgEee4dJuC7olYRA" source="_BdiZUBdcEeauFrHocIOK3g" target="_iXU30OTfEee4dJuC7olYRA" guardType="SUCCESS"/>
+  <edges uuid="_Tjrn4OTgEee4dJuC7olYRA" source="_iXU30OTfEee4dJuC7olYRA" target="_ZuFTcOTGEee4dJuC7olYRA"/>
+  <nodes xsi:type="mlsdm:InitialNode" uuid="_nqXKoBdlEeauFrHocIOK3g" outgoingEdges="_qedp8BdlEeauFrHocIOK3g"/>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_BdiZUBdcEeauFrHocIOK3g" outgoingEdges="_ni-UwOTIEee4dJuC7olYRA _F66FEOTgEee4dJuC7olYRA" incomingEdges="_qedp8BdlEeauFrHocIOK3g _qI2cwOTGEee4dJuC7olYRA" name="add one Replica">
+    <storyPattern uuid="_BdiZURdcEeauFrHocIOK3g">
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_CaHWUBdcEeauFrHocIOK3g" name="component" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+        <attributeAssignments uuid="_EBuNUBdcEeauFrHocIOK3g">
+          <assignmentExpression xsi:type="mlexpressions:MLStringExpression" uuid="_E6DjgBdcEeauFrHocIOK3g" expressionString="component.inUseReplica+1" expressionLanguageID="OCL"/>
+          <feature xsi:type="ecore:EAttribute" href="http://www.mdelab.de/morisia/comparch#//Component/inUseReplica"/>
+        </attributeAssignments>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:ActivityFinalNode" uuid="_HXpnUBdcEeauFrHocIOK3g" incomingEdges="_ICrhUBdcEeauFrHocIOK3g _ni-UwOTIEee4dJuC7olYRA"/>
+  <nodes xsi:type="mlsdm:DecisionMergeNode" uuid="_ZuFTcOTGEee4dJuC7olYRA" outgoingEdges="_ICrhUBdcEeauFrHocIOK3g _qI2cwOTGEee4dJuC7olYRA" incomingEdges="_Tjrn4OTgEee4dJuC7olYRA"/>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_iXU30OTfEee4dJuC7olYRA" outgoingEdges="_Tjrn4OTgEee4dJuC7olYRA" incomingEdges="_F66FEOTgEee4dJuC7olYRA" name="Update performance and efficiency">
+    <storyPattern uuid="_iXU30eTfEee4dJuC7olYRA">
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_vuiwkOTfEee4dJuC7olYRA" name="component" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+        <attributeAssignments uuid="_18_24OTfEee4dJuC7olYRA">
+          <assignmentExpression xsi:type="mlexpressions.mlcallactions:CallActionExpression" uuid="_87vKoOTfEee4dJuC7olYRA">
+            <callActions xsi:type="mlexpressions.mlcallactions:MethodCallAction" uuid="_-4yGIOTfEee4dJuC7olYRA" methodName="calculatePerformance" methodClassName="de.mdelab.morisia.selfhealing.rules.PerformanceEfficiencyManager">
+              <type xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <parameters uuid="_gc0oEOThEee4dJuC7olYRA" name="component">
+                <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+                <valueExpression xsi:type="mlexpressions:MLStringExpression" uuid="_jXXtoOThEee4dJuC7olYRA" expressionString="component" expressionLanguageID="OCL"/>
+              </parameters>
+            </callActions>
+          </assignmentExpression>
+          <feature xsi:type="ecore:EAttribute" href="http://www.mdelab.de/morisia/comparch#//ArchitecturalElement/performance"/>
+        </attributeAssignments>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <parameters uuid="_KAFpPRdcEeauFrHocIOK3g" name="component">
+    <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+  </parameters>
+</mlsdm:Activity>
