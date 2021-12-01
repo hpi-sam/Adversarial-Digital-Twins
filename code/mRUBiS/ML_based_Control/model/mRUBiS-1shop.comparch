@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="ASCII"?>
+<comparch:Architecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:comparch="http://www.mdelab.de/morisia/comparch" uid="_NImpYKuBEeuU5OmyejY5qw" name="mRUBiS">
+  <componentTypes uid="_NItXEKuBEeuU5OmyejY5qw" criticality="26.0" name="User Management Service" requiredInterfaceTypes="//@interfaceTypes.0 //@interfaceTypes.8 //@interfaceTypes.9 //@interfaceTypes.7" providedInterfaceTypes="//@interfaceTypes.11 //@interfaceTypes.12 //@interfaceTypes.13 //@interfaceTypes.14" instances="//@tenants.0/@components.0" reliability="0.5" satPoint="0.0394270283799647" performanceMax="15.721551511677173" replicaCost="1.1499789112334489" replicaADT="1.1258795096514547" cpuFactor="2.2845217071686896" memoryFactor="1.3250050011013013" storageFactor="2.370635200375701">
+    <parameterTypes uid="_NIt-IKuBEeuU5OmyejY5qw" name="privacy-level" type="java.lang.String" defaultValue="LOW" instances="//@tenants.0/@components.0/@parameters.0"/>
+  </componentTypes>
+  <componentTypes uid="_NIt-IauBEeuU5OmyejY5qw" criticality="21.0" name="Item Management Service" requiredInterfaceTypes="//@interfaceTypes.9 //@interfaceTypes.8 //@interfaceTypes.0 //@interfaceTypes.7" providedInterfaceTypes="//@interfaceTypes.5 //@interfaceTypes.6" instances="//@tenants.0/@components.1" reliability="0.5" satPoint="0.03154933760475095" performanceMax="15.672133033926405" replicaCost="1.390889256236019" replicaADT="1.3482794687829898" cpuFactor="2.5953874015636087" memoryFactor="2.338354593059918" storageFactor="1.2001273032229491"/>
+  <componentTypes uid="_NIt-IquBEeuU5OmyejY5qw" criticality="24.0" name="Authentication Service" requiredInterfaceTypes="//@interfaceTypes.9" providedInterfaceTypes="//@interfaceTypes.0" instances="//@tenants.0/@components.2" reliability="0.85" satPoint="0.04834143146000493" performanceMax="7.463077527650228" replicaCost="1.2842811533985097" replicaADT="1.4002516208700506" cpuFactor="2.473762821439193" memoryFactor="1.5785354121781328" storageFactor="1.696325419954072"/>
+  <componentTypes uid="_NIt-I6uBEeuU5OmyejY5qw" criticality="10.0" name="Bid and Buy Service" requiredInterfaceTypes="//@interfaceTypes.9 //@interfaceTypes.8 //@interfaceTypes.0 //@interfaceTypes.4 //@interfaceTypes.7" providedInterfaceTypes="//@interfaceTypes.1 //@interfaceTypes.2" instances="//@tenants.0/@components.3" reliability="0.5" satPoint="0.024865063051602167" performanceMax="7.635413159402585" replicaCost="1.355440798186465" replicaADT="1.2315248498729374" cpuFactor="2.330943875491601" memoryFactor="1.4131116197693583" storageFactor="2.1485603944714895"/>
+  <componentTypes uid="_NIt-JKuBEeuU5OmyejY5qw" criticality="13.0" name="Inventory Service" requiredInterfaceTypes="//@interfaceTypes.8 //@interfaceTypes.7" providedInterfaceTypes="//@interfaceTypes.4" instances="//@tenants.0/@components.4" reliability="0.5" satPoint="0.03357607712917284" performanceMax="11.035254522578402" replicaCost="1.495492767744774" replicaADT="1.1772446714334093" cpuFactor="2.1376661079804813" memoryFactor="2.814728031908536" storageFactor="1.3747714529373338"/>
+  <componentTypes uid="_NIt-JauBEeuU5OmyejY5qw" criticality="28.0" name="Reputation Service" requiredInterfaceTypes="//@interfaceTypes.9 //@interfaceTypes.8 //@interfaceTypes.0 //@interfaceTypes.7" providedInterfaceTypes="//@interfaceTypes.10" instances="//@tenants.0/@components.5" reliability="0.5" satPoint="0.047089320072314894" performanceMax="19.980006623250112" replicaCost="1.4133116401583423" replicaADT="1.3820884061287906" cpuFactor="2.5864498422392437" memoryFactor="1.6682318313156923" storageFactor="2.0795603631793167"/>
+  <componentTypes uid="_NIt-JquBEeuU5OmyejY5qw" criticality="14.0" name="Persistence Service" providedInterfaceTypes="//@interfaceTypes.7" instances="//@tenants.0/@components.6" reliability="0.5" satPoint="0.05801315229283718" performanceMax="8.245210206645792" replicaCost="1.3680640608221681" replicaADT="1.1724894961717984" cpuFactor="1.5433143122244806" memoryFactor="2.438003177777155" storageFactor="2.976114629252721"/>
+  <componentTypes uid="_NIt-J6uBEeuU5OmyejY5qw" criticality="21.0" name="Query Service" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.9 //@interfaceTypes.8" instances="//@tenants.0/@components.7" reliability="0.5" satPoint="0.04931847100385818" performanceMax="6.220332056582954" replicaCost="1.1727638242793046" replicaADT="1.133029567802575" cpuFactor="1.751263602874849" memoryFactor="2.7250056234439257" storageFactor="1.2505665863993771"/>
+  <componentTypes uid="_NIt-KKuBEeuU5OmyejY5qw" criticality="11.0" name="Last Second Sales Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.8" reliability="0.5" satPoint="0.05000384929430548" performanceMax="11.5134866118994" replicaCost="1.4290181024073494" replicaADT="1.259504606675104" cpuFactor="2.624791138404294" memoryFactor="2.7565206163831726" storageFactor="1.6137393579023798">
+    <parameterTypes uid="_NIt-KauBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.8/@parameters.0"/>
+    <parameterTypes uid="_NIt-KquBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.8/@parameters.1"/>
+    <parameterTypes uid="_NIulMKuBEeuU5OmyejY5qw" name="last-seconds" type="java.lang.Integer" defaultValue="300" instances="//@tenants.0/@components.8/@parameters.2"/>
+  </componentTypes>
+  <componentTypes uid="_NIulMauBEeuU5OmyejY5qw" criticality="24.0" name="Past Sales Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.9" reliability="0.5" satPoint="0.04939734171500392" performanceMax="13.614570144245906" replicaCost="1.4460581577355418" replicaADT="1.0693149731972307" cpuFactor="1.8282128863071723" memoryFactor="2.5046073059494747" storageFactor="1.5312027677277416">
+    <parameterTypes uid="_NIulMquBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.9/@parameters.0"/>
+    <parameterTypes uid="_NIulM6uBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.9/@parameters.1"/>
+  </componentTypes>
+  <componentTypes uid="_NIulNKuBEeuU5OmyejY5qw" criticality="16.0" name="Buy Now Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.10" reliability="0.5" satPoint="0.05696296889623616" performanceMax="11.22088005443835" replicaCost="1.226817304720146" replicaADT="1.1491218311132174" cpuFactor="1.0997649749148015" memoryFactor="2.144511847302299" storageFactor="1.7137235601466105">
+    <parameterTypes uid="_NIulNauBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.10/@parameters.0"/>
+    <parameterTypes uid="_NIulNquBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.10/@parameters.1"/>
+  </componentTypes>
+  <componentTypes uid="_NIulN6uBEeuU5OmyejY5qw" criticality="21.0" name="Availability Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.11" reliability="0.5" satPoint="0.04539322475814003" performanceMax="6.729630156678354" replicaCost="1.0605532132070545" replicaADT="1.4593503754513277" cpuFactor="1.6767793552561219" memoryFactor="1.426034338448541" storageFactor="2.3824316907374508">
+    <parameterTypes uid="_NIulOKuBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.11/@parameters.0"/>
+    <parameterTypes uid="_NIulOauBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.11/@parameters.1"/>
+  </componentTypes>
+  <componentTypes uid="_NIulOquBEeuU5OmyejY5qw" criticality="29.0" name="Region Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.12" reliability="0.5" satPoint="0.04218182574690965" performanceMax="10.154033252279618" replicaCost="1.4233286264080076" replicaADT="1.086937684348189" cpuFactor="2.9379926954473934" memoryFactor="1.6592270097708093" storageFactor="1.3803638414262445">
+    <parameterTypes uid="_NIulO6uBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.12/@parameters.0"/>
+    <parameterTypes uid="_NIulPKuBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.12/@parameters.1"/>
+  </componentTypes>
+  <componentTypes uid="_NIulPauBEeuU5OmyejY5qw" criticality="28.0" name="Seller Reputation Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.13" reliability="0.5" satPoint="0.05862646012837665" performanceMax="11.508794704687165" replicaCost="1.37238897569775" replicaADT="1.2544528841438323" cpuFactor="1.2774380900094116" memoryFactor="1.9711777863086595" storageFactor="2.6945025598262626">
+    <parameterTypes uid="_NIulPquBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.13/@parameters.0"/>
+    <parameterTypes uid="_NIulP6uBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.13/@parameters.1"/>
+    <parameterTypes uid="_NIulQKuBEeuU5OmyejY5qw" name="reputation-threshold" type="java.lang.Integer" defaultValue="5" instances="//@tenants.0/@components.13/@parameters.2"/>
+  </componentTypes>
+  <componentTypes uid="_NIulQauBEeuU5OmyejY5qw" criticality="12.0" name="Comment Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.14" reliability="0.5" satPoint="0.03390939657557486" performanceMax="19.379443216932938" replicaCost="1.467771153200821" replicaADT="1.4117426299914608" cpuFactor="1.8310595274235029" memoryFactor="2.852214997735447" storageFactor="1.319872819862843">
+    <parameterTypes uid="_NIulQquBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.14/@parameters.0"/>
+    <parameterTypes uid="_NIulQ6uBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.14/@parameters.1"/>
+    <parameterTypes uid="_NIulRKuBEeuU5OmyejY5qw" name="rating-threshold" type="java.lang.Integer" defaultValue="5" instances="//@tenants.0/@components.14/@parameters.2"/>
+  </componentTypes>
+  <componentTypes uid="_NIulRauBEeuU5OmyejY5qw" criticality="24.0" name="Category Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.15" reliability="0.5" satPoint="0.0236617339794381" performanceMax="12.354520297954636" replicaCost="1.1756043161748315" replicaADT="1.3203109504609456" cpuFactor="1.2956041261061424" memoryFactor="2.7774289435304396" storageFactor="2.023377800195718">
+    <parameterTypes uid="_NIulRquBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.15/@parameters.0"/>
+    <parameterTypes uid="_NIulR6uBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.15/@parameters.1"/>
+    <parameterTypes uid="_NIulSKuBEeuU5OmyejY5qw" name="filtered-categories" type="java.lang.String" defaultValue="Coins,Jewelry" instances="//@tenants.0/@components.15/@parameters.2"/>
+  </componentTypes>
+  <componentTypes uid="_NIulSauBEeuU5OmyejY5qw" criticality="21.0" name="Recommendation Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.16" reliability="0.5" satPoint="0.05671058045324752" performanceMax="19.105959983996517" replicaCost="1.113689255100252" replicaADT="1.2025015096573262" cpuFactor="2.6643689354861424" memoryFactor="1.691179092197637" storageFactor="2.1853268571820044">
+    <parameterTypes uid="_NIulSquBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.16/@parameters.0"/>
+    <parameterTypes uid="_NIulS6uBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.16/@parameters.1"/>
+  </componentTypes>
+  <componentTypes uid="_NIulTKuBEeuU5OmyejY5qw" criticality="21.0" name="Future Sales Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.17" reliability="0.5" satPoint="0.04883458531194447" performanceMax="7.458194655081567" replicaCost="1.3191218092015276" replicaADT="1.3734497288384695" cpuFactor="2.410113153317912" memoryFactor="1.2148098662378162" storageFactor="2.643391529330888">
+    <parameterTypes uid="_NIulTauBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.17/@parameters.0"/>
+    <parameterTypes uid="_NIulTquBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.17/@parameters.1"/>
+    <parameterTypes uid="_NIulT6uBEeuU5OmyejY5qw" name="days-to-run" type="java.lang.Integer" defaultValue="14" instances="//@tenants.0/@components.17/@parameters.2"/>
+  </componentTypes>
+  <componentTypes uid="_NIulUKuBEeuU5OmyejY5qw" criticality="27.0" name="Facebook Authentication Service" requiredInterfaceTypes="//@interfaceTypes.9" providedInterfaceTypes="//@interfaceTypes.0" reliability="0.85" satPoint="0.05749489843604193" performanceMax="14.629823706349221" replicaCost="1.251066445303955" replicaADT="1.3284982967787535" cpuFactor="2.9701554439522138" memoryFactor="2.5721319788232044" storageFactor="1.702057377238291">
+    <parameterTypes uid="_NIulUauBEeuU5OmyejY5qw" name="ServiceURI" type="java.lang.String" defaultValue="http://localhost:8080/FacebookAuthenticationService/FbAuthenticationServiceImpl?wsdl"/>
+    <parameterTypes uid="_NIulUquBEeuU5OmyejY5qw" name="ServiceNS" type="java.lang.String" defaultValue="http://authentication.facebook.com/"/>
+    <parameterTypes uid="_NIulU6uBEeuU5OmyejY5qw" name="ServiceNsLocalPartName" type="java.lang.String" defaultValue="FacebookAuthenticationService"/>
+  </componentTypes>
+  <componentTypes uid="_NIulVKuBEeuU5OmyejY5qw" criticality="30.0" name="Google Authentication Service" requiredInterfaceTypes="//@interfaceTypes.9" providedInterfaceTypes="//@interfaceTypes.0" reliability="0.9" satPoint="0.03190093678809501" performanceMax="8.149842090468672" replicaCost="1.2733542230386075" replicaADT="1.3036072847524547" cpuFactor="2.3102932666057283" memoryFactor="2.169257685915163" storageFactor="2.5787226533799146">
+    <parameterTypes uid="_NIulVauBEeuU5OmyejY5qw" name="ServiceURI" type="java.lang.String" defaultValue="http://localhost:8080/GoogleAuthenticationService/GoogleAuthenticationServiceImpl?wsdl"/>
+    <parameterTypes uid="_NIulVquBEeuU5OmyejY5qw" name="ServiceNS" type="java.lang.String" defaultValue="http://authentication.google.com/"/>
+    <parameterTypes uid="_NIulV6uBEeuU5OmyejY5qw" name="ServiceNsLocalPartName" type="java.lang.String" defaultValue="GoogleAuthenticationService"/>
+  </componentTypes>
+  <componentTypes uid="_NIulWKuBEeuU5OmyejY5qw" criticality="17.0" name="Twitter Authentication Service" requiredInterfaceTypes="//@interfaceTypes.9" providedInterfaceTypes="//@interfaceTypes.0" reliability="0.85" satPoint="0.05737703826451024" performanceMax="19.64997311424116" replicaCost="1.1119015073640959" replicaADT="1.2963314214373596" cpuFactor="1.8590713755165202" memoryFactor="2.359917058037981" storageFactor="2.6410511518239437">
+    <parameterTypes uid="_NIulWauBEeuU5OmyejY5qw" name="ServiceURI" type="java.lang.String" defaultValue="http://localhost:8080/TwitterAuthenticationService/TwitterAuthenticationServiceImpl?wsdl"/>
+    <parameterTypes uid="_NIulWquBEeuU5OmyejY5qw" name="ServiceNS" type="java.lang.String" defaultValue="http://authentication.twitter.com/"/>
+    <parameterTypes uid="_NIulW6uBEeuU5OmyejY5qw" name="ServiceNsLocalPartName" type="java.lang.String" defaultValue="TwitterAuthenticationService"/>
+  </componentTypes>
+  <interfaceTypes uid="_NInQcKuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.authservice.AuthenticationService" requiringComponentTypes="//@componentTypes.0 //@componentTypes.1 //@componentTypes.3 //@componentTypes.5" providingComponentTypes="//@componentTypes.2 //@componentTypes.18 //@componentTypes.19 //@componentTypes.20" instances="//@tenants.0/@components.0/@requiredInterfaces.0 //@tenants.0/@components.1/@requiredInterfaces.2 //@tenants.0/@components.2/@providedInterfaces.0 //@tenants.0/@components.3/@requiredInterfaces.2 //@tenants.0/@components.5/@requiredInterfaces.2">
+    <methodSpecification uid="_NIn3gKuBEeuU5OmyejY5qw" signature="authenticate(java.lang.String,java.lang.String)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIn3gauBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.bidandbuy.BidService" providingComponentTypes="//@componentTypes.3" instances="//@tenants.0/@components.3/@providedInterfaces.0">
+    <methodSpecification uid="_NIn3gquBEeuU5OmyejY5qw" signature="bidOnItem(int,float,float,int,java.lang.String,java.lang.String)"/>
+    <methodSpecification uid="_NIn3g6uBEeuU5OmyejY5qw" signature="getItemBidHistory(int)"/>
+    <methodSpecification uid="_NIn3hKuBEeuU5OmyejY5qw" signature="getItemBidHistorySortyByBidPrice(int)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIoekKuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.bidandbuy.BuyNowService" providingComponentTypes="//@componentTypes.3" instances="//@tenants.0/@components.3/@providedInterfaces.1">
+    <methodSpecification uid="_NIoekauBEeuU5OmyejY5qw" signature="buyItemNow(int,int,java.lang.String,java.lang.String)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIoekquBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.filter.ItemFilter" requiringComponentTypes="//@componentTypes.7 //@componentTypes.8 //@componentTypes.9 //@componentTypes.10 //@componentTypes.11 //@componentTypes.12 //@componentTypes.13 //@componentTypes.14 //@componentTypes.15 //@componentTypes.16 //@componentTypes.17" providingComponentTypes="//@componentTypes.8 //@componentTypes.9 //@componentTypes.10 //@componentTypes.11 //@componentTypes.12 //@componentTypes.13 //@componentTypes.14 //@componentTypes.15 //@componentTypes.16 //@componentTypes.17" instances="//@tenants.0/@components.7/@requiredInterfaces.0 //@tenants.0/@components.8/@requiredInterfaces.0 //@tenants.0/@components.8/@providedInterfaces.0 //@tenants.0/@components.9/@requiredInterfaces.0 //@tenants.0/@components.9/@providedInterfaces.0 //@tenants.0/@components.10/@requiredInterfaces.0 //@tenants.0/@components.10/@providedInterfaces.0 //@tenants.0/@components.11/@requiredInterfaces.0 //@tenants.0/@components.11/@providedInterfaces.0 //@tenants.0/@components.12/@requiredInterfaces.0 //@tenants.0/@components.12/@providedInterfaces.0 //@tenants.0/@components.13/@requiredInterfaces.0 //@tenants.0/@components.13/@providedInterfaces.0 //@tenants.0/@components.14/@requiredInterfaces.0 //@tenants.0/@components.14/@providedInterfaces.0 //@tenants.0/@components.15/@requiredInterfaces.0 //@tenants.0/@components.15/@providedInterfaces.0 //@tenants.0/@components.16/@requiredInterfaces.0 //@tenants.0/@components.16/@providedInterfaces.0 //@tenants.0/@components.17/@requiredInterfaces.0 //@tenants.0/@components.17/@providedInterfaces.0">
+    <methodSpecification uid="_NIoek6uBEeuU5OmyejY5qw" signature="filter(java.util.List,de.hpi.sam.rubis.entity.User)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIoelKuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.inventorymgmt.InventoryService" requiringComponentTypes="//@componentTypes.3" providingComponentTypes="//@componentTypes.4" instances="//@tenants.0/@components.3/@requiredInterfaces.3 //@tenants.0/@components.4/@providedInterfaces.0">
+    <methodSpecification uid="_NIpFoKuBEeuU5OmyejY5qw" signature="checkAvailabilityOfItem(de.hpi.sam.rubis.entity.Item)"/>
+    <methodSpecification uid="_NIpFoauBEeuU5OmyejY5qw" signature="reserveItem(de.hpi.sam.rubis.entity.Item,int)"/>
+    <methodSpecification uid="_NIpFoquBEeuU5OmyejY5qw" signature="cancelReservedItem(de.hpi.sam.rubis.entity.Item,int)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIpFo6uBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.itemmgmt.BrowseCategoriesService" providingComponentTypes="//@componentTypes.1" instances="//@tenants.0/@components.1/@providedInterfaces.0">
+    <methodSpecification uid="_NIpFpKuBEeuU5OmyejY5qw" signature="getCategoriesInRegion(java.lang.String)"/>
+    <methodSpecification uid="_NIpFpauBEeuU5OmyejY5qw" signature="getAllCategories()"/>
+    <methodSpecification uid="_NIpFpquBEeuU5OmyejY5qw" signature="getCategoriesByName(java.lang.String)"/>
+    <methodSpecification uid="_NIpFp6uBEeuU5OmyejY5qw" signature="getItemsByName(java.lang.String)"/>
+    <methodSpecification uid="_NIpFqKuBEeuU5OmyejY5qw" signature="getPersonalizedItems(java.lang.String,java.lang.String)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIpFqauBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.itemmgmt.ItemRegistrationService" providingComponentTypes="//@componentTypes.1" instances="//@tenants.0/@components.1/@providedInterfaces.1">
+    <methodSpecification uid="_NIpFqquBEeuU5OmyejY5qw" signature="registerItem(java.lang.String,java.lang.String,int,float,float,float,java.util.Date,java.util.Date,int,java.lang.String,int)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIpssKuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.persistenceservice.BusinessObjectsPersistenceService" requiringComponentTypes="//@componentTypes.0 //@componentTypes.1 //@componentTypes.3 //@componentTypes.4 //@componentTypes.5" providingComponentTypes="//@componentTypes.6" instances="//@tenants.0/@components.0/@requiredInterfaces.3 //@tenants.0/@components.1/@requiredInterfaces.3 //@tenants.0/@components.3/@requiredInterfaces.4 //@tenants.0/@components.4/@requiredInterfaces.1 //@tenants.0/@components.5/@requiredInterfaces.3 //@tenants.0/@components.6/@providedInterfaces.0">
+    <methodSpecification uid="_NIqTwKuBEeuU5OmyejY5qw" signature="persistUser(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,de.hpi.sam.rubis.entity.Region,de.hpi.sam.rubis.entity.CustomerClass)"/>
+    <methodSpecification uid="_NIqTwauBEeuU5OmyejY5qw" signature="persistItem(java.lang.String,java.lang.String,int,float,float,float,java.util.Date,java.util.Date,de.hpi.sam.rubis.entity.User,de.hpi.sam.rubis.entity.Category)"/>
+    <methodSpecification uid="_NIqTwquBEeuU5OmyejY5qw" signature="persistBid(de.hpi.sam.rubis.entity.User,de.hpi.sam.rubis.entity.Item,float,float,int,java.util.Date)"/>
+    <methodSpecification uid="_NIqTw6uBEeuU5OmyejY5qw" signature="persistBuyNow(de.hpi.sam.rubis.entity.User,de.hpi.sam.rubis.entity.Item,int,java.util.Date)"/>
+    <methodSpecification uid="_NIqTxKuBEeuU5OmyejY5qw" signature="persistComment(de.hpi.sam.rubis.entity.User,de.hpi.sam.rubis.entity.User,de.hpi.sam.rubis.entity.Item,java.lang.String,int,java.util.Date)"/>
+    <methodSpecification uid="_NIqTxauBEeuU5OmyejY5qw" signature="reduceInventoryItem(de.hpi.sam.rubis.entity.Item,int)"/>
+    <methodSpecification uid="_NIqTxquBEeuU5OmyejY5qw" signature="increaseInventoryItem(de.hpi.sam.rubis.entity.Item,int)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIqTx6uBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.queryservice.QueryService" requiringComponentTypes="//@componentTypes.0 //@componentTypes.1 //@componentTypes.3 //@componentTypes.4 //@componentTypes.5" providingComponentTypes="//@componentTypes.7" instances="//@tenants.0/@components.0/@requiredInterfaces.1 //@tenants.0/@components.1/@requiredInterfaces.1 //@tenants.0/@components.3/@requiredInterfaces.1 //@tenants.0/@components.4/@requiredInterfaces.0 //@tenants.0/@components.5/@requiredInterfaces.1 //@tenants.0/@components.7/@providedInterfaces.1">
+    <methodSpecification uid="_NIqTyKuBEeuU5OmyejY5qw" signature="findCurrentItemsInCategory(int,int)"/>
+    <methodSpecification uid="_NIqTyauBEeuU5OmyejY5qw" signature="findPastItemsInCategory(int,int)"/>
+    <methodSpecification uid="_NIqTyquBEeuU5OmyejY5qw" signature="findCurrentItemsInCategoryAndRegion(int,int,int)"/>
+    <methodSpecification uid="_NIqTy6uBEeuU5OmyejY5qw" signature="findPastItemsInCategoryAndRegion(int,int,int)"/>
+    <methodSpecification uid="_NIqTzKuBEeuU5OmyejY5qw" signature="findItemMaxBid(int)"/>
+    <methodSpecification uid="_NIqTzauBEeuU5OmyejY5qw" signature="findItemMaxBids(int,int)"/>
+    <methodSpecification uid="_NIqTzquBEeuU5OmyejY5qw" signature="findItemBidHistory(int)"/>
+    <methodSpecification uid="_NIqTz6uBEeuU5OmyejY5qw" signature="findSuccessfulBidsForItem(int)"/>
+    <methodSpecification uid="_NIqT0KuBEeuU5OmyejY5qw" signature="findUserBuyNows(int,int)"/>
+    <methodSpecification uid="_NIqT0auBEeuU5OmyejY5qw" signature="findUserCurrentSellings(int)"/>
+    <methodSpecification uid="_NIqT0quBEeuU5OmyejY5qw" signature="findUserPastSellings(int,int)"/>
+    <methodSpecification uid="_NIqT06uBEeuU5OmyejY5qw" signature="findUserPastWinningBids(int)"/>
+    <methodSpecification uid="_NIqT1KuBEeuU5OmyejY5qw" signature="findUserCurrentMaxBids(int)"/>
+    <methodSpecification uid="_NIqT1auBEeuU5OmyejY5qw" signature="findCategoriesInRegion(java.lang.String)"/>
+    <methodSpecification uid="_NIqT1quBEeuU5OmyejY5qw" signature="getNumberOfBidsForItem(int)"/>
+    <methodSpecification uid="_NIqT16uBEeuU5OmyejY5qw" signature="findComment(int,int,int)"/>
+    <methodSpecification uid="_NIqT2KuBEeuU5OmyejY5qw" signature="retrieveAvailabilityOfItem(int)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIqT2auBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.queryservice.BasicQueryService" requiringComponentTypes="//@componentTypes.0 //@componentTypes.1 //@componentTypes.2 //@componentTypes.3 //@componentTypes.5 //@componentTypes.18 //@componentTypes.19 //@componentTypes.20" providingComponentTypes="//@componentTypes.7" instances="//@tenants.0/@components.0/@requiredInterfaces.2 //@tenants.0/@components.1/@requiredInterfaces.0 //@tenants.0/@components.2/@requiredInterfaces.0 //@tenants.0/@components.3/@requiredInterfaces.0 //@tenants.0/@components.5/@requiredInterfaces.0 //@tenants.0/@components.7/@providedInterfaces.0">
+    <methodSpecification uid="_NIqT2quBEeuU5OmyejY5qw" signature="findAllUsers()"/>
+    <methodSpecification uid="_NIqT26uBEeuU5OmyejY5qw" signature="findUserById(int)"/>
+    <methodSpecification uid="_NIqT3KuBEeuU5OmyejY5qw" signature="findUserByNickname(java.lang.String)"/>
+    <methodSpecification uid="_NIqT3auBEeuU5OmyejY5qw" signature="findAllCategories()"/>
+    <methodSpecification uid="_NIqT3quBEeuU5OmyejY5qw" signature="findCategoryById(int)"/>
+    <methodSpecification uid="_NIqT36uBEeuU5OmyejY5qw" signature="findCategoryByName(java.lang.String)"/>
+    <methodSpecification uid="_NIqT4KuBEeuU5OmyejY5qw" signature="findCategoriesByName(java.lang.String)"/>
+    <methodSpecification uid="_NIqT4auBEeuU5OmyejY5qw" signature="findAllRegions()"/>
+    <methodSpecification uid="_NIqT4quBEeuU5OmyejY5qw" signature="findRegionById(int)"/>
+    <methodSpecification uid="_NIqT46uBEeuU5OmyejY5qw" signature="findRegionByName(java.lang.String)"/>
+    <methodSpecification uid="_NIqT5KuBEeuU5OmyejY5qw" signature="findRegionsByName(java.lang.String)"/>
+    <methodSpecification uid="_NIqT5auBEeuU5OmyejY5qw" signature="findItemsByName(java.lang.String)"/>
+    <methodSpecification uid="_NIq60KuBEeuU5OmyejY5qw" signature="findItemById(int)"/>
+    <methodSpecification uid="_NIq60auBEeuU5OmyejY5qw" signature="findAllItems()"/>
+    <methodSpecification uid="_NIq60quBEeuU5OmyejY5qw" signature="findPersonalizedItems(de.hpi.sam.rubis.entity.User)"/>
+    <methodSpecification uid="_NIq606uBEeuU5OmyejY5qw" signature="isUserNicknameUsed(java.lang.String)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIq61KuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.reputationservice.ReputationService" providingComponentTypes="//@componentTypes.5" instances="//@tenants.0/@components.5/@providedInterfaces.0">
+    <methodSpecification uid="_NIq61auBEeuU5OmyejY5qw" signature="giveComment(java.lang.String,java.lang.String,int,int,java.lang.String,int)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIq61quBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.usermgmt.AboutMeService" providingComponentTypes="//@componentTypes.0" instances="//@tenants.0/@components.0/@providedInterfaces.0">
+    <methodSpecification uid="_NIq616uBEeuU5OmyejY5qw" signature="getAboutMe(java.lang.String,java.lang.String)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIrh4KuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.usermgmt.BrowseRegionsService" providingComponentTypes="//@componentTypes.0" instances="//@tenants.0/@components.0/@providedInterfaces.1">
+    <methodSpecification uid="_NIrh4auBEeuU5OmyejY5qw" signature="getAllRegions()"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIrh4quBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.usermgmt.UserRegistrationService" providingComponentTypes="//@componentTypes.0" instances="//@tenants.0/@components.0/@providedInterfaces.2">
+    <methodSpecification uid="_NIrh46uBEeuU5OmyejY5qw" signature="registerUser(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,de.hpi.sam.rubis.entity.CustomerClass)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIrh5KuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.usermgmt.ViewUserInfoService" providingComponentTypes="//@componentTypes.0" instances="//@tenants.0/@components.0/@providedInterfaces.3">
+    <methodSpecification uid="_NIswAKuBEeuU5OmyejY5qw" signature="getUserInfo(int)"/>
+  </interfaceTypes>
+  <tenants uid="_NIvMQKuBEeuU5OmyejY5qw" importance="23.0" name="mRUBiS #1" replicaFactor="15.625057378321648">
+    <components uid="_NIvzUKuBEeuU5OmyejY5qw" criticality="3.0" aDT="1.4361940057372382" efficiency="0.1395707328676419" performance="15.721551511677173" request="2199.0" state="STARTED" type="//@componentTypes.0" inUseReplica="87.0" originalRequest="2199.0">
+      <parameters uid="_NIvzUauBEeuU5OmyejY5qw" value="LOW" type="//@componentTypes.0/@parameterTypes.0"/>
+      <requiredInterfaces uid="_NIwaYKuBEeuU5OmyejY5qw" type="//@interfaceTypes.0">
+        <connector uid="_NIxoi6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.2/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwaYauBEeuU5OmyejY5qw" type="//@interfaceTypes.8">
+        <connector uid="_NIxojauBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.1"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwaYquBEeuU5OmyejY5qw" type="//@interfaceTypes.9">
+        <connector uid="_NIxoj6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwaY6uBEeuU5OmyejY5qw" type="//@interfaceTypes.7">
+        <connector uid="_NIxoiauBEeuU5OmyejY5qw" target="//@tenants.0/@components.6/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwaZKuBEeuU5OmyejY5qw" type="//@interfaceTypes.11"/>
+      <providedInterfaces uid="_NIwaZauBEeuU5OmyejY5qw" type="//@interfaceTypes.12"/>
+      <providedInterfaces uid="_NIwaZquBEeuU5OmyejY5qw" type="//@interfaceTypes.13"/>
+      <providedInterfaces uid="_NIwaZ6uBEeuU5OmyejY5qw" type="//@interfaceTypes.14"/>
+      <replica/>
+    </components>
+    <components uid="_NIwaaKuBEeuU5OmyejY5qw" criticality="3.0" aDT="1.3547937316434782" efficiency="0.12473284641643685" performance="15.672133033926405" request="2121.0" state="STARTED" type="//@componentTypes.1" inUseReplica="67.0" originalRequest="2121.0">
+      <requiredInterfaces uid="_NIwaaauBEeuU5OmyejY5qw" type="//@interfaceTypes.9">
+        <connector uid="_NIxoh6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwaaquBEeuU5OmyejY5qw" type="//@interfaceTypes.8">
+        <connector uid="_NIxohauBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.1"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwaa6uBEeuU5OmyejY5qw" type="//@interfaceTypes.0">
+        <connector uid="_NIxog6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.2/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwabKuBEeuU5OmyejY5qw" type="//@interfaceTypes.7">
+        <connector uid="_NIxogauBEeuU5OmyejY5qw" target="//@tenants.0/@components.6/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwabauBEeuU5OmyejY5qw" type="//@interfaceTypes.5"/>
+      <providedInterfaces uid="_NIwabquBEeuU5OmyejY5qw" type="//@interfaceTypes.6"/>
+      <replica/>
+    </components>
+    <components uid="_NIwab6uBEeuU5OmyejY5qw" criticality="7.0" aDT="1.2786025087464425" efficiency="0.040686617673020134" performance="7.463077527650228" request="2104.0" state="STARTED" type="//@componentTypes.2" inUseReplica="102.0" originalRequest="2104.0">
+      <requiredInterfaces uid="_NIwacKuBEeuU5OmyejY5qw" type="//@interfaceTypes.9">
+        <connector uid="_NIxokauBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwacauBEeuU5OmyejY5qw" type="//@interfaceTypes.0" connectors="//@tenants.0/@components.5/@requiredInterfaces.2/@connector //@tenants.0/@components.1/@requiredInterfaces.2/@connector //@tenants.0/@components.0/@requiredInterfaces.0/@connector //@tenants.0/@components.3/@requiredInterfaces.2/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwacquBEeuU5OmyejY5qw" criticality="3.0" aDT="1.0255989694262369" efficiency="0.08470617071950994" performance="7.635413159402585" request="2161.0" state="STARTED" type="//@componentTypes.3" inUseReplica="54.0" originalRequest="2161.0">
+      <requiredInterfaces uid="_NIwac6uBEeuU5OmyejY5qw" type="//@interfaceTypes.9">
+        <connector uid="_NIxom6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwadKuBEeuU5OmyejY5qw" type="//@interfaceTypes.8">
+        <connector uid="_NIxomauBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.1"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwadauBEeuU5OmyejY5qw" type="//@interfaceTypes.0">
+        <connector uid="_NIxol6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.2/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwadquBEeuU5OmyejY5qw" type="//@interfaceTypes.4">
+        <connector uid="_NIxok6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.4/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwad6uBEeuU5OmyejY5qw" type="//@interfaceTypes.7">
+        <connector uid="_NIxolauBEeuU5OmyejY5qw" target="//@tenants.0/@components.6/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwaeKuBEeuU5OmyejY5qw" type="//@interfaceTypes.1"/>
+      <providedInterfaces uid="_NIwaeauBEeuU5OmyejY5qw" type="//@interfaceTypes.2"/>
+      <replica/>
+    </components>
+    <components uid="_NIwaequBEeuU5OmyejY5qw" criticality="3.0" aDT="1.0280263364552873" efficiency="0.08828216095395365" performance="11.035254522578402" request="2100.0" state="STARTED" type="//@componentTypes.4" inUseReplica="71.0" originalRequest="2100.0">
+      <requiredInterfaces uid="_NIwae6uBEeuU5OmyejY5qw" type="//@interfaceTypes.8">
+        <connector uid="_NIxonauBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.1"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwafKuBEeuU5OmyejY5qw" type="//@interfaceTypes.7">
+        <connector uid="_NIxon6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.6/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwafauBEeuU5OmyejY5qw" type="//@interfaceTypes.4" connectors="//@tenants.0/@components.3/@requiredInterfaces.3/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwafquBEeuU5OmyejY5qw" criticality="1.0" aDT="1.0189611473455906" efficiency="0.10228733606800049" performance="19.980006623250112" request="2108.0" state="STARTED" type="//@componentTypes.5" inUseReplica="100.0" originalRequest="2108.0">
+      <requiredInterfaces uid="_NIwaf6uBEeuU5OmyejY5qw" type="//@interfaceTypes.9">
+        <connector uid="_NIxBhKuBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwagKuBEeuU5OmyejY5qw" type="//@interfaceTypes.8">
+        <connector uid="_NIxBhquBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.1"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwagauBEeuU5OmyejY5qw" type="//@interfaceTypes.0">
+        <connector uid="_NIxBiKuBEeuU5OmyejY5qw" target="//@tenants.0/@components.2/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwagquBEeuU5OmyejY5qw" type="//@interfaceTypes.7">
+        <connector uid="_NIxBiquBEeuU5OmyejY5qw" target="//@tenants.0/@components.6/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwag6uBEeuU5OmyejY5qw" type="//@interfaceTypes.10"/>
+      <replica/>
+    </components>
+    <components uid="_NIwahKuBEeuU5OmyejY5qw" criticality="3.0" aDT="1.2256038858217302" efficiency="0.04213340002776202" performance="8.245210206645792" request="2095.0" state="STARTED" type="//@componentTypes.6" inUseReplica="122.0" originalRequest="2095.0">
+      <providedInterfaces uid="_NIwahauBEeuU5OmyejY5qw" type="//@interfaceTypes.7" connectors="//@tenants.0/@components.5/@requiredInterfaces.3/@connector //@tenants.0/@components.1/@requiredInterfaces.3/@connector //@tenants.0/@components.0/@requiredInterfaces.3/@connector //@tenants.0/@components.3/@requiredInterfaces.4/@connector //@tenants.0/@components.4/@requiredInterfaces.1/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwahquBEeuU5OmyejY5qw" criticality="3.0" aDT="1.1011695284757212" efficiency="0.045449021747716485" performance="6.220332056582954" request="2072.0" state="STARTED" type="//@componentTypes.7" inUseReplica="103.0" originalRequest="2072.0">
+      <requiredInterfaces uid="_NIwah6uBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxooauBEeuU5OmyejY5qw" target="//@tenants.0/@components.8/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwaiKuBEeuU5OmyejY5qw" type="//@interfaceTypes.9" connectors="//@tenants.0/@components.5/@requiredInterfaces.0/@connector //@tenants.0/@components.1/@requiredInterfaces.0/@connector //@tenants.0/@components.0/@requiredInterfaces.2/@connector //@tenants.0/@components.2/@requiredInterfaces.0/@connector //@tenants.0/@components.3/@requiredInterfaces.0/@connector"/>
+      <providedInterfaces uid="_NIwaiauBEeuU5OmyejY5qw" type="//@interfaceTypes.8" connectors="//@tenants.0/@components.5/@requiredInterfaces.1/@connector //@tenants.0/@components.1/@requiredInterfaces.1/@connector //@tenants.0/@components.0/@requiredInterfaces.1/@connector //@tenants.0/@components.3/@requiredInterfaces.1/@connector //@tenants.0/@components.4/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwaiquBEeuU5OmyejY5qw" criticality="2.0" aDT="1.357817857531252" efficiency="0.05815361065858426" performance="11.5134866118994" request="2184.0" state="STARTED" type="//@componentTypes.8" inUseReplica="110.0" originalRequest="2184.0">
+      <parameters uid="_NIwai6uBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.8/@parameterTypes.0"/>
+      <parameters uid="_NIwajKuBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.8/@parameterTypes.1"/>
+      <parameters uid="_NIwajauBEeuU5OmyejY5qw" value="300" type="//@componentTypes.8/@parameterTypes.2"/>
+      <requiredInterfaces uid="_NIwajquBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxoo6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.9/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwaj6uBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.7/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwakKuBEeuU5OmyejY5qw" criticality="2.0" aDT="1.3172577897900153" efficiency="0.0889359464763549" performance="13.614570144245906" request="2004.0" state="STARTED" type="//@componentTypes.9" inUseReplica="99.0" originalRequest="2004.0">
+      <parameters uid="_NIwakauBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.9/@parameterTypes.0"/>
+      <parameters uid="_NIwakquBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.9/@parameterTypes.1"/>
+      <requiredInterfaces uid="_NIwak6uBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxopauBEeuU5OmyejY5qw" target="//@tenants.0/@components.10/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwalKuBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.8/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwalauBEeuU5OmyejY5qw" criticality="2.0" aDT="1.4436032520399626" efficiency="0.06471066156629121" performance="11.22088005443835" request="2145.0" state="STARTED" type="//@componentTypes.10" inUseReplica="123.0" originalRequest="2145.0">
+      <parameters uid="_NIwalquBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.10/@parameterTypes.0"/>
+      <parameters uid="_NIwal6uBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.10/@parameterTypes.1"/>
+      <requiredInterfaces uid="_NIwamKuBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxop6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.11/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwamauBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.9/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwamquBEeuU5OmyejY5qw" criticality="2.0" aDT="1.4849691209604348" efficiency="0.04482573554343882" performance="6.729630156678354" request="2118.0" state="STARTED" type="//@componentTypes.11" inUseReplica="97.0" originalRequest="2118.0">
+      <parameters uid="_NIwam6uBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.11/@parameterTypes.0"/>
+      <parameters uid="_NIwanKuBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.11/@parameterTypes.1"/>
+      <requiredInterfaces uid="_NIwanauBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxoqauBEeuU5OmyejY5qw" target="//@tenants.0/@components.12/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwanquBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.10/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwan6uBEeuU5OmyejY5qw" criticality="2.0" aDT="1.1914252362385565" efficiency="0.07134128436951051" performance="10.154033252279618" request="2159.0" state="STARTED" type="//@componentTypes.12" inUseReplica="92.0" originalRequest="2159.0">
+      <parameters uid="_NIwaoKuBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.12/@parameterTypes.0"/>
+      <parameters uid="_NIwaoauBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.12/@parameterTypes.1"/>
+      <requiredInterfaces uid="_NIwaoquBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxoq6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.13/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwao6uBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.11/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwapKuBEeuU5OmyejY5qw" criticality="2.0" aDT="1.4323704003917366" efficiency="0.051821330327694926" performance="11.508794704687165" request="2195.0" state="STARTED" type="//@componentTypes.13" inUseReplica="129.0" originalRequest="2195.0">
+      <parameters uid="_NIwapauBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.13/@parameterTypes.0"/>
+      <parameters uid="_NIwapquBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.13/@parameterTypes.1"/>
+      <parameters uid="_NIwap6uBEeuU5OmyejY5qw" value="5" type="//@componentTypes.13/@parameterTypes.2"/>
+      <requiredInterfaces uid="_NIwaqKuBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxorauBEeuU5OmyejY5qw" target="//@tenants.0/@components.14/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwaqauBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.12/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwaqquBEeuU5OmyejY5qw" criticality="2.0" aDT="1.3207125722828228" efficiency="0.13172526149926297" performance="19.379443216932938" request="2093.0" state="STARTED" type="//@componentTypes.14" inUseReplica="71.0" originalRequest="2093.0">
+      <parameters uid="_NIwaq6uBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.14/@parameterTypes.0"/>
+      <parameters uid="_NIwarKuBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.14/@parameterTypes.1"/>
+      <parameters uid="_NIwarauBEeuU5OmyejY5qw" value="5" type="//@componentTypes.14/@parameterTypes.2"/>
+      <requiredInterfaces uid="_NIxBcKuBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxor6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.15/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIxBcauBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.13/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIxBcquBEeuU5OmyejY5qw" criticality="2.0" aDT="1.346869273499143" efficiency="0.15606959881161805" performance="12.354520297954636" request="2151.0" state="STARTED" type="//@componentTypes.15" inUseReplica="51.0" originalRequest="2151.0">
+      <parameters uid="_NIxBc6uBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.15/@parameterTypes.0"/>
+      <parameters uid="_NIxBdKuBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.15/@parameterTypes.1"/>
+      <parameters uid="_NIxBdauBEeuU5OmyejY5qw" value="Coins,Jewelry" type="//@componentTypes.15/@parameterTypes.2"/>
+      <requiredInterfaces uid="_NIxBdquBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxosauBEeuU5OmyejY5qw" target="//@tenants.0/@components.16/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIxBd6uBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.14/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIxBeKuBEeuU5OmyejY5qw" criticality="2.0" aDT="1.3343571424146026" efficiency="0.11988704135587881" performance="19.105959983996517" request="2089.0" state="STARTED" type="//@componentTypes.16" inUseReplica="119.0" originalRequest="2089.0">
+      <parameters uid="_NIxBeauBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.16/@parameterTypes.0"/>
+      <parameters uid="_NIxBequBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.16/@parameterTypes.1"/>
+      <requiredInterfaces uid="_NIxBe6uBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxos6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.17/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIxBfKuBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.15/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIxBfauBEeuU5OmyejY5qw" criticality="2.0" aDT="1.1639689116255767" efficiency="0.03958245312617291" performance="7.458194655081567" request="2111.0" state="STARTED" type="//@componentTypes.17" inUseReplica="104.0" originalRequest="2111.0">
+      <parameters uid="_NIxBfquBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.17/@parameterTypes.0"/>
+      <parameters uid="_NIxBf6uBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.17/@parameterTypes.1"/>
+      <parameters uid="_NIxBgKuBEeuU5OmyejY5qw" value="14" type="//@componentTypes.17/@parameterTypes.2"/>
+      <requiredInterfaces uid="_NIxBgauBEeuU5OmyejY5qw" type="//@interfaceTypes.3"/>
+      <providedInterfaces uid="_NIxBgquBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.16/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+  </tenants>
+  <cloud name="AmazonCloud"/>
+  <annotations/>
+</comparch:Architecture>

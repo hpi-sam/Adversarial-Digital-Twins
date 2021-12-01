@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mlsdm:Activity xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:mlexpressions="http://www.mdelab.de/mlexpressions/1.0" xmlns:mlexpressions.mlcallactions="http://www.mdelab.de/mlexpressions/mlcallactions/1.0" xmlns:mlsdm="http://www.mdelab.de/mlsdm/1.0" xmlns:mlstorypatterns="http://www.mdelab.de/mlstorypatterns/1.0" uuid="_yjPkQBdbEeauFrHocIOK3g" name="RemoveReplica">
+  <edges uuid="_ICrhUBdcEeauFrHocIOK3g" source="_ZuFTcOTGEee4dJuC7olYRA" target="_oW6rcOTOEee4dJuC7olYRA" guardType="BOOLEAN">
+    <guardExpression xsi:type="mlexpressions:MLStringExpression" uuid="_5hfsoOTEEee4dJuC7olYRA" expressionString="(component.performanceOld-component.performance)/component.performanceOld>0.05" expressionLanguageID="OCL"/>
+  </edges>
+  <edges uuid="_qedp8BdlEeauFrHocIOK3g" source="_nqXKoBdlEeauFrHocIOK3g" target="_oW6rcOTOEee4dJuC7olYRA"/>
+  <edges uuid="_qI2cwOTGEee4dJuC7olYRA" source="_ZuFTcOTGEee4dJuC7olYRA" target="_HXpnUBdcEeauFrHocIOK3g" guardType="ELSE"/>
+  <edges uuid="_GA5sQOTIEee4dJuC7olYRA" source="_BdiZUBdcEeauFrHocIOK3g" target="_0H0VYBdbEeauFrHocIOK3g" guardType="SUCCESS"/>
+  <edges uuid="_ni-UwOTIEee4dJuC7olYRA" source="_BdiZUBdcEeauFrHocIOK3g" target="_HXpnUBdcEeauFrHocIOK3g" guardType="FAILURE"/>
+  <edges uuid="_3FNE0OTOEee4dJuC7olYRA" source="_oW6rcOTOEee4dJuC7olYRA" target="_BdiZUBdcEeauFrHocIOK3g" guardType="BOOLEAN">
+    <guardExpression xsi:type="mlexpressions:MLStringExpression" uuid="_7HtQ8OTOEee4dJuC7olYRA" expressionString="component.inUseReplica>1" expressionLanguageID="OCL"/>
+  </edges>
+  <edges uuid="_3mBS4OTOEee4dJuC7olYRA" source="_oW6rcOTOEee4dJuC7olYRA" target="_HXpnUBdcEeauFrHocIOK3g" guardType="ELSE"/>
+  <edges uuid="_aTT7wOZYEee9Y_r8492Jkg" source="_0H0VYBdbEeauFrHocIOK3g" target="_ZuFTcOTGEee4dJuC7olYRA"/>
+  <nodes xsi:type="mlsdm:InitialNode" uuid="_nqXKoBdlEeauFrHocIOK3g" outgoingEdges="_qedp8BdlEeauFrHocIOK3g"/>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_0H0VYBdbEeauFrHocIOK3g" outgoingEdges="_aTT7wOZYEee9Y_r8492Jkg" incomingEdges="_GA5sQOTIEee4dJuC7olYRA" name="Update Efficiency and Performance">
+    <storyPattern uuid="_0H0VYRdbEeauFrHocIOK3g">
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_1eB6YBdbEeauFrHocIOK3g" name="component" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+        <attributeAssignments uuid="_Ya4agOZYEee9Y_r8492Jkg">
+          <assignmentExpression xsi:type="mlexpressions.mlcallactions:CallActionExpression" uuid="_in5BEOZYEee9Y_r8492Jkg">
+            <callActions xsi:type="mlexpressions.mlcallactions:MethodCallAction" uuid="_jvZbsOZYEee9Y_r8492Jkg" methodName="calculatePerformance" methodClassName="de.mdelab.morisia.selfhealing.rules.PerformanceEfficiencyManager">
+              <type xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <parameters uuid="_ntisQOZYEee9Y_r8492Jkg" name="component">
+                <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+                <valueExpression xsi:type="mlexpressions:MLStringExpression" uuid="_qonWQOZYEee9Y_r8492Jkg" expressionString="component" expressionLanguageID="OCL"/>
+              </parameters>
+            </callActions>
+          </assignmentExpression>
+          <feature xsi:type="ecore:EAttribute" href="http://www.mdelab.de/morisia/comparch#//ArchitecturalElement/performance"/>
+        </attributeAssignments>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_BdiZUBdcEeauFrHocIOK3g" outgoingEdges="_GA5sQOTIEee4dJuC7olYRA _ni-UwOTIEee4dJuC7olYRA" incomingEdges="_3FNE0OTOEee4dJuC7olYRA" name="remove one Replica">
+    <storyPattern uuid="_BdiZURdcEeauFrHocIOK3g">
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_CaHWUBdcEeauFrHocIOK3g" name="component" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+        <attributeAssignments uuid="_EBuNUBdcEeauFrHocIOK3g">
+          <assignmentExpression xsi:type="mlexpressions:MLStringExpression" uuid="_E6DjgBdcEeauFrHocIOK3g" expressionString="component.inUseReplica-1" expressionLanguageID="OCL"/>
+          <feature xsi:type="ecore:EAttribute" href="http://www.mdelab.de/morisia/comparch#//Component/inUseReplica"/>
+        </attributeAssignments>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:ActivityFinalNode" uuid="_HXpnUBdcEeauFrHocIOK3g" incomingEdges="_ni-UwOTIEee4dJuC7olYRA _qI2cwOTGEee4dJuC7olYRA _3mBS4OTOEee4dJuC7olYRA"/>
+  <nodes xsi:type="mlsdm:DecisionMergeNode" uuid="_ZuFTcOTGEee4dJuC7olYRA" outgoingEdges="_ICrhUBdcEeauFrHocIOK3g _qI2cwOTGEee4dJuC7olYRA" incomingEdges="_aTT7wOZYEee9Y_r8492Jkg"/>
+  <nodes xsi:type="mlsdm:DecisionMergeNode" uuid="_oW6rcOTOEee4dJuC7olYRA" outgoingEdges="_3FNE0OTOEee4dJuC7olYRA _3mBS4OTOEee4dJuC7olYRA" incomingEdges="_ICrhUBdcEeauFrHocIOK3g _qedp8BdlEeauFrHocIOK3g"/>
+  <parameters uuid="_KAFpPRdcEeauFrHocIOK3g" name="component">
+    <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+  </parameters>
+</mlsdm:Activity>

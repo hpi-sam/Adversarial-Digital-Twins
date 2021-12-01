@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="ASCII"?>
+<comparch:Architecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:comparch="http://www.mdelab.de/morisia/comparch" uid="_NImpYKuBEeuU5OmyejY5qw" name="mRUBiS">
+  <componentTypes uid="_NItXEKuBEeuU5OmyejY5qw" name="User Management Service" requiredInterfaceTypes="//@interfaceTypes.0 //@interfaceTypes.8 //@interfaceTypes.9 //@interfaceTypes.7" providedInterfaceTypes="//@interfaceTypes.11 //@interfaceTypes.12 //@interfaceTypes.13 //@interfaceTypes.14" instances="//@tenants.0/@components.0">
+    <parameterTypes uid="_NIt-IKuBEeuU5OmyejY5qw" name="privacy-level" type="java.lang.String" defaultValue="LOW" instances="//@tenants.0/@components.0/@parameters.0"/>
+  </componentTypes>
+  <componentTypes uid="_NIt-IauBEeuU5OmyejY5qw" name="Item Management Service" requiredInterfaceTypes="//@interfaceTypes.9 //@interfaceTypes.8 //@interfaceTypes.0 //@interfaceTypes.7" providedInterfaceTypes="//@interfaceTypes.5 //@interfaceTypes.6" instances="//@tenants.0/@components.1"/>
+  <componentTypes uid="_NIt-IquBEeuU5OmyejY5qw" name="Authentication Service" requiredInterfaceTypes="//@interfaceTypes.9" providedInterfaceTypes="//@interfaceTypes.0" instances="//@tenants.0/@components.2"/>
+  <componentTypes uid="_NIt-I6uBEeuU5OmyejY5qw" name="Bid and Buy Service" requiredInterfaceTypes="//@interfaceTypes.9 //@interfaceTypes.8 //@interfaceTypes.0 //@interfaceTypes.4 //@interfaceTypes.7" providedInterfaceTypes="//@interfaceTypes.1 //@interfaceTypes.2" instances="//@tenants.0/@components.3"/>
+  <componentTypes uid="_NIt-JKuBEeuU5OmyejY5qw" name="Inventory Service" requiredInterfaceTypes="//@interfaceTypes.8 //@interfaceTypes.7" providedInterfaceTypes="//@interfaceTypes.4" instances="//@tenants.0/@components.4"/>
+  <componentTypes uid="_NIt-JauBEeuU5OmyejY5qw" name="Reputation Service" requiredInterfaceTypes="//@interfaceTypes.9 //@interfaceTypes.8 //@interfaceTypes.0 //@interfaceTypes.7" providedInterfaceTypes="//@interfaceTypes.10" instances="//@tenants.0/@components.5"/>
+  <componentTypes uid="_NIt-JquBEeuU5OmyejY5qw" name="Persistence Service" providedInterfaceTypes="//@interfaceTypes.7" instances="//@tenants.0/@components.6"/>
+  <componentTypes uid="_NIt-J6uBEeuU5OmyejY5qw" name="Query Service" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.9 //@interfaceTypes.8" instances="//@tenants.0/@components.7"/>
+  <componentTypes uid="_NIt-KKuBEeuU5OmyejY5qw" name="Last Second Sales Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.8">
+    <parameterTypes uid="_NIt-KauBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.8/@parameters.0"/>
+    <parameterTypes uid="_NIt-KquBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.8/@parameters.1"/>
+    <parameterTypes uid="_NIulMKuBEeuU5OmyejY5qw" name="last-seconds" type="java.lang.Integer" defaultValue="300" instances="//@tenants.0/@components.8/@parameters.2"/>
+  </componentTypes>
+  <componentTypes uid="_NIulMauBEeuU5OmyejY5qw" name="Past Sales Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.9">
+    <parameterTypes uid="_NIulMquBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.9/@parameters.0"/>
+    <parameterTypes uid="_NIulM6uBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.9/@parameters.1"/>
+  </componentTypes>
+  <componentTypes uid="_NIulNKuBEeuU5OmyejY5qw" name="Buy Now Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.10">
+    <parameterTypes uid="_NIulNauBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.10/@parameters.0"/>
+    <parameterTypes uid="_NIulNquBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.10/@parameters.1"/>
+  </componentTypes>
+  <componentTypes uid="_NIulN6uBEeuU5OmyejY5qw" name="Availability Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.11">
+    <parameterTypes uid="_NIulOKuBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.11/@parameters.0"/>
+    <parameterTypes uid="_NIulOauBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.11/@parameters.1"/>
+  </componentTypes>
+  <componentTypes uid="_NIulOquBEeuU5OmyejY5qw" name="Region Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.12">
+    <parameterTypes uid="_NIulO6uBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.12/@parameters.0"/>
+    <parameterTypes uid="_NIulPKuBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.12/@parameters.1"/>
+  </componentTypes>
+  <componentTypes uid="_NIulPauBEeuU5OmyejY5qw" name="Seller Reputation Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.13">
+    <parameterTypes uid="_NIulPquBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.13/@parameters.0"/>
+    <parameterTypes uid="_NIulP6uBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.13/@parameters.1"/>
+    <parameterTypes uid="_NIulQKuBEeuU5OmyejY5qw" name="reputation-threshold" type="java.lang.Integer" defaultValue="5" instances="//@tenants.0/@components.13/@parameters.2"/>
+  </componentTypes>
+  <componentTypes uid="_NIulQauBEeuU5OmyejY5qw" name="Comment Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.14">
+    <parameterTypes uid="_NIulQquBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.14/@parameters.0"/>
+    <parameterTypes uid="_NIulQ6uBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.14/@parameters.1"/>
+    <parameterTypes uid="_NIulRKuBEeuU5OmyejY5qw" name="rating-threshold" type="java.lang.Integer" defaultValue="5" instances="//@tenants.0/@components.14/@parameters.2"/>
+  </componentTypes>
+  <componentTypes uid="_NIulRauBEeuU5OmyejY5qw" name="Category Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.15">
+    <parameterTypes uid="_NIulRquBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.15/@parameters.0"/>
+    <parameterTypes uid="_NIulR6uBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.15/@parameters.1"/>
+    <parameterTypes uid="_NIulSKuBEeuU5OmyejY5qw" name="filtered-categories" type="java.lang.String" defaultValue="Coins,Jewelry" instances="//@tenants.0/@components.15/@parameters.2"/>
+  </componentTypes>
+  <componentTypes uid="_NIulSauBEeuU5OmyejY5qw" name="Recommendation Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.16">
+    <parameterTypes uid="_NIulSquBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.16/@parameters.0"/>
+    <parameterTypes uid="_NIulS6uBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.16/@parameters.1"/>
+  </componentTypes>
+  <componentTypes uid="_NIulTKuBEeuU5OmyejY5qw" name="Future Sales Item Filter" requiredInterfaceTypes="//@interfaceTypes.3" providedInterfaceTypes="//@interfaceTypes.3" instances="//@tenants.0/@components.17">
+    <parameterTypes uid="_NIulTauBEeuU5OmyejY5qw" name="selection-rate-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.17/@parameters.0"/>
+    <parameterTypes uid="_NIulTquBEeuU5OmyejY5qw" name="computation-time-threshold" type="java.lang.Double" defaultValue="0.05" instances="//@tenants.0/@components.17/@parameters.1"/>
+    <parameterTypes uid="_NIulT6uBEeuU5OmyejY5qw" name="days-to-run" type="java.lang.Integer" defaultValue="14" instances="//@tenants.0/@components.17/@parameters.2"/>
+  </componentTypes>
+  <componentTypes uid="_NIulUKuBEeuU5OmyejY5qw" name="Facebook Authentication Service" requiredInterfaceTypes="//@interfaceTypes.9" providedInterfaceTypes="//@interfaceTypes.0">
+    <parameterTypes uid="_NIulUauBEeuU5OmyejY5qw" name="ServiceURI" type="java.lang.String" defaultValue="http://localhost:8080/FacebookAuthenticationService/FbAuthenticationServiceImpl?wsdl"/>
+    <parameterTypes uid="_NIulUquBEeuU5OmyejY5qw" name="ServiceNS" type="java.lang.String" defaultValue="http://authentication.facebook.com/"/>
+    <parameterTypes uid="_NIulU6uBEeuU5OmyejY5qw" name="ServiceNsLocalPartName" type="java.lang.String" defaultValue="FacebookAuthenticationService"/>
+  </componentTypes>
+  <componentTypes uid="_NIulVKuBEeuU5OmyejY5qw" name="Google Authentication Service" requiredInterfaceTypes="//@interfaceTypes.9" providedInterfaceTypes="//@interfaceTypes.0">
+    <parameterTypes uid="_NIulVauBEeuU5OmyejY5qw" name="ServiceURI" type="java.lang.String" defaultValue="http://localhost:8080/GoogleAuthenticationService/GoogleAuthenticationServiceImpl?wsdl"/>
+    <parameterTypes uid="_NIulVquBEeuU5OmyejY5qw" name="ServiceNS" type="java.lang.String" defaultValue="http://authentication.google.com/"/>
+    <parameterTypes uid="_NIulV6uBEeuU5OmyejY5qw" name="ServiceNsLocalPartName" type="java.lang.String" defaultValue="GoogleAuthenticationService"/>
+  </componentTypes>
+  <componentTypes uid="_NIulWKuBEeuU5OmyejY5qw" name="Twitter Authentication Service" requiredInterfaceTypes="//@interfaceTypes.9" providedInterfaceTypes="//@interfaceTypes.0">
+    <parameterTypes uid="_NIulWauBEeuU5OmyejY5qw" name="ServiceURI" type="java.lang.String" defaultValue="http://localhost:8080/TwitterAuthenticationService/TwitterAuthenticationServiceImpl?wsdl"/>
+    <parameterTypes uid="_NIulWquBEeuU5OmyejY5qw" name="ServiceNS" type="java.lang.String" defaultValue="http://authentication.twitter.com/"/>
+    <parameterTypes uid="_NIulW6uBEeuU5OmyejY5qw" name="ServiceNsLocalPartName" type="java.lang.String" defaultValue="TwitterAuthenticationService"/>
+  </componentTypes>
+  <interfaceTypes uid="_NInQcKuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.authservice.AuthenticationService" requiringComponentTypes="//@componentTypes.0 //@componentTypes.1 //@componentTypes.3 //@componentTypes.5" providingComponentTypes="//@componentTypes.2 //@componentTypes.18 //@componentTypes.19 //@componentTypes.20" instances="//@tenants.0/@components.0/@requiredInterfaces.0 //@tenants.0/@components.1/@requiredInterfaces.2 //@tenants.0/@components.2/@providedInterfaces.0 //@tenants.0/@components.3/@requiredInterfaces.2 //@tenants.0/@components.5/@requiredInterfaces.2">
+    <methodSpecification uid="_NIn3gKuBEeuU5OmyejY5qw" signature="authenticate(java.lang.String,java.lang.String)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIn3gauBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.bidandbuy.BidService" providingComponentTypes="//@componentTypes.3" instances="//@tenants.0/@components.3/@providedInterfaces.0">
+    <methodSpecification uid="_NIn3gquBEeuU5OmyejY5qw" signature="bidOnItem(int,float,float,int,java.lang.String,java.lang.String)"/>
+    <methodSpecification uid="_NIn3g6uBEeuU5OmyejY5qw" signature="getItemBidHistory(int)"/>
+    <methodSpecification uid="_NIn3hKuBEeuU5OmyejY5qw" signature="getItemBidHistorySortyByBidPrice(int)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIoekKuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.bidandbuy.BuyNowService" providingComponentTypes="//@componentTypes.3" instances="//@tenants.0/@components.3/@providedInterfaces.1">
+    <methodSpecification uid="_NIoekauBEeuU5OmyejY5qw" signature="buyItemNow(int,int,java.lang.String,java.lang.String)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIoekquBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.filter.ItemFilter" requiringComponentTypes="//@componentTypes.7 //@componentTypes.8 //@componentTypes.9 //@componentTypes.10 //@componentTypes.11 //@componentTypes.12 //@componentTypes.13 //@componentTypes.14 //@componentTypes.15 //@componentTypes.16 //@componentTypes.17" providingComponentTypes="//@componentTypes.8 //@componentTypes.9 //@componentTypes.10 //@componentTypes.11 //@componentTypes.12 //@componentTypes.13 //@componentTypes.14 //@componentTypes.15 //@componentTypes.16 //@componentTypes.17" instances="//@tenants.0/@components.7/@requiredInterfaces.0 //@tenants.0/@components.8/@requiredInterfaces.0 //@tenants.0/@components.8/@providedInterfaces.0 //@tenants.0/@components.9/@requiredInterfaces.0 //@tenants.0/@components.9/@providedInterfaces.0 //@tenants.0/@components.10/@requiredInterfaces.0 //@tenants.0/@components.10/@providedInterfaces.0 //@tenants.0/@components.11/@requiredInterfaces.0 //@tenants.0/@components.11/@providedInterfaces.0 //@tenants.0/@components.12/@requiredInterfaces.0 //@tenants.0/@components.12/@providedInterfaces.0 //@tenants.0/@components.13/@requiredInterfaces.0 //@tenants.0/@components.13/@providedInterfaces.0 //@tenants.0/@components.14/@requiredInterfaces.0 //@tenants.0/@components.14/@providedInterfaces.0 //@tenants.0/@components.15/@requiredInterfaces.0 //@tenants.0/@components.15/@providedInterfaces.0 //@tenants.0/@components.16/@requiredInterfaces.0 //@tenants.0/@components.16/@providedInterfaces.0 //@tenants.0/@components.17/@requiredInterfaces.0 //@tenants.0/@components.17/@providedInterfaces.0">
+    <methodSpecification uid="_NIoek6uBEeuU5OmyejY5qw" signature="filter(java.util.List,de.hpi.sam.rubis.entity.User)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIoelKuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.inventorymgmt.InventoryService" requiringComponentTypes="//@componentTypes.3" providingComponentTypes="//@componentTypes.4" instances="//@tenants.0/@components.3/@requiredInterfaces.3 //@tenants.0/@components.4/@providedInterfaces.0">
+    <methodSpecification uid="_NIpFoKuBEeuU5OmyejY5qw" signature="checkAvailabilityOfItem(de.hpi.sam.rubis.entity.Item)"/>
+    <methodSpecification uid="_NIpFoauBEeuU5OmyejY5qw" signature="reserveItem(de.hpi.sam.rubis.entity.Item,int)"/>
+    <methodSpecification uid="_NIpFoquBEeuU5OmyejY5qw" signature="cancelReservedItem(de.hpi.sam.rubis.entity.Item,int)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIpFo6uBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.itemmgmt.BrowseCategoriesService" providingComponentTypes="//@componentTypes.1" instances="//@tenants.0/@components.1/@providedInterfaces.0">
+    <methodSpecification uid="_NIpFpKuBEeuU5OmyejY5qw" signature="getCategoriesInRegion(java.lang.String)"/>
+    <methodSpecification uid="_NIpFpauBEeuU5OmyejY5qw" signature="getAllCategories()"/>
+    <methodSpecification uid="_NIpFpquBEeuU5OmyejY5qw" signature="getCategoriesByName(java.lang.String)"/>
+    <methodSpecification uid="_NIpFp6uBEeuU5OmyejY5qw" signature="getItemsByName(java.lang.String)"/>
+    <methodSpecification uid="_NIpFqKuBEeuU5OmyejY5qw" signature="getPersonalizedItems(java.lang.String,java.lang.String)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIpFqauBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.itemmgmt.ItemRegistrationService" providingComponentTypes="//@componentTypes.1" instances="//@tenants.0/@components.1/@providedInterfaces.1">
+    <methodSpecification uid="_NIpFqquBEeuU5OmyejY5qw" signature="registerItem(java.lang.String,java.lang.String,int,float,float,float,java.util.Date,java.util.Date,int,java.lang.String,int)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIpssKuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.persistenceservice.BusinessObjectsPersistenceService" requiringComponentTypes="//@componentTypes.0 //@componentTypes.1 //@componentTypes.3 //@componentTypes.4 //@componentTypes.5" providingComponentTypes="//@componentTypes.6" instances="//@tenants.0/@components.0/@requiredInterfaces.3 //@tenants.0/@components.1/@requiredInterfaces.3 //@tenants.0/@components.3/@requiredInterfaces.4 //@tenants.0/@components.4/@requiredInterfaces.1 //@tenants.0/@components.5/@requiredInterfaces.3 //@tenants.0/@components.6/@providedInterfaces.0">
+    <methodSpecification uid="_NIqTwKuBEeuU5OmyejY5qw" signature="persistUser(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,de.hpi.sam.rubis.entity.Region,de.hpi.sam.rubis.entity.CustomerClass)"/>
+    <methodSpecification uid="_NIqTwauBEeuU5OmyejY5qw" signature="persistItem(java.lang.String,java.lang.String,int,float,float,float,java.util.Date,java.util.Date,de.hpi.sam.rubis.entity.User,de.hpi.sam.rubis.entity.Category)"/>
+    <methodSpecification uid="_NIqTwquBEeuU5OmyejY5qw" signature="persistBid(de.hpi.sam.rubis.entity.User,de.hpi.sam.rubis.entity.Item,float,float,int,java.util.Date)"/>
+    <methodSpecification uid="_NIqTw6uBEeuU5OmyejY5qw" signature="persistBuyNow(de.hpi.sam.rubis.entity.User,de.hpi.sam.rubis.entity.Item,int,java.util.Date)"/>
+    <methodSpecification uid="_NIqTxKuBEeuU5OmyejY5qw" signature="persistComment(de.hpi.sam.rubis.entity.User,de.hpi.sam.rubis.entity.User,de.hpi.sam.rubis.entity.Item,java.lang.String,int,java.util.Date)"/>
+    <methodSpecification uid="_NIqTxauBEeuU5OmyejY5qw" signature="reduceInventoryItem(de.hpi.sam.rubis.entity.Item,int)"/>
+    <methodSpecification uid="_NIqTxquBEeuU5OmyejY5qw" signature="increaseInventoryItem(de.hpi.sam.rubis.entity.Item,int)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIqTx6uBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.queryservice.QueryService" requiringComponentTypes="//@componentTypes.0 //@componentTypes.1 //@componentTypes.3 //@componentTypes.4 //@componentTypes.5" providingComponentTypes="//@componentTypes.7" instances="//@tenants.0/@components.0/@requiredInterfaces.1 //@tenants.0/@components.1/@requiredInterfaces.1 //@tenants.0/@components.3/@requiredInterfaces.1 //@tenants.0/@components.4/@requiredInterfaces.0 //@tenants.0/@components.5/@requiredInterfaces.1 //@tenants.0/@components.7/@providedInterfaces.1">
+    <methodSpecification uid="_NIqTyKuBEeuU5OmyejY5qw" signature="findCurrentItemsInCategory(int,int)"/>
+    <methodSpecification uid="_NIqTyauBEeuU5OmyejY5qw" signature="findPastItemsInCategory(int,int)"/>
+    <methodSpecification uid="_NIqTyquBEeuU5OmyejY5qw" signature="findCurrentItemsInCategoryAndRegion(int,int,int)"/>
+    <methodSpecification uid="_NIqTy6uBEeuU5OmyejY5qw" signature="findPastItemsInCategoryAndRegion(int,int,int)"/>
+    <methodSpecification uid="_NIqTzKuBEeuU5OmyejY5qw" signature="findItemMaxBid(int)"/>
+    <methodSpecification uid="_NIqTzauBEeuU5OmyejY5qw" signature="findItemMaxBids(int,int)"/>
+    <methodSpecification uid="_NIqTzquBEeuU5OmyejY5qw" signature="findItemBidHistory(int)"/>
+    <methodSpecification uid="_NIqTz6uBEeuU5OmyejY5qw" signature="findSuccessfulBidsForItem(int)"/>
+    <methodSpecification uid="_NIqT0KuBEeuU5OmyejY5qw" signature="findUserBuyNows(int,int)"/>
+    <methodSpecification uid="_NIqT0auBEeuU5OmyejY5qw" signature="findUserCurrentSellings(int)"/>
+    <methodSpecification uid="_NIqT0quBEeuU5OmyejY5qw" signature="findUserPastSellings(int,int)"/>
+    <methodSpecification uid="_NIqT06uBEeuU5OmyejY5qw" signature="findUserPastWinningBids(int)"/>
+    <methodSpecification uid="_NIqT1KuBEeuU5OmyejY5qw" signature="findUserCurrentMaxBids(int)"/>
+    <methodSpecification uid="_NIqT1auBEeuU5OmyejY5qw" signature="findCategoriesInRegion(java.lang.String)"/>
+    <methodSpecification uid="_NIqT1quBEeuU5OmyejY5qw" signature="getNumberOfBidsForItem(int)"/>
+    <methodSpecification uid="_NIqT16uBEeuU5OmyejY5qw" signature="findComment(int,int,int)"/>
+    <methodSpecification uid="_NIqT2KuBEeuU5OmyejY5qw" signature="retrieveAvailabilityOfItem(int)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIqT2auBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.queryservice.BasicQueryService" requiringComponentTypes="//@componentTypes.0 //@componentTypes.1 //@componentTypes.2 //@componentTypes.3 //@componentTypes.5 //@componentTypes.18 //@componentTypes.19 //@componentTypes.20" providingComponentTypes="//@componentTypes.7" instances="//@tenants.0/@components.0/@requiredInterfaces.2 //@tenants.0/@components.1/@requiredInterfaces.0 //@tenants.0/@components.2/@requiredInterfaces.0 //@tenants.0/@components.3/@requiredInterfaces.0 //@tenants.0/@components.5/@requiredInterfaces.0 //@tenants.0/@components.7/@providedInterfaces.0">
+    <methodSpecification uid="_NIqT2quBEeuU5OmyejY5qw" signature="findAllUsers()"/>
+    <methodSpecification uid="_NIqT26uBEeuU5OmyejY5qw" signature="findUserById(int)"/>
+    <methodSpecification uid="_NIqT3KuBEeuU5OmyejY5qw" signature="findUserByNickname(java.lang.String)"/>
+    <methodSpecification uid="_NIqT3auBEeuU5OmyejY5qw" signature="findAllCategories()"/>
+    <methodSpecification uid="_NIqT3quBEeuU5OmyejY5qw" signature="findCategoryById(int)"/>
+    <methodSpecification uid="_NIqT36uBEeuU5OmyejY5qw" signature="findCategoryByName(java.lang.String)"/>
+    <methodSpecification uid="_NIqT4KuBEeuU5OmyejY5qw" signature="findCategoriesByName(java.lang.String)"/>
+    <methodSpecification uid="_NIqT4auBEeuU5OmyejY5qw" signature="findAllRegions()"/>
+    <methodSpecification uid="_NIqT4quBEeuU5OmyejY5qw" signature="findRegionById(int)"/>
+    <methodSpecification uid="_NIqT46uBEeuU5OmyejY5qw" signature="findRegionByName(java.lang.String)"/>
+    <methodSpecification uid="_NIqT5KuBEeuU5OmyejY5qw" signature="findRegionsByName(java.lang.String)"/>
+    <methodSpecification uid="_NIqT5auBEeuU5OmyejY5qw" signature="findItemsByName(java.lang.String)"/>
+    <methodSpecification uid="_NIq60KuBEeuU5OmyejY5qw" signature="findItemById(int)"/>
+    <methodSpecification uid="_NIq60auBEeuU5OmyejY5qw" signature="findAllItems()"/>
+    <methodSpecification uid="_NIq60quBEeuU5OmyejY5qw" signature="findPersonalizedItems(de.hpi.sam.rubis.entity.User)"/>
+    <methodSpecification uid="_NIq606uBEeuU5OmyejY5qw" signature="isUserNicknameUsed(java.lang.String)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIq61KuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.reputationservice.ReputationService" providingComponentTypes="//@componentTypes.5" instances="//@tenants.0/@components.5/@providedInterfaces.0">
+    <methodSpecification uid="_NIq61auBEeuU5OmyejY5qw" signature="giveComment(java.lang.String,java.lang.String,int,int,java.lang.String,int)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIq61quBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.usermgmt.AboutMeService" providingComponentTypes="//@componentTypes.0" instances="//@tenants.0/@components.0/@providedInterfaces.0">
+    <methodSpecification uid="_NIq616uBEeuU5OmyejY5qw" signature="getAboutMe(java.lang.String,java.lang.String)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIrh4KuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.usermgmt.BrowseRegionsService" providingComponentTypes="//@componentTypes.0" instances="//@tenants.0/@components.0/@providedInterfaces.1">
+    <methodSpecification uid="_NIrh4auBEeuU5OmyejY5qw" signature="getAllRegions()"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIrh4quBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.usermgmt.UserRegistrationService" providingComponentTypes="//@componentTypes.0" instances="//@tenants.0/@components.0/@providedInterfaces.2">
+    <methodSpecification uid="_NIrh46uBEeuU5OmyejY5qw" signature="registerUser(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,de.hpi.sam.rubis.entity.CustomerClass)"/>
+  </interfaceTypes>
+  <interfaceTypes uid="_NIrh5KuBEeuU5OmyejY5qw" fullyQualifiedName="de.hpi.sam.rubis.usermgmt.ViewUserInfoService" providingComponentTypes="//@componentTypes.0" instances="//@tenants.0/@components.0/@providedInterfaces.3">
+    <methodSpecification uid="_NIswAKuBEeuU5OmyejY5qw" signature="getUserInfo(int)"/>
+  </interfaceTypes>
+  <tenants uid="_NIvMQKuBEeuU5OmyejY5qw" name="mRUBiS #1">
+    <components uid="_NIvzUKuBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.0">
+      <parameters uid="_NIvzUauBEeuU5OmyejY5qw" value="LOW" type="//@componentTypes.0/@parameterTypes.0"/>
+      <requiredInterfaces uid="_NIwaYKuBEeuU5OmyejY5qw" type="//@interfaceTypes.0">
+        <connector uid="_NIxoi6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.2/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwaYauBEeuU5OmyejY5qw" type="//@interfaceTypes.8">
+        <connector uid="_NIxojauBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.1"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwaYquBEeuU5OmyejY5qw" type="//@interfaceTypes.9">
+        <connector uid="_NIxoj6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwaY6uBEeuU5OmyejY5qw" type="//@interfaceTypes.7">
+        <connector uid="_NIxoiauBEeuU5OmyejY5qw" target="//@tenants.0/@components.6/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwaZKuBEeuU5OmyejY5qw" type="//@interfaceTypes.11"/>
+      <providedInterfaces uid="_NIwaZauBEeuU5OmyejY5qw" type="//@interfaceTypes.12"/>
+      <providedInterfaces uid="_NIwaZquBEeuU5OmyejY5qw" type="//@interfaceTypes.13"/>
+      <providedInterfaces uid="_NIwaZ6uBEeuU5OmyejY5qw" type="//@interfaceTypes.14"/>
+      <replica/>
+    </components>
+    <components uid="_NIwaaKuBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.1">
+      <requiredInterfaces uid="_NIwaaauBEeuU5OmyejY5qw" type="//@interfaceTypes.9">
+        <connector uid="_NIxoh6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwaaquBEeuU5OmyejY5qw" type="//@interfaceTypes.8">
+        <connector uid="_NIxohauBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.1"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwaa6uBEeuU5OmyejY5qw" type="//@interfaceTypes.0">
+        <connector uid="_NIxog6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.2/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwabKuBEeuU5OmyejY5qw" type="//@interfaceTypes.7">
+        <connector uid="_NIxogauBEeuU5OmyejY5qw" target="//@tenants.0/@components.6/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwabauBEeuU5OmyejY5qw" type="//@interfaceTypes.5"/>
+      <providedInterfaces uid="_NIwabquBEeuU5OmyejY5qw" type="//@interfaceTypes.6"/>
+      <replica/>
+    </components>
+    <components uid="_NIwab6uBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.2">
+      <requiredInterfaces uid="_NIwacKuBEeuU5OmyejY5qw" type="//@interfaceTypes.9">
+        <connector uid="_NIxokauBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwacauBEeuU5OmyejY5qw" type="//@interfaceTypes.0" connectors="//@tenants.0/@components.5/@requiredInterfaces.2/@connector //@tenants.0/@components.1/@requiredInterfaces.2/@connector //@tenants.0/@components.0/@requiredInterfaces.0/@connector //@tenants.0/@components.3/@requiredInterfaces.2/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwacquBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.3">
+      <requiredInterfaces uid="_NIwac6uBEeuU5OmyejY5qw" type="//@interfaceTypes.9">
+        <connector uid="_NIxom6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwadKuBEeuU5OmyejY5qw" type="//@interfaceTypes.8">
+        <connector uid="_NIxomauBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.1"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwadauBEeuU5OmyejY5qw" type="//@interfaceTypes.0">
+        <connector uid="_NIxol6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.2/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwadquBEeuU5OmyejY5qw" type="//@interfaceTypes.4">
+        <connector uid="_NIxok6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.4/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwad6uBEeuU5OmyejY5qw" type="//@interfaceTypes.7">
+        <connector uid="_NIxolauBEeuU5OmyejY5qw" target="//@tenants.0/@components.6/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwaeKuBEeuU5OmyejY5qw" type="//@interfaceTypes.1"/>
+      <providedInterfaces uid="_NIwaeauBEeuU5OmyejY5qw" type="//@interfaceTypes.2"/>
+      <replica/>
+    </components>
+    <components uid="_NIwaequBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.4">
+      <requiredInterfaces uid="_NIwae6uBEeuU5OmyejY5qw" type="//@interfaceTypes.8">
+        <connector uid="_NIxonauBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.1"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwafKuBEeuU5OmyejY5qw" type="//@interfaceTypes.7">
+        <connector uid="_NIxon6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.6/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwafauBEeuU5OmyejY5qw" type="//@interfaceTypes.4" connectors="//@tenants.0/@components.3/@requiredInterfaces.3/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwafquBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.5">
+      <requiredInterfaces uid="_NIwaf6uBEeuU5OmyejY5qw" type="//@interfaceTypes.9">
+        <connector uid="_NIxBhKuBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwagKuBEeuU5OmyejY5qw" type="//@interfaceTypes.8">
+        <connector uid="_NIxBhquBEeuU5OmyejY5qw" target="//@tenants.0/@components.7/@providedInterfaces.1"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwagauBEeuU5OmyejY5qw" type="//@interfaceTypes.0">
+        <connector uid="_NIxBiKuBEeuU5OmyejY5qw" target="//@tenants.0/@components.2/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <requiredInterfaces uid="_NIwagquBEeuU5OmyejY5qw" type="//@interfaceTypes.7">
+        <connector uid="_NIxBiquBEeuU5OmyejY5qw" target="//@tenants.0/@components.6/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwag6uBEeuU5OmyejY5qw" type="//@interfaceTypes.10"/>
+      <replica/>
+    </components>
+    <components uid="_NIwahKuBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.6">
+      <providedInterfaces uid="_NIwahauBEeuU5OmyejY5qw" type="//@interfaceTypes.7" connectors="//@tenants.0/@components.5/@requiredInterfaces.3/@connector //@tenants.0/@components.1/@requiredInterfaces.3/@connector //@tenants.0/@components.0/@requiredInterfaces.3/@connector //@tenants.0/@components.3/@requiredInterfaces.4/@connector //@tenants.0/@components.4/@requiredInterfaces.1/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwahquBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.7">
+      <requiredInterfaces uid="_NIwah6uBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxooauBEeuU5OmyejY5qw" target="//@tenants.0/@components.8/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwaiKuBEeuU5OmyejY5qw" type="//@interfaceTypes.9" connectors="//@tenants.0/@components.5/@requiredInterfaces.0/@connector //@tenants.0/@components.1/@requiredInterfaces.0/@connector //@tenants.0/@components.0/@requiredInterfaces.2/@connector //@tenants.0/@components.2/@requiredInterfaces.0/@connector //@tenants.0/@components.3/@requiredInterfaces.0/@connector"/>
+      <providedInterfaces uid="_NIwaiauBEeuU5OmyejY5qw" type="//@interfaceTypes.8" connectors="//@tenants.0/@components.5/@requiredInterfaces.1/@connector //@tenants.0/@components.1/@requiredInterfaces.1/@connector //@tenants.0/@components.0/@requiredInterfaces.1/@connector //@tenants.0/@components.3/@requiredInterfaces.1/@connector //@tenants.0/@components.4/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwaiquBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.8">
+      <parameters uid="_NIwai6uBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.8/@parameterTypes.0"/>
+      <parameters uid="_NIwajKuBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.8/@parameterTypes.1"/>
+      <parameters uid="_NIwajauBEeuU5OmyejY5qw" value="300" type="//@componentTypes.8/@parameterTypes.2"/>
+      <requiredInterfaces uid="_NIwajquBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxoo6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.9/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwaj6uBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.7/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwakKuBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.9">
+      <parameters uid="_NIwakauBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.9/@parameterTypes.0"/>
+      <parameters uid="_NIwakquBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.9/@parameterTypes.1"/>
+      <requiredInterfaces uid="_NIwak6uBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxopauBEeuU5OmyejY5qw" target="//@tenants.0/@components.10/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwalKuBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.8/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwalauBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.10">
+      <parameters uid="_NIwalquBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.10/@parameterTypes.0"/>
+      <parameters uid="_NIwal6uBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.10/@parameterTypes.1"/>
+      <requiredInterfaces uid="_NIwamKuBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxop6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.11/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwamauBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.9/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwamquBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.11">
+      <parameters uid="_NIwam6uBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.11/@parameterTypes.0"/>
+      <parameters uid="_NIwanKuBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.11/@parameterTypes.1"/>
+      <requiredInterfaces uid="_NIwanauBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxoqauBEeuU5OmyejY5qw" target="//@tenants.0/@components.12/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwanquBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.10/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwan6uBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.12">
+      <parameters uid="_NIwaoKuBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.12/@parameterTypes.0"/>
+      <parameters uid="_NIwaoauBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.12/@parameterTypes.1"/>
+      <requiredInterfaces uid="_NIwaoquBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxoq6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.13/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwao6uBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.11/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwapKuBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.13">
+      <parameters uid="_NIwapauBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.13/@parameterTypes.0"/>
+      <parameters uid="_NIwapquBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.13/@parameterTypes.1"/>
+      <parameters uid="_NIwap6uBEeuU5OmyejY5qw" value="5" type="//@componentTypes.13/@parameterTypes.2"/>
+      <requiredInterfaces uid="_NIwaqKuBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxorauBEeuU5OmyejY5qw" target="//@tenants.0/@components.14/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIwaqauBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.12/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIwaqquBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.14">
+      <parameters uid="_NIwaq6uBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.14/@parameterTypes.0"/>
+      <parameters uid="_NIwarKuBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.14/@parameterTypes.1"/>
+      <parameters uid="_NIwarauBEeuU5OmyejY5qw" value="5" type="//@componentTypes.14/@parameterTypes.2"/>
+      <requiredInterfaces uid="_NIxBcKuBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxor6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.15/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIxBcauBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.13/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIxBcquBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.15">
+      <parameters uid="_NIxBc6uBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.15/@parameterTypes.0"/>
+      <parameters uid="_NIxBdKuBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.15/@parameterTypes.1"/>
+      <parameters uid="_NIxBdauBEeuU5OmyejY5qw" value="Coins,Jewelry" type="//@componentTypes.15/@parameterTypes.2"/>
+      <requiredInterfaces uid="_NIxBdquBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxosauBEeuU5OmyejY5qw" target="//@tenants.0/@components.16/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIxBd6uBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.14/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIxBeKuBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.16">
+      <parameters uid="_NIxBeauBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.16/@parameterTypes.0"/>
+      <parameters uid="_NIxBequBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.16/@parameterTypes.1"/>
+      <requiredInterfaces uid="_NIxBe6uBEeuU5OmyejY5qw" type="//@interfaceTypes.3">
+        <connector uid="_NIxos6uBEeuU5OmyejY5qw" target="//@tenants.0/@components.17/@providedInterfaces.0"/>
+      </requiredInterfaces>
+      <providedInterfaces uid="_NIxBfKuBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.15/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+    <components uid="_NIxBfauBEeuU5OmyejY5qw" state="STARTED" type="//@componentTypes.17">
+      <parameters uid="_NIxBfquBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.17/@parameterTypes.0"/>
+      <parameters uid="_NIxBf6uBEeuU5OmyejY5qw" value="0.05" type="//@componentTypes.17/@parameterTypes.1"/>
+      <parameters uid="_NIxBgKuBEeuU5OmyejY5qw" value="14" type="//@componentTypes.17/@parameterTypes.2"/>
+      <requiredInterfaces uid="_NIxBgauBEeuU5OmyejY5qw" type="//@interfaceTypes.3"/>
+      <providedInterfaces uid="_NIxBgquBEeuU5OmyejY5qw" type="//@interfaceTypes.3" connectors="//@tenants.0/@components.16/@requiredInterfaces.0/@connector"/>
+      <replica/>
+    </components>
+  </tenants>
+  <cloud name="AmazonCloud"/>
+</comparch:Architecture>

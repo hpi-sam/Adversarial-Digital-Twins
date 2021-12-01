@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mlsdm:Activity xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:mlexpressions="http://www.mdelab.de/mlexpressions/1.0" xmlns:mlsdm="http://www.mdelab.de/mlsdm/1.0" xmlns:mlstorypatterns="http://www.mdelab.de/mlstorypatterns/1.0" uuid="_aGylcBIWEeaGtfV5DkXcfA" name="A_CF3_ALL">
+  <edges uuid="_xgWF0BIWEeaGtfV5DkXcfA" source="_cLH0sBIWEeaGtfV5DkXcfA" target="_uyCsgBIWEeaGtfV5DkXcfA"/>
+  <edges uuid="_vCZf4BSLEeaKB4CuFlF4Yg" source="_uyCsgBIWEeaGtfV5DkXcfA" target="_2Ha5wNH9Eeerq69SbBK_BA" guardType="SUCCESS"/>
+  <edges uuid="_FWkdgBhmEeaKAMVq-_H_Mw" source="_uyCsgBIWEeaGtfV5DkXcfA" target="_0E87IBIXEeaGtfV5DkXcfA" guardType="FAILURE"/>
+  <edges uuid="_JOOEgBhmEeaKAMVq-_H_Mw" source="_1xatkBhlEeaKAMVq-_H_Mw" target="_0E87IBIXEeaGtfV5DkXcfA"/>
+  <edges uuid="_pAjxMNH9Eeerq69SbBK_BA" source="_mhnpkNH9Eeerq69SbBK_BA" target="_0E87IBIXEeaGtfV5DkXcfA"/>
+  <edges uuid="_s2e54NH9Eeerq69SbBK_BA" source="_lAt3gNH9Eeerq69SbBK_BA" target="_0E87IBIXEeaGtfV5DkXcfA"/>
+  <edges uuid="_4BYsENH9Eeerq69SbBK_BA" source="_2Ha5wNH9Eeerq69SbBK_BA" target="_1xatkBhlEeaKAMVq-_H_Mw" guardType="BOOLEAN">
+    <guardExpression xsi:type="mlexpressions:MLStringExpression" uuid="_oOUpsNICEeerq69SbBK_BA" expressionString="component.providedInterfaces.connectors->size()=0" expressionLanguageID="OCL"/>
+  </edges>
+  <edges uuid="_9anakNH9Eeerq69SbBK_BA" source="_2Ha5wNH9Eeerq69SbBK_BA" target="_lAt3gNH9Eeerq69SbBK_BA" guardType="BOOLEAN">
+    <guardExpression xsi:type="mlexpressions:MLStringExpression" uuid="_xGDfYNICEeerq69SbBK_BA" expressionString="component.providedInterfaces.connectors->size()=1" expressionLanguageID="OCL"/>
+  </edges>
+  <edges uuid="__24BoNH9Eeerq69SbBK_BA" source="_2Ha5wNH9Eeerq69SbBK_BA" target="_mhnpkNH9Eeerq69SbBK_BA" guardType="ELSE"/>
+  <nodes xsi:type="mlsdm:InitialNode" uuid="_cLH0sBIWEeaGtfV5DkXcfA" outgoingEdges="_xgWF0BIWEeaGtfV5DkXcfA"/>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_uyCsgBIWEeaGtfV5DkXcfA" outgoingEdges="_vCZf4BSLEeaKB4CuFlF4Yg _FWkdgBhmEeaKAMVq-_H_Mw" incomingEdges="_xgWF0BIWEeaGtfV5DkXcfA" name="check for failures">
+    <storyPattern uuid="_uyDTkBIWEeaGtfV5DkXcfA">
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_Iw_h0BIXEeaGtfV5DkXcfA" name="component" outgoingLinks="_7Wc44BhkEeaKAMVq-_H_Mw" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+        <constraints xsi:type="mlexpressions:MLStringExpression" uuid="_LRd6gBIXEeaGtfV5DkXcfA" expressionString="self.state=ComponentLifeCycle::REMOVED" expressionLanguageID="OCL"/>
+      </storyPatternObjects>
+      <negativeApplicationConditions uuid="_Tap9QBSKEeaKB4CuFlF4Yg" name="nac">
+        <storyPatternLinks xsi:type="mlstorypatterns:StoryPatternLink" uuid="_7Wc44BhkEeaKAMVq-_H_Mw" source="_Iw_h0BIXEeaGtfV5DkXcfA" target="_UvsdkBSKEeaKB4CuFlF4Yg">
+          <feature xsi:type="ecore:EReference" href="http://www.mdelab.de/morisia/comparch#//Component/issues"/>
+        </storyPatternLinks>
+        <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_UvsdkBSKEeaKB4CuFlF4Yg" name="cf3old" incomingLinks="_7Wc44BhkEeaKAMVq-_H_Mw">
+          <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//CF3"/>
+        </storyPatternObjects>
+      </negativeApplicationConditions>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_1xatkBhlEeaKAMVq-_H_Mw" outgoingEdges="_JOOEgBhmEeaKAMVq-_H_Mw" incomingEdges="_4BYsENH9Eeerq69SbBK_BA" name="mark failure">
+    <storyPattern uuid="_1xatkRhlEeaKAMVq-_H_Mw" name="">
+      <storyPatternLinks xsi:type="mlstorypatterns:StoryPatternLink" uuid="_GaNr0BhmEeaKAMVq-_H_Mw" modifier="CREATE" source="_-wC1cBhlEeaKAMVq-_H_Mw" target="_6SN_QBhlEeaKAMVq-_H_Mw">
+        <feature xsi:type="ecore:EReference" href="http://www.mdelab.de/morisia/comparch#//Issue/affectedComponent"/>
+      </storyPatternLinks>
+      <storyPatternLinks xsi:type="mlstorypatterns:StoryPatternLink" uuid="_IAj-kBhmEeaKAMVq-_H_Mw" modifier="CREATE" source="_8VF18BhlEeaKAMVq-_H_Mw" target="_-wC1cBhlEeaKAMVq-_H_Mw">
+        <feature xsi:type="ecore:EReference" href="http://www.mdelab.de/morisia/comparch#//Annotations/issues"/>
+      </storyPatternLinks>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_6SN_QBhlEeaKAMVq-_H_Mw" name="component" incomingLinks="_GaNr0BhmEeaKAMVq-_H_Mw" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+      </storyPatternObjects>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_8VF18BhlEeaKAMVq-_H_Mw" name="annotations" outgoingLinks="_IAj-kBhmEeaKAMVq-_H_Mw" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Annotations"/>
+      </storyPatternObjects>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_-wC1cBhlEeaKAMVq-_H_Mw" modifier="CREATE" name="cf3" outgoingLinks="_GaNr0BhmEeaKAMVq-_H_Mw" incomingLinks="_IAj-kBhmEeaKAMVq-_H_Mw">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//CF3"/>
+        <attributeAssignments uuid="_ARFxcBhmEeaKAMVq-_H_Mw">
+          <assignmentExpression xsi:type="mlexpressions:MLStringExpression" uuid="_Cq46YBhmEeaKAMVq-_H_Mw" expressionString="component.type.reliability * component.type.criticality *component.tenant.importance*(component.requiredInterfaces.connector->size()+1)*component.performance-10*component.aDT" expressionLanguageID="OCL"/>
+          <feature xsi:type="ecore:EAttribute" href="http://www.mdelab.de/morisia/comparch#//Issue/utilityDrop"/>
+        </attributeAssignments>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:ActivityFinalNode" uuid="_0E87IBIXEeaGtfV5DkXcfA" incomingEdges="_FWkdgBhmEeaKAMVq-_H_Mw _JOOEgBhmEeaKAMVq-_H_Mw _pAjxMNH9Eeerq69SbBK_BA _s2e54NH9Eeerq69SbBK_BA"/>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_lAt3gNH9Eeerq69SbBK_BA" outgoingEdges="_s2e54NH9Eeerq69SbBK_BA" incomingEdges="_9anakNH9Eeerq69SbBK_BA" name="make failure 2">
+    <storyPattern uuid="_lAt3gdH9Eeerq69SbBK_BA">
+      <storyPatternLinks xsi:type="mlstorypatterns:StoryPatternLink" uuid="_dloeoNIAEeerq69SbBK_BA" modifier="CREATE" source="_Cz2eMNIAEeerq69SbBK_BA" target="_DRdAMNIAEeerq69SbBK_BA">
+        <feature xsi:type="ecore:EReference" href="http://www.mdelab.de/morisia/comparch#//Annotations/issues"/>
+      </storyPatternLinks>
+      <storyPatternLinks xsi:type="mlstorypatterns:StoryPatternLink" uuid="_eLXB4NIAEeerq69SbBK_BA" modifier="CREATE" source="_DRdAMNIAEeerq69SbBK_BA" target="_CWelsNIAEeerq69SbBK_BA">
+        <feature xsi:type="ecore:EReference" href="http://www.mdelab.de/morisia/comparch#//Issue/affectedComponent"/>
+      </storyPatternLinks>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_CWelsNIAEeerq69SbBK_BA" name="component" incomingLinks="_eLXB4NIAEeerq69SbBK_BA" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+      </storyPatternObjects>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_Cz2eMNIAEeerq69SbBK_BA" name="annotations" outgoingLinks="_dloeoNIAEeerq69SbBK_BA" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Annotations"/>
+      </storyPatternObjects>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_DRdAMNIAEeerq69SbBK_BA" modifier="CREATE" name="cf3" outgoingLinks="_eLXB4NIAEeerq69SbBK_BA" incomingLinks="_dloeoNIAEeerq69SbBK_BA">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//CF3"/>
+        <attributeAssignments uuid="_O_uvwNIBEeerq69SbBK_BA">
+          <assignmentExpression xsi:type="mlexpressions:MLStringExpression" uuid="_S8FQkNIBEeerq69SbBK_BA" expressionString="component.type.reliability * component.type.criticality*component.tenant.importance*(component.requiredInterfaces.connector->size()+1)*2*component.performance-10*component.aDT" expressionLanguageID="OCL"/>
+          <feature xsi:type="ecore:EAttribute" href="http://www.mdelab.de/morisia/comparch#//Issue/utilityDrop"/>
+        </attributeAssignments>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:StoryNode" uuid="_mhnpkNH9Eeerq69SbBK_BA" outgoingEdges="_pAjxMNH9Eeerq69SbBK_BA" incomingEdges="__24BoNH9Eeerq69SbBK_BA" name="make failure 3">
+    <storyPattern uuid="_mhnpkdH9Eeerq69SbBK_BA">
+      <storyPatternLinks xsi:type="mlstorypatterns:StoryPatternLink" uuid="_QsV4ANIAEeerq69SbBK_BA" modifier="CREATE" source="_E3_gMNIAEeerq69SbBK_BA" target="_EGGJMNIAEeerq69SbBK_BA">
+        <feature xsi:type="ecore:EReference" href="http://www.mdelab.de/morisia/comparch#//Issue/affectedComponent"/>
+      </storyPatternLinks>
+      <storyPatternLinks xsi:type="mlstorypatterns:StoryPatternLink" uuid="_R09s8NIAEeerq69SbBK_BA" modifier="CREATE" source="_EeNuQNIAEeerq69SbBK_BA" target="_E3_gMNIAEeerq69SbBK_BA">
+        <feature xsi:type="ecore:EReference" href="http://www.mdelab.de/morisia/comparch#//Annotations/issues"/>
+      </storyPatternLinks>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_EGGJMNIAEeerq69SbBK_BA" name="component" incomingLinks="_QsV4ANIAEeerq69SbBK_BA" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+      </storyPatternObjects>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_EeNuQNIAEeerq69SbBK_BA" name="annotations" outgoingLinks="_R09s8NIAEeerq69SbBK_BA" bindingType="BOUND">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Annotations"/>
+      </storyPatternObjects>
+      <storyPatternObjects xsi:type="mlstorypatterns:StoryPatternObject" uuid="_E3_gMNIAEeerq69SbBK_BA" modifier="CREATE" name="cf3" outgoingLinks="_QsV4ANIAEeerq69SbBK_BA" incomingLinks="_R09s8NIAEeerq69SbBK_BA">
+        <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//CF3"/>
+        <attributeAssignments uuid="_kQtaENIBEeerq69SbBK_BA">
+          <assignmentExpression xsi:type="mlexpressions:MLStringExpression" uuid="_pwe1cNIBEeerq69SbBK_BA" expressionString="component.type.reliability * component.type.criticality*component.tenant.importance*(component.requiredInterfaces.connector->size()+1)*component.providedInterfaces.connectors->size()*component.performance-10*component.aDT" expressionLanguageID="OCL"/>
+          <feature xsi:type="ecore:EAttribute" href="http://www.mdelab.de/morisia/comparch#//Issue/utilityDrop"/>
+        </attributeAssignments>
+      </storyPatternObjects>
+    </storyPattern>
+  </nodes>
+  <nodes xsi:type="mlsdm:DecisionMergeNode" uuid="_2Ha5wNH9Eeerq69SbBK_BA" outgoingEdges="_4BYsENH9Eeerq69SbBK_BA _9anakNH9Eeerq69SbBK_BA __24BoNH9Eeerq69SbBK_BA" incomingEdges="_vCZf4BSLEeaKB4CuFlF4Yg"/>
+  <parameters uuid="_kNB1rRIWEeaGtfV5DkXcfA" name="component">
+    <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Component"/>
+  </parameters>
+  <parameters uuid="_qhZ9zRIWEeaGtfV5DkXcfA" name="annotations">
+    <type xsi:type="ecore:EClass" href="http://www.mdelab.de/morisia/comparch#//Annotations"/>
+  </parameters>
+</mlsdm:Activity>
