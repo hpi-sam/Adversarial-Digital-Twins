@@ -1,21 +1,20 @@
 import json
 import logging
 import random
-import socket
 from pathlib import Path
-from json.decoder import JSONDecodeError
 from subprocess import PIPE, Popen
 from time import sleep
-
+import sys
 from component_utility_predictor import RidgeUtilityPredictor
 from component_dependencies import ComponentDependencyModel
 
 import pandas as pd
+from failure_propagator.failure_propagator import FailureProgagator
 import numpy as np
 
 logging.basicConfig()
 logger = logging.getLogger('controller')
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.ERROR)
 
 
 class MRubisController():
@@ -26,9 +25,6 @@ class MRubisController():
         # Put your command line here (In Eclipse: Run -> Run Configurations... -> Show Command Line)
         with open(json_path, 'r') as f:
             variable_paths = json.load(f)
-
-        self.host = host
-        self.port = port
 
         self.launch_args = [
             variable_paths['java_path'],
@@ -47,11 +43,10 @@ class MRubisController():
         self.mrubis_state_history = []
         self.fix_history = []
         self.current_fixes = None
-        self.socket = None
-        self.mrubis_process = None
         self.utility_model = RidgeUtilityPredictor()
         self.output_path = Path(__file__).parent.resolve() / 'output'
         self.component_dependency_model = ComponentDependencyModel()
+        self.environment = FailureProgagator(host=host, port=port, json_path='path.json')
 
     def _start_mrubis(self):
         '''Launch mRUBiS as a subprocess. NOTE: Unstable. Manual startup from Eclipse is more robust.'''
@@ -67,42 +62,20 @@ class MRubisController():
         '''Terminate the mRUBiS process'''
         self.mrubis_process.terminate()
 
-    def _connect_to_java(self):
-        '''Connect to the socket opened on the java side'''
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sleep(1)
-        self.socket.connect((self.host, self.port))
-        logger.info('Connected to the Java side.')
 
     def _get_initial_state(self):
         '''Query mRUBiS for the number of shops, get their initial states'''
-        self.number_of_shops = self._get_from_mrubis(
-            'get_number_of_shops').get('number_of_shops')
+        self.number_of_shops = self.environment.get_number_of_shops()
         logger.info(f'Number of mRUBIS shops: {self.number_of_shops}')
         for _ in range(self.number_of_shops):
-            shop_state = self._get_from_mrubis('get_initial_state')
+            shop_state = self.environment.get_initial_state()
             shop_name = next(iter(shop_state))
             self.mrubis_state[shop_name] = shop_state[shop_name]
 
+
     def _update_number_of_issues_in_run(self):
         '''Update the number of issues present in the current run'''
-        self.number_of_issues_in_run = self._get_from_mrubis(
-            'get_number_of_issues_in_run').get('number_of_issues_in_run')
-
-    def _get_from_mrubis(self, message):
-        '''Send a message to mRUBiS and return the response as a dictionary'''
-        self.socket.send(f"{message}\n".encode("utf-8"))
-        logger.debug(f'Waiting for mRUBIS to answer to message {message}')
-        data = self.socket.recv(64000)
-
-        try:
-            mrubis_state = json.loads(data.decode("utf-8"))
-        except JSONDecodeError:
-            logger.error("Could not decode JSON input, received this:")
-            logger.error(data)
-            mrubis_state = "not available"
-
-        return mrubis_state
+        self.number_of_issues_in_run = self.environment.get_number_of_issues_in_run()
 
     @staticmethod
     def _get_info_from_issue(issue):
@@ -129,7 +102,6 @@ class MRubisController():
             rule_costs = [cost for idx, cost in enumerate(
                 rule_costs) if rules[idx] != 'ReplaceComponent']
             rules = [rule for rule in rules if rule != 'ReplaceComponent']
-
         if strategy == 'random':
             return random.choice(rules)
         if strategy == 'lowest':
@@ -141,21 +113,11 @@ class MRubisController():
         '''Send a rule to apply to an issue to mRUBiS'''
         shop_name, component_name, _, issue_name, _, _ = self._get_info_from_issue(
             issue)
-        picked_rule_message = {shop_name: {issue_name: {component_name: rule}}}
-        logger.info(
-            f"{shop_name}: Handling {issue_name} on {component_name} with {rule}")
-        logger.debug('Sending selected rule to mRUBIS...')
-        self.socket.send(
-            (json.dumps(picked_rule_message) + '\n').encode("utf-8"))
-        logger.debug("Waiting for mRUBIS to answer with 'rule_received'...")
-        data = self.socket.recv(64000)
-        if data.decode('utf-8').strip() == 'rule_received':
-            logger.debug('Rule transmitted successfully.')
-        # Remember components that have been fixed in this run
         if self.components_fixed_in_this_run.get(shop_name) is None:
             self.components_fixed_in_this_run[shop_name] = []
         self.components_fixed_in_this_run[shop_name].append(
             (issue_name, component_name))
+        self.environment.send_rule_to_execute(shop_name, issue_name, component_name, rule)
 
     def _predict_optimal_utility_of_fixed_components(self, fixes_can_fail):
         '''Predict the optimal utility of a component which should be fixed'''
@@ -216,35 +178,6 @@ class MRubisController():
         cumulative_utility_per_component = [util * (n_rows - i) for i, util in enumerate(sorted_df['predicted_optimal_utility'])]
         sorted_df['cum_util'] = cumulative_utility_per_component
         return sorted_df
-
-    def _send_order_in_which_to_apply_fixes(self, order_tuples):
-        '''Send the order in which to apply the fixes to mRUBiS'''
-        logger.debug('Sending order in which to apply fixes to mRUBIS...')
-        order_dict = {idx: {
-            'shop': fix_tuple[0],
-            'issue': fix_tuple[1],
-            'component': fix_tuple[2]
-        } for idx, fix_tuple in enumerate(order_tuples)}
-        '''
-        for issueComponent in order_dict:
-            self.socket.send(json.dumps(issueComponent))
-            data = self.socket.recv(64000)
-        '''
-        self.socket.send((json.dumps(order_dict) + '\n').encode("utf-8"))
-        logger.debug(
-            "Waiting for mRUBIS to answer with 'fix_order_received'...")
-        data = self.socket.recv(64000)
-        if data.decode('utf-8').strip() == 'fix_order_received':
-            logger.debug('Order transmitted successfully.')
-
-    def _send_exit_message(self):
-        '''Tell mRUBiS to stop its main loop'''
-        self.socket.send("exit\n".encode("utf-8"))
-        _ = self.socket.recv(64000)
-
-    def _close_socket(self):
-        '''Close the socket'''
-        self.socket.close()
 
     def _state_to_df(self, fix_status):
         '''Return the current mRUBiS state as a pandas dataframe'''
@@ -310,7 +243,7 @@ class MRubisController():
                     if 'Authentication Service' in component_type and np.isclose(float(component_params['component_utility']), 0):
                         del self.mrubis_state[shop][component_type]
 
-    def run(self, external_start=False, max_runs=100, rule_picking_strategy='lowest', issue_ranking_strategy='utility', fixes_can_fail=False):
+    def run(self, external_start=False, max_runs=300, rule_picking_strategy='lowest', issue_ranking_strategy='utility', fixes_can_fail=False):
         '''Run and control mRUBiS for a maximum number of runs'''
 
         if not external_start:
@@ -320,8 +253,6 @@ class MRubisController():
 
         # Account for Java being slow to start on some systems
         sleep(0.5)
-
-        self._connect_to_java()
 
         # Train the model on the provided batch file
         self.utility_model.load_train_data()
@@ -345,7 +276,8 @@ class MRubisController():
                 self._update_number_of_issues_in_run()
 
                 # Get the current issue to handle
-                current_issue = self._get_from_mrubis('get_issue')
+                current_issue = self.environment.get_current_issue()
+                logger.info(current_issue)
                 #current_issues.append(current_issue)
                 self._update_current_state(current_issue)
 
@@ -374,17 +306,17 @@ class MRubisController():
             self.fix_history.append(fixed_issues)
 
             logger.info(f'Fixing in this order: {component_fixing_order}')
-            self._send_order_in_which_to_apply_fixes(component_fixing_order)
+            self.environment.send_order_in_which_to_apply_fixes(component_fixing_order)
 
             # Fixes are now being applied...
 
             # Query the state of the affected components once more
             logger.info(
                 "Getting state of affected components after taking action...")
-            state_after_action = self._get_from_mrubis(
+            state_after_action = self.environment.get_from_mrubis(
                 message=json.dumps(
-                    {shop_name: [i_c_tuple[1] for i_c_tuple in i_c_tuples]
-                        for shop_name, i_c_tuples in self.components_fixed_in_this_run.items()}
+                    {shop_name: [issue_component_tuple[1] for issue_component_tuple in issue_component_tuples]
+                        for shop_name, issue_component_tuples in self.components_fixed_in_this_run.items()}
                 )
             )
             self._update_current_state(state_after_action)
@@ -394,11 +326,11 @@ class MRubisController():
             state_df_after = self._state_to_df(fix_status='after')
             self.mrubis_state_history.append(state_df_after)
 
-        self._send_exit_message()
-        self._close_socket()
+        self.environment.send_exit_message()
+        self.environment.close_socket()
 
         if not external_start:
-            self._stop_mrubis()
+            self.environment.stop_mrubis()
 
         self._write_mrubis_state_history_to_disk(
             filename=f'{max_runs}_runs_{rule_picking_strategy}_{issue_ranking_strategy}{"_fixingcanfail" if fixes_can_fail else ""}')
@@ -410,5 +342,5 @@ class MRubisController():
 if __name__ == "__main__":
 
     controller = MRubisController()
-    controller.run(external_start=True, max_runs=100,
+    controller.run(external_start=True, max_runs=1000,
                    rule_picking_strategy='highest', issue_ranking_strategy='random', fixes_can_fail=True)
