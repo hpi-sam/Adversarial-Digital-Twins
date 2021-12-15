@@ -384,6 +384,40 @@
     }
   },
   "User Management Service": {
+    "CF1": {
+      "component_utility": [
+        1.368921472838684e-12,
+        2.9625234585437415e-15
+      ],
+      "criticality": [
+        1.5,
+        0.0
+      ],
+      "importance": [
+        1.061685667752443,
+        0.2250347162282782
+      ],
+      "reliability": [
+        0.03125,
+        0.0
+      ],
+      "RestartComponent": [
+        0.35000000000000003,
+        5.551115123125783e-17
+      ],
+      "HwRedeployComponent": [
+        2.5872638436482083,
+        0.7767524090592594
+      ],
+      "ReplaceComponent": [
+        2.5872638436482083,
+        0.7767524090592594
+      ],
+      "LwRedeployComponent": [
+        1.5299999999999998,
+        2.220446049250313e-16
+      ]
+    },
     "CF3": {
       "component_utility": [
         0.0,
