@@ -8,6 +8,15 @@ from .components import Components
 class FPHMM():
     def __init__(self, config_path: str ="moin"):
         #self.transition_matrix = pd.read_csv(config_path)
+        long_components = np.array([[component]*5 for component in Components.list()]).flat
+        arrays = [
+        long_components,
+        ComponentFailure.list()*len(Components.list()),
+        ]
+        tuples = list(zip(*arrays))
+        index = pd.MultiIndex.from_tuples(tuples, names=["component", "status"])
+        self.transition_matrix = pd.DataFrame(np.array([[0.9625, 0.0125, 0.0125, 0.0125, 0.]*len(Components.list())]*len(long_components)), index=index, columns=index)
+    
         self.current_state = None
 
     def get_state(self):
@@ -17,7 +26,8 @@ class FPHMM():
         print(state)
         pass
 
-    def create_observation(matrix: pd.DataFrame, failed_components: Dict[str, str]):
+    def create_observation(self, failed_components: Dict[str, str]):
+        matrix = self.transition_matrix
         # assumption: observation of failed components can not differ from the real state
         # "we cant unfail components"
         all_failed_components = failed_components.copy()

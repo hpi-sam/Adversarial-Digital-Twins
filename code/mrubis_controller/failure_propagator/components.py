@@ -22,5 +22,5 @@ class Components(enum.Enum):
     USER_MANAGEMENT_SERVICE = 'User Management Service'
 
     @classmethod
-    def list() -> List[str]:
+    def list(self) -> List[str]:
         return [status.value for status in Components]

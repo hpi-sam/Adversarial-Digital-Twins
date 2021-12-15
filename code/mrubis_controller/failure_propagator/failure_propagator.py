@@ -5,9 +5,9 @@ from pathlib import Path
 from json.decoder import JSONDecodeError
 from time import sleep
 from typing import Union
-
+import sys
 from .messages import Messages
-
+import numpy as np
 from .failure_propagation_HMM import FPHMM
 
 logging.basicConfig()
@@ -24,6 +24,8 @@ class FailureProgagator():
 
         self.host = host
         self.port = port
+        self.analytics = {}
+        self.counter = 0
 
         self.launch_args = [
             variable_paths['java_path'],
@@ -43,7 +45,7 @@ class FailureProgagator():
         sleep(1)
         mrubis_socket.connect((self.host, self.port))
         logger.info('Connected to the Java side.')
-        return socket
+        return mrubis_socket
 
     def get_from_mrubis(self, message: Union[Messages, str]):
         if isinstance(message, Messages):
@@ -68,6 +70,10 @@ class FailureProgagator():
 
     def get_initial_state(self):
         shop_state = self.get_from_mrubis(Messages.GET_INITIAL_STATE)
+        # print(shop_state)
+        # with open("initial_state.json", "w") as file:
+        #     json.dump(shop_state, file, indent=2)
+        # sys.exit()
         #self.propagator.update_state(shop_state)
         return shop_state
 
@@ -75,6 +81,55 @@ class FailureProgagator():
         return self.get_from_mrubis(Messages.GET_NUMBER_OF_ISSUES_IN_RUN).get('number_of_issues_in_run')
     
     def get_current_issue(self):
+        issue = self.get_from_mrubis(Messages.GET_CURRENT_ISSUE)
+        #print(issue)
+        component_name = list(list(issue.values())[0].keys())[0]
+        failure_name = list(issue.values())[0][component_name]["failure_name"]
+        rule_cost = list(issue.values())[0][component_name]["rule_costs"]
+        rule_names = list(issue.values())[0][component_name]["rule_names"]
+        component_utility = list(issue.values())[0][component_name]["component_utility"]
+        criticality = list(issue.values())[0][component_name]["criticality"]
+        importance = list(issue.values())[0][component_name]["importance"]
+        reliability = list(issue.values())[0][component_name]["reliability"]
+
+
+        #rule_names = issue.values()[0][component_name]["rule_names"]
+        if component_name not in self.analytics:
+            self.analytics[component_name] = {}
+        if failure_name not in self.analytics[component_name]:
+            self.analytics[component_name][failure_name] = {}
+            self.analytics[component_name][failure_name]["component_utility"] = []
+            self.analytics[component_name][failure_name]["criticality"] = []
+            self.analytics[component_name][failure_name]["importance"] = []
+            self.analytics[component_name][failure_name]["reliability"] = []
+        self.analytics[component_name][failure_name]["component_utility"].append(float(component_utility))
+        self.analytics[component_name][failure_name]["criticality"].append(float(criticality))
+        self.analytics[component_name][failure_name]["importance"].append(float(importance))
+        self.analytics[component_name][failure_name]["reliability"].append(float(reliability))
+
+        for name, cost in zip(rule_names[1:-1].replace(" ", "").split(","), rule_cost[1:-1].replace(" ", "").split(",")):
+            if name not in self.analytics[component_name][failure_name]:
+                self.analytics[component_name][failure_name][name] = []
+            self.analytics[component_name][failure_name][name].append(float(cost)) 
+
+        self.counter += 1
+        print(self.counter)
+        if self.counter > 3000:
+
+            for component_name in self.analytics.keys():
+                for failure_name in self.analytics[component_name].keys():
+                    for rule_name in self.analytics[component_name][failure_name].keys():
+                        self.analytics[component_name][failure_name][rule_name] = [np.mean(self.analytics[component_name][failure_name][rule_name]), np.std(self.analytics[component_name][failure_name][rule_name])]
+                        self.analytics[component_name][failure_name]["component_utility"] = [np.mean(self.analytics[component_name][failure_name]["component_utility"]), np.std(self.analytics[component_name][failure_name]["component_utility"])]
+                        self.analytics[component_name][failure_name]["criticality"] = [np.mean(self.analytics[component_name][failure_name]["criticality"]), np.std(self.analytics[component_name][failure_name]["criticality"])]
+                        self.analytics[component_name][failure_name]["importance"] = [np.mean(self.analytics[component_name][failure_name]["importance"]), np.std(self.analytics[component_name][failure_name]["importance"])]
+                        self.analytics[component_name][failure_name]["reliability"] = [np.mean(self.analytics[component_name][failure_name]["reliability"]), np.std(self.analytics[component_name][failure_name]["reliability"])]
+
+            with open("rule_costs.json", "w") as file:
+                json.dump(self.analytics, file, indent=2)
+        
+            sys.exit()
+        return issue
         return self.get_from_mrubis(Messages.GET_CURRENT_ISSUE)
 
     def send_rule_to_execute(self, shop_name, issue_name, component_name, rule):

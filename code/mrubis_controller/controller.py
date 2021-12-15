@@ -4,7 +4,7 @@ import random
 from pathlib import Path
 from subprocess import PIPE, Popen
 from time import sleep
-
+import sys
 from component_utility_predictor import RidgeUtilityPredictor
 from component_dependencies import ComponentDependencyModel
 
@@ -14,7 +14,7 @@ import numpy as np
 
 logging.basicConfig()
 logger = logging.getLogger('controller')
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.ERROR)
 
 
 class MRubisController():
@@ -71,6 +71,11 @@ class MRubisController():
             shop_state = self.environment.get_initial_state()
             shop_name = next(iter(shop_state))
             self.mrubis_state[shop_name] = shop_state[shop_name]
+
+        with open("initial_state.json", "w") as file:
+            json.dump(self.mrubis_state[shop_name], file, indent=2)
+        sys.exit()
+
 
     def _update_number_of_issues_in_run(self):
         '''Update the number of issues present in the current run'''
@@ -242,7 +247,7 @@ class MRubisController():
                     if 'Authentication Service' in component_type and np.isclose(float(component_params['component_utility']), 0):
                         del self.mrubis_state[shop][component_type]
 
-    def run(self, external_start=False, max_runs=100, rule_picking_strategy='lowest', issue_ranking_strategy='utility', fixes_can_fail=False):
+    def run(self, external_start=False, max_runs=300, rule_picking_strategy='lowest', issue_ranking_strategy='utility', fixes_can_fail=False):
         '''Run and control mRUBiS for a maximum number of runs'''
 
         if not external_start:
@@ -341,5 +346,5 @@ class MRubisController():
 if __name__ == "__main__":
 
     controller = MRubisController()
-    controller.run(external_start=True, max_runs=100,
+    controller.run(external_start=True, max_runs=1000,
                    rule_picking_strategy='highest', issue_ranking_strategy='random', fixes_can_fail=True)

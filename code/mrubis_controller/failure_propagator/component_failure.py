@@ -9,5 +9,5 @@ class ComponentFailure(enum.Enum):
     CF5 = "cf5"
 
     @classmethod
-    def list() -> List[str]:
+    def list(self) -> List[str]:
         return [status.value for status in ComponentFailure]
