@@ -72,10 +72,6 @@ class MRubisController():
             shop_name = next(iter(shop_state))
             self.mrubis_state[shop_name] = shop_state[shop_name]
 
-        with open("initial_state.json", "w") as file:
-            json.dump(self.mrubis_state[shop_name], file, indent=2)
-        sys.exit()
-
 
     def _update_number_of_issues_in_run(self):
         '''Update the number of issues present in the current run'''

@@ -4,6 +4,7 @@ from typing import Dict
 
 from .component_failure import ComponentFailure
 from .components import Components
+import json
 
 class FPHMM():
     def __init__(self, config_path: str ="moin"):
@@ -15,9 +16,18 @@ class FPHMM():
         ]
         tuples = list(zip(*arrays))
         index = pd.MultiIndex.from_tuples(tuples, names=["component", "status"])
-        self.transition_matrix = pd.DataFrame(np.array([[0.9625, 0.0125, 0.0125, 0.0125, 0.]*len(Components.list())]*len(long_components)), index=index, columns=index)
+        #User Management Service looks like it cant have a CF1
+        #TODO: Change the probabilities accordingly.
+        self.transition_matrix = pd.DataFrame(np.array([[0.955, 0.015, 0.015, 0.015, 0.]*len(Components.list())]*len(long_components)), index=index, columns=index)
     
+        with open('rule_costs.json', "r") as json_file:
+            self.sample_params = json.load(json_file)
+
         self.current_state = None
+        self.initial_shop_states = {}
+
+    def add_initial_state(self, state):
+        self.initial_shop_states[list(state.keys())[0]] = list(state.values())[0]
 
     def get_state(self):
         return self.current_state
@@ -26,7 +36,7 @@ class FPHMM():
         print(state)
         pass
 
-    def create_observation(self, failed_components: Dict[str, str]):
+    def propagate_failures(self, failed_components: Dict[str, str]):
         matrix = self.transition_matrix
         # assumption: observation of failed components can not differ from the real state
         # "we cant unfail components"
@@ -34,17 +44,16 @@ class FPHMM():
         while True:
             if len(failed_components) == 0:
                 break
-            print("Failed components: "+str(failed_components))
+
             new_failed_components = {}
             for component, errorId in failed_components.items():
-                #print(component, errorId)
                 probabilities = matrix.loc[component,errorId]
-                #print("Probabilites: "+str(probabilities))
+
                 for computed_component in Components.list():
                     if computed_component in all_failed_components:
                         continue
                     new_state = np.random.choice(ComponentFailure.list(), p=np.array(probabilities[computed_component])/np.sum(probabilities[computed_component]))
-                    #print("New state: "+new_state)
+
                     if new_state == 'good':
                         continue
                     else:
@@ -53,4 +62,40 @@ class FPHMM():
             failed_components = new_failed_components
             
         return all_failed_components
+
+    def create_observation(self, issues):
+        shop_name = list(issues.keys())[0]
+        component_name = list(issues[shop_name].keys())[0]
+        failure_type = issues[shop_name][component_name]["failure_name"]
+        failed_components = {component_name: failure_type}
+        failed_components = self.propagate_failures(failed_components)
+        print(failed_components)
+        del failed_components[component_name]
+
+        shop_utility = float(issues[shop_name][component_name]["shop_utility"])
+
+        for failed_component, failure_type in failed_components.items():
+            sample_params = self.sample_params[failed_component][failure_type]
+            issues[shop_name][failed_component] = self.initial_shop_states[shop_name][failed_component]
+            issues[shop_name][failed_component]["failure_name"] = failure_type
+            shop_utility -= float(issues[shop_name][failed_component]["component_utility"])
+            issues[shop_name][failed_component]["component_utility"] = np.random.normal(*sample_params["component_utility"])
+            shop_utility += float(issues[shop_name][failed_component]["component_utility"])
+            issues[shop_name][failed_component]["criticality"] = np.random.normal(*sample_params["criticality"])
+            issues[shop_name][failed_component]["importance"] = np.random.normal(*sample_params["importance"])
+            issues[shop_name][failed_component]["reliability"] = np.random.normal(*sample_params["reliability"])
+            issues[shop_name][failed_component]["rule_names"] = list(sample_params.keys())[4:]
+            issues[shop_name][failed_component]["rule_costs"] = [np.random.normal(*sample_params[rule_name]) for rule_name in issues[shop_name][failed_component]["rule_names"]]
+        
+        for failed_component in issues[shop_name].keys():
+            issues[shop_name][failed_component]["shop_utility"] = shop_utility
+
+        return issues
+
+
+
+
+
+            
+        
         
