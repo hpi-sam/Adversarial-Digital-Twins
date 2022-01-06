@@ -38,6 +38,8 @@ class FailureProgagator():
 
         self.socket = self._connect_to_java()
         self.propagator = FPHMM()
+        self.current_issues = []
+        self.number_of_shops = self.get_from_mrubis(Messages.GET_NUMBER_OF_SHOPS).get('number_of_shops')
 
     def _connect_to_java(self) -> socket.socket:
         '''Connect to the socket opened on the java side'''
@@ -66,7 +68,7 @@ class FailureProgagator():
         return mrubis_state
 
     def get_number_of_shops(self):
-        return self.get_from_mrubis(Messages.GET_NUMBER_OF_SHOPS).get('number_of_shops')
+        return self.number_of_shops
 
     def get_initial_state(self):
         shop_state = self.get_from_mrubis(Messages.GET_INITIAL_STATE)
@@ -76,8 +78,16 @@ class FailureProgagator():
     def get_number_of_issues_in_run(self):
         return self.get_from_mrubis(Messages.GET_NUMBER_OF_ISSUES_IN_RUN).get('number_of_issues_in_run')
     
-    def get_current_issue(self):
+    def get_current_issues(self):
+        # issues = {}
+        # for num_shops in range(self.number_of_shops):
+        #     num_issues = self.get_number_of_issues_in_run()
+        #     if num_issues == 0:
+        #         break
         issue = self.get_from_mrubis(Messages.GET_CURRENT_ISSUE)
+        #     issues = {**self.propagator.create_observation(issue), **issues}
+        # self.current_issues = issues
+        return self.propagator.create_observation(issue)
         # #print(issue)
         # component_name = list(list(issue.values())[0].keys())[0]
         # failure_name = list(issue.values())[0][component_name]["failure_name"]
@@ -126,10 +136,10 @@ class FailureProgagator():
         
         #     sys.exit()
         # return issue
-        with open("test_issue.json", "w") as file:
-            json.dump(self.propagator.create_observation(issue), file, indent=2)
-        sys.exit()
-        return self.propagator.create_observation(issue)
+        # with open("test_issue.json", "w") as file:
+        #     json.dump(self.propagator.create_observation(issue), file, indent=2)
+        # sys.exit()
+        
 
     def send_rule_to_execute(self, shop_name, issue_name, component_name, rule):
         '''Send a rule to apply to an issue to mRUBiS'''
@@ -145,6 +155,26 @@ class FailureProgagator():
         if data.decode('utf-8').strip() == 'rule_received':
             logger.debug('Rule transmitted successfully.')
         # Remember components that have been fixed in this run
+        logger.debug('Sending order in which to apply fixes to mRUBIS...')
+        order_dict ={
+            0: {
+            'shop': shop_name,
+            'issue': issue_name,
+            'component': component_name
+                }
+            }
+        self.socket.send((json.dumps(order_dict) + '\n').encode("utf-8"))
+        logger.debug(
+            "Waiting for mRUBIS to answer with 'fix_order_received'...")
+        data = self.socket.recv(64000)
+        if data.decode('utf-8').strip() == 'fix_order_received':
+            logger.debug('Order transmitted successfully.')
+
+        previous_shop_utility = float(list(self.current_issues[shop_name].items())[0]["shop_utility"])
+        current_issues = self.get_current_issues()
+        reward = float(list(self.current_issues[shop_name].items())[0]["shop_utility"]) - previous_shop_utility
+        return current_issues, reward
+
 
     def send_order_in_which_to_apply_fixes(self, order_tuples):
         '''Send the order in which to apply the fixes to mRUBiS'''

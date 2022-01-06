@@ -5,6 +5,7 @@ from typing import Dict
 from .component_failure import ComponentFailure
 from .components import Components
 import json
+import copy
 
 class FPHMM():
     def __init__(self, config_path: str ="moin"):
@@ -18,13 +19,15 @@ class FPHMM():
         index = pd.MultiIndex.from_tuples(tuples, names=["component", "status"])
         #User Management Service looks like it cant have a CF1
         #TODO: Change the probabilities accordingly.
-        self.transition_matrix = pd.DataFrame(np.array([[0.955, 0.015, 0.015, 0.015, 0.]*len(Components.list())]*len(long_components)), index=index, columns=index)
+        self.transition_matrix = pd.DataFrame(np.array([[1, 0, 0, 0, 0.]*len(Components.list())]*len(long_components)), index=index, columns=index)
     
         with open('rule_costs.json', "r") as json_file:
             self.sample_params = json.load(json_file)
 
         self.current_state = None
         self.initial_shop_states = {}
+        self.lastshopstates = {}
+        self.lastshoppropagations = {}
 
     def add_initial_state(self, state):
         self.initial_shop_states[list(state.keys())[0]] = list(state.values())[0]
@@ -65,11 +68,16 @@ class FPHMM():
 
     def create_observation(self, issues):
         shop_name = list(issues.keys())[0]
+
+        if (shop_name in self.lastshopstates) and (self.lastshopstates[shop_name] == issues):
+            return self.lastshoppropagations[shop_name]
+
+        self.lastshopstates[shop_name] = copy.deepcopy(issues)
         component_name = list(issues[shop_name].keys())[0]
         failure_type = issues[shop_name][component_name]["failure_name"]
         failed_components = {component_name: failure_type}
         failed_components = self.propagate_failures(failed_components)
-        print(failed_components)
+        #print(failed_components)
         del failed_components[component_name]
 
         shop_utility = float(issues[shop_name][component_name]["shop_utility"])
@@ -89,6 +97,8 @@ class FPHMM():
         
         for failed_component in issues[shop_name].keys():
             issues[shop_name][failed_component]["shop_utility"] = shop_utility
+
+        self.lastshoppropagations[shop_name] = issues
 
         return issues
 
