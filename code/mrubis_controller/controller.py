@@ -11,7 +11,7 @@ from component_dependencies import ComponentDependencyModel
 import pandas as pd
 from failure_propagator.failure_propagator import FailureProgagator
 import numpy as np
-
+import logging
 logging.basicConfig()
 logger = logging.getLogger('controller')
 logger.setLevel(logging.DEBUG)
@@ -246,10 +246,10 @@ class MRubisController():
     def run(self, external_start=False, max_runs=300, rule_picking_strategy='lowest', issue_ranking_strategy='utility', fixes_can_fail=False):
         '''Run and control mRUBiS for a maximum number of runs'''
 
-        if not external_start:
-            self._start_mrubis()
-            if self.mrubis_process.poll() is None:
-                logger.info('MRUBIS is running')
+        # if not external_start:
+        #     self._start_mrubis()
+        #     if self.mrubis_process.poll() is None:
+        #         logger.info('MRUBIS is running')
 
         # Account for Java being slow to start on some systems
         sleep(0.5)
@@ -294,43 +294,43 @@ class MRubisController():
 
                 self.number_of_issues_handled_in_this_run += 1
 
-            # logger.info(
-            #     f'Total number of issues to handle in current run: {self.number_of_issues_in_run}')
-            # logger.info(
-            #     f'Total number of issues handled: {self.number_of_issues_handled_in_this_run}')
+            logger.info(
+                f'Total number of issues to handle in current run: {self.number_of_issues_in_run}')
+            logger.info(
+                f'Total number of issues handled: {self.number_of_issues_handled_in_this_run}')
 
-            # # Predict the optimal utility of the components to fix...
-            # self._predict_optimal_utility_of_fixed_components(fixes_can_fail) #Side effect: [shop][component]['predicted_optimal_utility']
-            # state_df_before = self._state_to_df(fix_status='before')
-            # self.mrubis_state_history.append(state_df_before)
+            # Predict the optimal utility of the components to fix...
+            self._predict_optimal_utility_of_fixed_components(fixes_can_fail) #Side effect: [shop][component]['predicted_optimal_utility']
+            state_df_before = self._state_to_df(fix_status='before')
+            self.mrubis_state_history.append(state_df_before)
 
-            # # Get and send the order of the fixes to mRUBiS...
-            # component_fixing_order = self._get_component_fixing_order(
-            #     state_df_before, ranking_strategy=issue_ranking_strategy)
+            # Get and send the order of the fixes to mRUBiS...
+            component_fixing_order = self._get_component_fixing_order(
+                state_df_before, ranking_strategy=issue_ranking_strategy)
 
-            # fixed_issues = self._cumulative_utility_based_on_order(self.current_fixes)
-            # self.fix_history.append(fixed_issues)
+            fixed_issues = self._cumulative_utility_based_on_order(self.current_fixes)
+            self.fix_history.append(fixed_issues)
 
-            # logger.info(f'Fixing in this order: {component_fixing_order}')
-            # self.environment.send_order_in_which_to_apply_fixes(component_fixing_order)
+            logger.info(f'Fixing in this order: {component_fixing_order}')
+            self.environment.send_order_in_which_to_apply_fixes(component_fixing_order)
 
-            # # Fixes are now being applied...
+            # Fixes are now being applied...
 
-            # # Query the state of the affected components once more
-            # logger.info(
-            #     "Getting state of affected components after taking action...")
-            # state_after_action = self.environment.get_from_mrubis(
-            #     message=json.dumps(
-            #         {shop_name: [issue_component_tuple[1] for issue_component_tuple in issue_component_tuples]
-            #             for shop_name, issue_component_tuples in self.components_fixed_in_this_run.items()}
-            #     )
-            # )
-            # self._update_current_state(state_after_action)
-            # self._remove_replaced_authentication_service()
-            # self._reset_predicted_utility()
+            # Query the state of the affected components once more
+            logger.info(
+                "Getting state of affected components after taking action...")
+            state_after_action = self.environment.get_from_mrubis(
+                message=json.dumps(
+                    {shop_name: [issue_component_tuple[1] for issue_component_tuple in issue_component_tuples]
+                        for shop_name, issue_component_tuples in self.components_fixed_in_this_run.items()}
+                )
+            )
+            self._update_current_state(state_after_action)
+            self._remove_replaced_authentication_service()
+            self._reset_predicted_utility()
 
-            # state_df_after = self._state_to_df(fix_status='after')
-            # self.mrubis_state_history.append(state_df_after)
+            state_df_after = self._state_to_df(fix_status='after')
+            self.mrubis_state_history.append(state_df_after)
 
         self.environment.send_exit_message()
         self.environment.close_socket()

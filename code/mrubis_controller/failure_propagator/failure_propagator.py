@@ -141,12 +141,11 @@ class FailureProgagator():
         # sys.exit()
         
 
-    def send_rule_to_execute(self, shop_name, issue_name, component_name, rule):
+    def send_rule_to_execute(self, picked_rule_message):
         '''Send a rule to apply to an issue to mRUBiS'''
 
-        picked_rule_message = {shop_name: {issue_name: {component_name: rule}}}
         logger.info(
-            f"{shop_name}: Handling {issue_name} on {component_name} with {rule}")
+            f"Handling {picked_rule_message}")
         logger.debug('Sending selected rule to mRUBIS...')
         self.socket.send(
             (json.dumps(picked_rule_message) + '\n').encode("utf-8"))
@@ -154,36 +153,33 @@ class FailureProgagator():
         data = self.socket.recv(64000)
         if data.decode('utf-8').strip() == 'rule_received':
             logger.debug('Rule transmitted successfully.')
+
         # Remember components that have been fixed in this run
-        logger.debug('Sending order in which to apply fixes to mRUBIS...')
-        order_dict ={
-            0: {
-            'shop': shop_name,
-            'issue': issue_name,
-            'component': component_name
-                }
-            }
-        self.socket.send((json.dumps(order_dict) + '\n').encode("utf-8"))
-        logger.debug(
-            "Waiting for mRUBIS to answer with 'fix_order_received'...")
-        data = self.socket.recv(64000)
-        if data.decode('utf-8').strip() == 'fix_order_received':
-            logger.debug('Order transmitted successfully.')
+        # logger.debug('Sending order in which to apply fixes to mRUBIS...')
+        # order_dict ={
+        #     0: {
+        #     'shop': shop_name,
+        #     'issue': issue_name,
+        #     'component': component_name
+        #         }
+        #     }
+        # self.socket.send((json.dumps(order_dict) + '\n').encode("utf-8"))
+        # logger.debug(
+        #     "Waiting for mRUBIS to answer with 'fix_order_received'...")
+        # data = self.socket.recv(64000)
+        # if data.decode('utf-8').strip() == 'fix_order_received':
+        #     logger.debug('Order transmitted successfully.')
 
-        previous_shop_utility = float(list(self.current_issues[shop_name].items())[0]["shop_utility"])
-        current_issues = self.get_current_issues()
-        reward = float(list(self.current_issues[shop_name].items())[0]["shop_utility"]) - previous_shop_utility
-        return current_issues, reward
+        # previous_shop_utility = float(list(self.current_issues[shop_name].items())[0]["shop_utility"])
+        # current_issues = self.get_current_issues()
+        # reward = float(list(self.current_issues[shop_name].items())[0]["shop_utility"]) - previous_shop_utility
+        # return current_issues, reward
 
 
-    def send_order_in_which_to_apply_fixes(self, order_tuples):
+    def send_order_in_which_to_apply_fixes(self, predicted_fixes, order_indices):
         '''Send the order in which to apply the fixes to mRUBiS'''
         logger.debug('Sending order in which to apply fixes to mRUBIS...')
-        order_dict = {idx: {
-            'shop': fix_tuple[0],
-            'issue': fix_tuple[1],
-            'component': fix_tuple[2]
-        } for idx, fix_tuple in enumerate(order_tuples)}
+        order_dict = {index: predicted_fixes[index] for index in order_indices}
         '''
         for issueComponent in order_dict:
             self.socket.send(json.dumps(issueComponent))

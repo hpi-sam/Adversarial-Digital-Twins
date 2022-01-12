@@ -5,6 +5,7 @@ class RankingPredictor():
         pass
 
     def forward(self, utilities):
+        #TODO: Implement actual model
         # utilities is a vector of length number of shops with utilities for each shop
         # return array of shop indices with array[0] being the top priority.
-        pass
+        return [index for _, index in sorted(zip(utilities, list(range(len(utilities)))), reverse=True)]

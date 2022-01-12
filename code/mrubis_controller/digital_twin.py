@@ -3,6 +3,7 @@ class DigitalTwin():
         pass
 
     def forward(self, last_observation, action):
+        #TODO: Implement actual model
         # last_observation full state for the shop
         # predict next state
         # return next observation vector
