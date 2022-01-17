@@ -180,6 +180,7 @@ class FailureProgagator():
         '''Send the order in which to apply the fixes to mRUBiS'''
         logger.debug('Sending order in which to apply fixes to mRUBIS...')
         order_dict = {index: predicted_fixes[index] for index in order_indices}
+        logger.info(order_dict)
         '''
         for issueComponent in order_dict:
             self.socket.send(json.dumps(issueComponent))

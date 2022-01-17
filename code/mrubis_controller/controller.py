@@ -313,6 +313,7 @@ class MRubisController():
 
             logger.info(f'Fixing in this order: {component_fixing_order}')
             self.environment.send_order_in_which_to_apply_fixes(component_fixing_order)
+            sys.exit()
 
             # Fixes are now being applied...
 
