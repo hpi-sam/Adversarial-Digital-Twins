@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 from typing import Dict
 
-from .component_failure import ComponentFailure
-from .components import Components
+from entities.component_failure import ComponentFailure
+from entities.components import Components
 import json
 import copy
 

@@ -1,14 +1,9 @@
 from failure_propagator.failure_propagator import FailureProgagator
-from failure_propagator.components import Components
-from failure_propagator.component_failure import ComponentFailure
-from failure_propagator.fixes import Fixes
-from agent import Agent
-from fix_predictor import FixPredictor
-from ranking_predictor import RankingPredictor
+from entities.components import Components
+from entities.component_failure import ComponentFailure
+from entities.fixes import Fixes
 import numpy as np
 import logging
-import random
-import sys
 import torch
 import json
 logging.basicConfig()
@@ -175,11 +170,3 @@ class Trainer():
         failure_name = list(observation.values())[0][predicted_component]['failure_name']
 
         return shop_name, failure_name, predicted_component, predicted_rule
-
-
-if __name__ == "__main__":
-    fix_predictor = FixPredictor()
-    ranking_predictor = RankingPredictor()
-    agent = Agent(fix_predictor, ranking_predictor)
-    trainer = Trainer(agent=agent)
-    trainer.train()

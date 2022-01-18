@@ -1,11 +1,8 @@
 # Pytorch model
 # Predict utility and next fix per shop
 # start with single layer
-import numpy as np
 import torch.nn as nn
 import torch
-from failure_propagator.components import Components
-from failure_propagator.fixes import Fixes
 class FixPredictor(nn.Module):
     def __init__(self):
         super().__init__()

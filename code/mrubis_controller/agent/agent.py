@@ -11,4 +11,3 @@ class Agent():
     def predict_ranking(self, utilities):
         # predict an optimal ranking for predicted fixes
         return self.ranking_predictor.forward(utilities)
-

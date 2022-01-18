@@ -1,13 +1,10 @@
 import json
 import logging
 import socket
-from pathlib import Path
 from json.decoder import JSONDecodeError
 from time import sleep
 from typing import Union
-import sys
-from .messages import Messages
-import numpy as np
+from entities.messages import Messages
 from .failure_propagation_HMM import FPHMM
 
 logging.basicConfig()

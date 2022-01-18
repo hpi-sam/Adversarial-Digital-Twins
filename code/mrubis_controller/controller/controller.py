@@ -347,7 +347,6 @@ class MRubisController():
 
 
 if __name__ == "__main__":
-
     controller = MRubisController()
     controller.run(external_start=True, max_runs=1000,
                    rule_picking_strategy='highest', issue_ranking_strategy='random', fixes_can_fail=True)
