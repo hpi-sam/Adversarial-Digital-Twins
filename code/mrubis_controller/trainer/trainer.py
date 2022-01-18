@@ -101,7 +101,7 @@ class Trainer():
             #TODO: Get reward & train predictors
             #TODO: Think of digital twin training logic
             run_counter+=1
-            self.train_agent(predicted_fixes_w_gradients, utility_differences)
+            # self.train_agent(predicted_fixes_w_gradients, utility_differences)
 
 
 

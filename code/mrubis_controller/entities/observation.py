@@ -21,6 +21,6 @@ class Issue(Component):
 
 @dataclass
 class Observation:
-    shopname: str
+    shop_name: str
     shop_utility: float
     issues: List[Issue]
