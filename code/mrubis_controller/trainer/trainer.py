@@ -20,6 +20,7 @@ class Trainer():
         self.mrubis_state = {}
         self.mrubis_utilities = {}
         self.utility_loss = torch.nn.MSELoss()
+        self.fix_loss = torch.nn.MSELoss()
         self.utility_optimizer = torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.001)
 
     def train(self, max_runs=1):
@@ -35,6 +36,7 @@ class Trainer():
 
             # shop_name -> (fix vector, predicted utility)
             predicted_fixes_w_gradients = {}
+            right_components_picked = {}
             predicted_fixes = []
 
             # Utilities of failed components before fixing
@@ -48,6 +50,8 @@ class Trainer():
 
                 # Get current observation
                 current_observation = self.environment.get_current_issues()
+                logging.info("Current Observation:")
+                logging.info(current_observation)
 
                 # Update failed utilities
                 for shop_name, state in current_observation.items():
@@ -57,6 +61,9 @@ class Trainer():
                 self.utility_optimizer.zero_grad()
                 predicted_fix_vector, predicted_utility = self.agent.predict_fix(self.observation_to_vector(current_observation))
                 predicted_utilities.append(predicted_utility.item())
+                logging.info("Predictions: ")
+                logging.info(predicted_fix_vector)
+                logging.info(predicted_utility)
 
                 # convert the fix to a json
                 shop_name, failure_name, predicted_component, predicted_rule = self.vector_to_fix(predicted_fix_vector, current_observation)
@@ -67,11 +74,15 @@ class Trainer():
                 })
                 predicted_fixes_w_gradients[shop_name] = (predicted_fix_vector, predicted_utility)
 
+                logging.info(f"We predicted fix: {shop_name, failure_name, predicted_component, predicted_rule}")
+
                 # send the fix to mRubis
-                self.environment.send_rule_to_execute({shop_name: {failure_name: {predicted_component: predicted_rule}}})
+                right_components_picked[shop_name] = self.environment.send_rule_to_execute(shop_name, failure_name, predicted_component, predicted_rule)
 
             # predict the ranking of fixes
-            order_indices = agent.predict_ranking(predicted_utilities)
+            order_indices = self.agent.predict_ranking(predicted_utilities)
+            logger.info("We predicted order: ")
+            logger.info(order_indices)
 
             # send fixes to mRubis
             self.environment.send_order_in_which_to_apply_fixes(predicted_fixes, order_indices)
@@ -90,6 +101,7 @@ class Trainer():
             #TODO: Get reward & train predictors
             #TODO: Think of digital twin training logic
             run_counter+=1
+            self.train_agent(predicted_fixes_w_gradients, utility_differences)
 
 
 
@@ -106,7 +118,7 @@ class Trainer():
                 # break if we overfit
         pass
 
-    def train_agent(self, predicted_fixes_w_gradients, utility_differences):
+    def train_agent(self, predicted_fixes_w_gradients, utility_differences, right_components_picked):
         # -------
         #   Optimzation step:
         # LOOP:
@@ -117,11 +129,35 @@ class Trainer():
         # send ranking to mRubis
         # calculate loss and optimize models with reward
         # -------
+        utility_loss = torch.tensor(0.0)
+        fix_loss = torch.tensor(0.0)
         for shop_name, utility_difference in utility_differences.items():
             predicted_utility = predicted_fixes_w_gradients[shop_name][1]
-            loss = self.utility_loss(predicted_utility, torch.tensor(utility_difference))
-            loss.backward()
-            self.utility_optimizer.step()
+            utility_loss += self.utility_loss(predicted_utility, torch.tensor(utility_difference))
+
+            predicted_fix = predicted_fixes_w_gradients[shop_name][0]
+            acceptance_threshold = 100
+            max_index = torch.argmax(predicted_fix)
+            idx_1, idx_2 = max_index.item() // predicted_fix.shape[1], max_index.item() % predicted_fix.shape[1]
+            label = torch.zeros(predicted_fix.shape)
+
+            if right_components_picked[shop_name] and utility_difference > acceptance_threshold:
+                label[idx_1,idx_2] = 1.0
+            elif right_components_picked[shop_name]:
+                label[:,idx_2] = 1.0
+                label[idx_1,idx_2] = 0.0
+
+
+            fix_loss += self.fix_loss(predicted_fix, label)
+
+        loss = utility_loss + fix_loss
+        logging.info(f"Current loss: {loss.item()}, Utility loss: {utility_loss.item()}, Fix loss: {fix_loss.item()}")
+        loss.backward()
+        self.utility_optimizer.step()
+
+            
+
+            
 
     def _get_initial_observation(self):
         '''Query mRUBiS for the number of shops, get their initial states'''
@@ -163,10 +199,11 @@ class Trainer():
     def vector_to_fix(self, fix_vector, observation):
         all_components_list = Components.list()
         all_fixes_list = Fixes.list()
-        componentindex = np.argmax(fix_vector.numpy()==1)
-        predicted_component = all_components_list[int(componentindex[1])]
-        predicted_rule = all_fixes_list[int(componentindex[0])]
+        max_index = torch.argmax(fix_vector)
+        idx_1, idx_2 = max_index.item() // fix_vector.shape[1], max_index.item() % fix_vector.shape[1]
+        predicted_component = all_components_list[int(idx_2)]
+        predicted_rule = all_fixes_list[int(idx_1)]
         shop_name = list(observation.keys())[0]
-        failure_name = list(observation.values())[0][predicted_component]['failure_name']
+        failure_name = list(list(observation.values())[0].values())[0]['failure_name']
 
         return shop_name, failure_name, predicted_component, predicted_rule

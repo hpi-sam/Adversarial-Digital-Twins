@@ -1,11 +1,14 @@
 import json
 import logging
 import socket
+from pathlib import Path
 from json.decoder import JSONDecodeError
 from time import sleep
 from typing import Union
+import sys
 from entities.messages import Messages
-from .failure_propagation_HMM import FPHMM
+import numpy as np
+from failure_propagator.failure_propagation_HMM import FPHMM
 
 logging.basicConfig()
 logger = logging.getLogger('controller')
@@ -23,6 +26,7 @@ class FailureProgagator():
         self.port = port
         self.analytics = {}
         self.counter = 0
+        self.last_real_issue = {}
 
         self.launch_args = [
             variable_paths['java_path'],
@@ -82,6 +86,7 @@ class FailureProgagator():
         #     if num_issues == 0:
         #         break
         issue = self.get_from_mrubis(Messages.GET_CURRENT_ISSUE)
+        self.last_real_issue = issue
         #     issues = {**self.propagator.create_observation(issue), **issues}
         # self.current_issues = issues
         return self.propagator.create_observation(issue)
@@ -138,8 +143,15 @@ class FailureProgagator():
         # sys.exit()
         
 
-    def send_rule_to_execute(self, picked_rule_message):
+    def send_rule_to_execute(self, shop_name, failure_name, predicted_component, predicted_rule):
         '''Send a rule to apply to an issue to mRUBiS'''
+        failed_components = list(list(self.last_real_issue.values())[0].keys())
+        
+        if predicted_component not in failed_components:
+            #TODO: Pick rule based on real failure
+            picked_rule_message = {shop_name: {failure_name: {failed_components[0]: "HwRedeployComponent"}}}
+        else:
+            picked_rule_message = {shop_name: {failure_name: {predicted_component: predicted_rule}}}
 
         logger.info(
             f"Handling {picked_rule_message}")
@@ -150,6 +162,8 @@ class FailureProgagator():
         data = self.socket.recv(64000)
         if data.decode('utf-8').strip() == 'rule_received':
             logger.debug('Rule transmitted successfully.')
+
+        return predicted_component not in failed_components
 
         # Remember components that have been fixed in this run
         # logger.debug('Sending order in which to apply fixes to mRUBIS...')

@@ -7,7 +7,6 @@ class FixPredictor(nn.Module):
     def __init__(self):
         super().__init__()
         self.input_part = nn.Sequential(
-            nn.Flatten(),
             nn.Linear(18*5, 64),
             nn.LeakyReLU()
         )
@@ -15,7 +14,7 @@ class FixPredictor(nn.Module):
             nn.Linear(64, 1)
         )
         self.fix_output = nn.Sequential(
-            nn.Linear(64, 18*3),
+            nn.Linear(64, 18*2),
             nn.Softmax()
         )
 
@@ -31,9 +30,10 @@ class FixPredictor(nn.Module):
         # all_fixes_list = Fixes.list()
         # fix = np.zeros((len(all_fixes_list), len(all_components_list)))
         # fix[0, failure_index[1]] = 1
-
-        hidden_values = self.input_part(shop_observation_vector)
+        print(shop_observation_vector)
+        print(shop_observation_vector.shape)
+        hidden_values = self.input_part(torch.flatten(torch.from_numpy(shop_observation_vector).float()))
         predicted_utility_gain = self.utility_output(hidden_values)
-        predicted_fix = torch.reshape(self.fix_output(hidden_values), (3, 18))
+        predicted_fix = torch.reshape(self.fix_output(hidden_values), (2, 18))
 
         return predicted_fix, predicted_utility_gain
