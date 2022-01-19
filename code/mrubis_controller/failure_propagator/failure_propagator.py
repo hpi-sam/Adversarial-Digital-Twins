@@ -5,7 +5,7 @@ from pathlib import Path
 from json.decoder import JSONDecodeError
 from time import sleep
 from typing import Union
-import sys
+import copy
 from entities.messages import Messages
 import numpy as np
 from failure_propagator.failure_propagation_HMM import FPHMM
@@ -86,7 +86,8 @@ class FailureProgagator():
         #     if num_issues == 0:
         #         break
         issue = self.get_from_mrubis(Messages.GET_CURRENT_ISSUE)
-        self.last_real_issue = issue
+        self.last_real_issue = copy.deepcopy(issue)
+
         #     issues = {**self.propagator.create_observation(issue), **issues}
         # self.current_issues = issues
         return self.propagator.create_observation(issue)
@@ -146,7 +147,11 @@ class FailureProgagator():
     def send_rule_to_execute(self, shop_name, failure_name, predicted_component, predicted_rule):
         '''Send a rule to apply to an issue to mRUBiS'''
         failed_components = list(list(self.last_real_issue.values())[0].keys())
-        
+        # print("Real failure: ")
+        # print(failed_components)
+        # print("Predicted component: ")
+        # print(predicted_component)
+        # print(predicted_component not in failed_components)
         if predicted_component not in failed_components:
             return False
        
@@ -188,9 +193,9 @@ class FailureProgagator():
 
     def send_order_in_which_to_apply_fixes(self, predicted_fixes, order_indices):
         '''Send the order in which to apply the fixes to mRUBiS'''
-        logger.info('Sending order in which to apply fixes to mRUBIS...')
+        logger.debug('Sending order in which to apply fixes to mRUBIS...')
         order_dict = {index: predicted_fixes[index] for index in order_indices}
-        logger.info(order_dict)
+        logger.debug(order_dict)
         '''
         for issueComponent in order_dict:
             self.socket.send(json.dumps(issueComponent))

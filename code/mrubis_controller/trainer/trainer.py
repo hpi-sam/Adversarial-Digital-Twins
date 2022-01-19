@@ -9,10 +9,11 @@ import numpy as np
 import logging
 import torch
 import json
-logging.basicConfig()
-logger = logging.getLogger('controller')
-logging.basicConfig(filename='training.log', encoding='utf-8', level=logging.INFO)
-logger.setLevel(logging.INFO)
+#logging.basicConfig()
+logging.basicConfig(filename='training.log', filemode='w', level=logging.DEBUG)
+logger = logging.getLogger('trainer')
+logger.setLevel(logging.DEBUG)
+
 
 def map_observation(mrubis_observation: Dict) -> Observation:
     broken_components = list(mrubis_observation.values())
@@ -56,9 +57,9 @@ class Trainer():
         self.mrubis_utilities = {}
         self.utility_loss = torch.nn.MSELoss()
         self.fix_loss = torch.nn.MSELoss()
-        self.utility_optimizer = torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.0001)
+        self.utility_optimizer = torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.01)
 
-    def train(self, max_runs=10):
+    def train(self, max_runs=50):
         run_counter = 0
         self._get_initial_observation()
         for shop_name, state in self.mrubis_state.items():
@@ -117,7 +118,9 @@ class Trainer():
                     right_component_picked = self.environment.send_rule_to_execute(shop_name, failure_name, predicted_component, predicted_rule)
                     top_counter+=1
                     if right_component_picked:
-                        right_components_picked[shop_name] = {'right_component_predicted': right_component_picked, 'attempts': top_counter, 'right_component': predicted_component}
+                        
+                        right_components_picked[shop_name] = {'right_component_predicted': top_counter==1, 'attempts': top_counter, 'right_component': predicted_component}
+                        #print(right_components_picked[shop_name])
                         predicted_fixes.append({
                             'shop': shop_name,
                             'issue': failure_name,
@@ -129,9 +132,9 @@ class Trainer():
 
             # predict the ranking of fixes
             order_indices = self.agent.predict_ranking(predicted_utilities)
-            print("We predicted order: ")
-            print(order_indices)
-            print(predicted_fixes)
+            #print("We predicted order: ")
+            #print(order_indices)
+            #print(predicted_fixes)
 
             # send fixes to mRubis
             self.environment.send_order_in_which_to_apply_fixes(predicted_fixes, order_indices)
@@ -150,8 +153,8 @@ class Trainer():
                         observations_of_run[shop_name].applied_fix.worked = False
                 except:
                     continue
-            logger.debug(failed_utilities)
-            logger.debug(utility_differences)
+            logging.debug(failed_utilities)
+            logging.debug(utility_differences)
             self._update_current_state(state_after_action)
             #TODO: Get reward & train predictors
             #TODO: Think of digital twin training logic
@@ -186,14 +189,22 @@ class Trainer():
         # -------
         utility_loss = 0
         fix_loss = 0
+        avg_attempts = 0
+        counter = 0
+        utility_gain = 0
         for shop_name, utility_difference in utility_differences.items():
+            counter+=1
+
             predicted_utility = predicted_fixes_w_gradients[shop_name][1]
 
-            new_utility_loss = self.utility_loss(predicted_utility, torch.tensor([utility_difference])) * (0.9**right_components_picked[shop_name]['attempts'])
+            utility_scaling_factor = 10**(-5)
+            new_utility_loss = self.utility_loss(predicted_utility, torch.tensor([utility_difference*utility_scaling_factor])) * (0.9**right_components_picked[shop_name]['attempts'])
             utility_loss += new_utility_loss
+            utility_gain+=utility_difference
 
             predicted_fix = predicted_fixes_w_gradients[shop_name][0]
-            acceptance_threshold = 100
+            acceptance_threshold = 20000
+            avg_attempts += right_components_picked[shop_name]['attempts']
             correct_attempt_index = torch.topk(predicted_fix.view(-1), right_components_picked[shop_name]['attempts'])[1][-1].item()
             idx_1, idx_2 = correct_attempt_index // predicted_fix.shape[1], correct_attempt_index % predicted_fix.shape[1]
             label = torch.zeros(predicted_fix.shape)
@@ -208,7 +219,7 @@ class Trainer():
             fix_loss += new_fix_loss
 
         loss = utility_loss + fix_loss
-        #print(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
+        print(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
         logging.info(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
         loss.backward()
         self.utility_optimizer.step()
@@ -216,7 +227,7 @@ class Trainer():
     def _get_initial_observation(self):
         '''Query mRUBiS for the number of shops, get their initial states'''
         self.number_of_shops = self.environment.number_of_shops
-        logger.debug(f'Number of mRUBIS shops: {self.number_of_shops}')
+        logging.debug(f'Number of mRUBIS shops: {self.number_of_shops}')
         for _ in range(self.number_of_shops):
             shop_state = self.environment.get_initial_state()
             shop_name = next(iter(shop_state))
