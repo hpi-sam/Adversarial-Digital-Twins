@@ -19,6 +19,7 @@ class AgentFix:
 class Fix:
     fix_type: Fixes
     fix_cost: float
+
 @dataclass
 class Issue(Component):
     failure_type: ComponentFailure
@@ -36,7 +37,6 @@ class Observation:
     shop_utility: float
     issues: List[Issue]
     applied_fix: AppliedFix
-
 
 @dataclass
 class InitialState:

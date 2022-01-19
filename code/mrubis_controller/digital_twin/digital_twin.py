@@ -25,7 +25,7 @@ class ShopDigitalTwin:
     def set_initial_state(self, inital_state: InitialState) -> None:
         assert len(inital_state.components) == len(Components.list())
         self._healthy_shop_utility = inital_state.shop_utility
-        
+
     def get_shop_utility(self) -> float:
         if self.is_fixed():
             return self._healthy_shop_utility()
@@ -60,7 +60,7 @@ class ShopDigitalTwin:
         failures = ComponentFailure.list()
         failures.remove(ComponentFailure.GOOD)
         long_components = np.array([[comp]*len(failures)*len(fixes) for comp in components]).flatten().tolist()
-        long_failures = np.array([[fail]*len(fixes) for fail in failures]).flatten().tolist() * len(components) 
+        long_failures = np.array([[fail]*len(fixes) for fail in failures]).flatten().tolist() * len(components)
         long_fixes = fixes * len(failures) * len(components)
         columns = pd.MultiIndex.from_arrays((long_components, long_failures, long_fixes))
         index = ['worked', 'failed']
@@ -82,7 +82,7 @@ class ShopDigitalTwin:
     def build_utility_series(self):
         self.utility_means = self.component_failure_series()
         self.utility_stds = self.component_failure_series()
-    
+
     def build_healthy_component_utilities(self):
         components = Components.list()
         self.healthy_component_utilities = pd.Series(np.zeros(len(components)), index=components)
@@ -100,7 +100,7 @@ class ShopDigitalTwin:
             index=self.build_component_failure_multi_index(),
             columns=Fixes.list()
         )
-    
+
     def build_fix_lists(self) -> pd.DataFrame:
         num_fail_comp = self.number_failure_components()
         num_fixes = len(Fixes.list())
@@ -122,7 +122,7 @@ class ShopDigitalTwin:
         tuples = list(zip(*arrays))
         index = pd.MultiIndex.from_tuples(tuples, names=["component", "status"])
         return index
-    
+
     def number_failure_components(self):
         return len(Components.list()) * (len(ComponentFailure.list()) - 1)
 
@@ -130,7 +130,7 @@ class ShopDigitalTwin:
         num_components = self.number_failure_components()
         index = self.build_component_failure_multi_index()
         return pd.DataFrame(np.zeros((num_components, num_components)), index=index, columns=index)
-    
+
     def component_failure_series(self) -> pd.Series:
         num_components = self.number_failure_components()
         index = self.build_component_failure_multi_index()
@@ -143,7 +143,6 @@ class ShopDigitalTwin:
         also effected
         """
         self.propagation_matrix = self.component_failure_matrix()
-
 
     def reset_propagation_matrix(self) -> None:
         """Resets the propagation matrix to zero.
@@ -241,31 +240,41 @@ class ShopDigitalTwin:
         return issues
 
 class DigitalTwin:
-    def __init__(self, shop_names: List[str]) -> None:
-        self.shop_simulations = {shop_name: ShopDigitalTwin() for shop_name in shop_names}
+    def __init__(self) -> None:
+        self.shop_simulations: Dict[str, ShopDigitalTwin] = {}
         self.current_shop_index = 0
-    
+        self._initialized = False
+
+    def set_initial_state(self, initial_states: Dict[str, InitialState]) -> None:
+        for shop_name, initial_state in initial_states.items():
+            self.shop_simulations[shop_name] = ShopDigitalTwin()
+            self.shop_simulations[shop_name].set_initial_state(initial_state)
+
     def train(self, observations: List[Observation]) -> None:
+        assert self._initialized
         for shop_name, sim in self.shop_simulations.items():
             sim.train(list(filter(lambda x: x.shop_name == shop_name, observations)))
 
     def get_number_of_issues_in_run(self):
+        assert self._initialized
         counter = self._number_of_issues()
-        
+
         if counter == 0:
             for sim in self.shop_simulations.values():
                 sim.get_next_issue()
                 counter += 1
         return counter
-    
+
     def _number_of_issues(self) -> int:
+        assert self._initialized
         counter = 0
         for sim in self.shop_simulations.values():
             if not sim.is_fixed():
                 counter += 1
         return counter
 
-    def get_current_issues(self):
+    def get_current_issues(self) -> List[Issue]:
+        assert self._initialized
         simulations = list(self.shop_simulations.values())
         while self._number_of_issues > 0:
             self.current_shop_index = (self.current_shop_index + 1) % len(self.shop_simulations)
@@ -275,15 +284,15 @@ class DigitalTwin:
         return []
 
     def send_rule_to_execute(self, shop_name: str, failure_name: ComponentFailure, predicted_component: Components, predicted_rule: Fixes) -> bool:
+        assert self._initialized
         sim = self.shop_simulations[shop_name]
         if not sim.check_real(predicted_component):
             return False
-        sim.apply_fix()
+        sim.apply_fix(AgentFix(predicted_component, predicted_rule))
         return True
 
     def send_order_in_which_to_apply_fixes(self, predicted_fixes, order_indices):
-        # TODO
-        pass
+        assert self._initialized
 
     def get_from_mrubis(self, message: str) -> Dict:
         """Get the state of the given shops and components.
@@ -295,10 +304,11 @@ class DigitalTwin:
         Returns:
             Dict: A dict which maps shop to the component state.
         """
+        assert self._initialized
         message: Dict = json.loads(message)
         result = {}
         for shop, components in message.items():
             sim = self.shop_simulations[shop]
             for component in components:
-                result[shop] = sim.get_shop_utility()
+                result[shop] = {component: sim.get_shop_utility()}
         return result
