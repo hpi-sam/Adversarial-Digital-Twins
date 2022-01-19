@@ -8,6 +8,7 @@ import torch
 import json
 logging.basicConfig()
 logger = logging.getLogger('controller')
+logging.basicConfig(filename='training.log', encoding='utf-8', level=logging.INFO)
 logger.setLevel(logging.INFO)
 
 class Trainer():
@@ -21,9 +22,9 @@ class Trainer():
         self.mrubis_utilities = {}
         self.utility_loss = torch.nn.MSELoss()
         self.fix_loss = torch.nn.MSELoss()
-        self.utility_optimizer = torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.001)
+        self.utility_optimizer = torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.0001)
 
-    def train(self, max_runs=1):
+    def train(self, max_runs=10):
         run_counter = 0
         self._get_initial_observation()
         for shop_name, state in self.mrubis_state.items():
@@ -50,8 +51,8 @@ class Trainer():
 
                 # Get current observation
                 current_observation = self.environment.get_current_issues()
-                logging.info("Current Observation:")
-                logging.info(current_observation)
+                logging.debug("Current Observation:")
+                logging.debug(current_observation)
 
                 # Update failed utilities
                 for shop_name, state in current_observation.items():
@@ -61,28 +62,36 @@ class Trainer():
                 self.utility_optimizer.zero_grad()
                 predicted_fix_vector, predicted_utility = self.agent.predict_fix(self.observation_to_vector(current_observation))
                 predicted_utilities.append(predicted_utility.item())
-                logging.info("Predictions: ")
-                logging.info(predicted_fix_vector)
-                logging.info(predicted_utility)
+                predicted_fixes_w_gradients[shop_name] = (predicted_fix_vector, predicted_utility)
+                logging.debug("Predictions: ")
+                logging.debug(predicted_fix_vector)
+                logging.debug(predicted_utility)
 
                 # convert the fix to a json
-                shop_name, failure_name, predicted_component, predicted_rule = self.vector_to_fix(predicted_fix_vector, current_observation)
-                predicted_fixes.append({
-                    'shop': shop_name,
-                    'issue': failure_name,
-                    'component': predicted_component
-                })
-                predicted_fixes_w_gradients[shop_name] = (predicted_fix_vector, predicted_utility)
+                top_counter = 0
+                while True:
+                    shop_name, failure_name, predicted_component, predicted_rule = self.vector_to_fix(predicted_fix_vector, current_observation, top_counter)
 
-                logging.info(f"We predicted fix: {shop_name, failure_name, predicted_component, predicted_rule}")
+                    logging.debug(f"We predicted fix: {shop_name, failure_name, predicted_component, predicted_rule}")
 
-                # send the fix to mRubis
-                right_components_picked[shop_name] = self.environment.send_rule_to_execute(shop_name, failure_name, predicted_component, predicted_rule)
+                    # send the fix to mRubis
+                    right_component_picked = self.environment.send_rule_to_execute(shop_name, failure_name, predicted_component, predicted_rule)
+                    top_counter+=1
+                    if right_component_picked:
+                        right_components_picked[shop_name] = {'right_component_predicted': right_component_picked, 'attempts': top_counter, 'right_component': predicted_component}
+                        predicted_fixes.append({
+                            'shop': shop_name,
+                            'issue': failure_name,
+                            'component': predicted_component
+                        })
+                        break
+
 
             # predict the ranking of fixes
             order_indices = self.agent.predict_ranking(predicted_utilities)
-            logger.info("We predicted order: ")
-            logger.info(order_indices)
+            print("We predicted order: ")
+            print(order_indices)
+            print(predicted_fixes)
 
             # send fixes to mRubis
             self.environment.send_order_in_which_to_apply_fixes(predicted_fixes, order_indices)
@@ -95,13 +104,13 @@ class Trainer():
                     utility_differences[shop_name] = float(list(state.values())[0]['shop_utility']) - float(failed_utilities[shop_name])
                 except:
                     continue
-            logger.info(failed_utilities)
-            logger.info(utility_differences)
+            logger.debug(failed_utilities)
+            logger.debug(utility_differences)
             self._update_current_state(state_after_action)
             #TODO: Get reward & train predictors
             #TODO: Think of digital twin training logic
             run_counter+=1
-            self.train_agent(predicted_fixes_w_gradients, utility_differences)
+            self.train_agent(predicted_fixes_w_gradients, utility_differences, right_components_picked)
 
 
 
@@ -129,29 +138,32 @@ class Trainer():
         # send ranking to mRubis
         # calculate loss and optimize models with reward
         # -------
-        utility_loss = torch.tensor(0.0)
-        fix_loss = torch.tensor(0.0)
+        utility_loss = 0
+        fix_loss = 0
         for shop_name, utility_difference in utility_differences.items():
             predicted_utility = predicted_fixes_w_gradients[shop_name][1]
-            utility_loss += self.utility_loss(predicted_utility, torch.tensor(utility_difference))
+
+            new_utility_loss = self.utility_loss(predicted_utility, torch.tensor([utility_difference])) * (0.9**right_components_picked[shop_name]['attempts'])
+            utility_loss += new_utility_loss
 
             predicted_fix = predicted_fixes_w_gradients[shop_name][0]
             acceptance_threshold = 100
-            max_index = torch.argmax(predicted_fix)
-            idx_1, idx_2 = max_index.item() // predicted_fix.shape[1], max_index.item() % predicted_fix.shape[1]
+            correct_attempt_index = torch.topk(predicted_fix.view(-1), right_components_picked[shop_name]['attempts'])[1][-1].item()
+            idx_1, idx_2 = correct_attempt_index // predicted_fix.shape[1], correct_attempt_index % predicted_fix.shape[1]
             label = torch.zeros(predicted_fix.shape)
 
-            if right_components_picked[shop_name] and utility_difference > acceptance_threshold:
+            if utility_difference > acceptance_threshold:
                 label[idx_1,idx_2] = 1.0
-            elif right_components_picked[shop_name]:
+            else:
                 label[:,idx_2] = 1.0
                 label[idx_1,idx_2] = 0.0
 
-
-            fix_loss += self.fix_loss(predicted_fix, label)
+            new_fix_loss = self.fix_loss(predicted_fix, label)
+            fix_loss += new_fix_loss
 
         loss = utility_loss + fix_loss
-        logging.info(f"Current loss: {loss.item()}, Utility loss: {utility_loss.item()}, Fix loss: {fix_loss.item()}")
+        #print(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
+        logging.info(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
         loss.backward()
         self.utility_optimizer.step()
 
@@ -162,7 +174,7 @@ class Trainer():
     def _get_initial_observation(self):
         '''Query mRUBiS for the number of shops, get their initial states'''
         self.number_of_shops = self.environment.number_of_shops
-        logger.info(f'Number of mRUBIS shops: {self.number_of_shops}')
+        logger.debug(f'Number of mRUBIS shops: {self.number_of_shops}')
         for _ in range(self.number_of_shops):
             shop_state = self.environment.get_initial_state()
             shop_name = next(iter(shop_state))
@@ -196,11 +208,13 @@ class Trainer():
                 failed_vector[all_failures_list.index(ComponentFailure.GOOD.value), index] = 1
         return failed_vector
 
-    def vector_to_fix(self, fix_vector, observation):
+    def vector_to_fix(self, fix_vector, observation, top_k):
         all_components_list = Components.list()
         all_fixes_list = Fixes.list()
-        max_index = torch.argmax(fix_vector)
-        idx_1, idx_2 = max_index.item() // fix_vector.shape[1], max_index.item() % fix_vector.shape[1]
+
+        max_index = torch.topk(fix_vector.view(-1), top_k+1)[1][-1].item()
+        
+        idx_1, idx_2 = max_index // fix_vector.shape[1], max_index % fix_vector.shape[1]
         predicted_component = all_components_list[int(idx_2)]
         predicted_rule = all_fixes_list[int(idx_1)]
         shop_name = list(observation.keys())[0]
