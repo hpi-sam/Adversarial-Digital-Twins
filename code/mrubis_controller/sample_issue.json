@@ -1,0 +1,24 @@
+{
+    "mRUBiS #4": {
+        "Bid and Buy Service": {
+            "component_utility": "0.0",
+            "required_interface": "5",
+            "request": "317.0",
+            "rule_names": "[HwRedeployComponent, ReplaceComponent]",
+            "replica": "13.0",
+            "failure_name": "CF3",
+            "perf_max": "17.056132824172366",
+            "importance": "12.0",
+            "reliability": "0.5",
+            "criticality": "21.0",
+            "sat_point": "0.038633091346468224",
+            "system_utility": "2062425.0165422875",
+            "rule_costs": "[1.7199999999999998, 1.7199999999999998]",
+            "adt": "1.166579125957095",
+            "shop_utility": 135431.94369717225,
+            "uid": "_b_N46-SREeumKfox9_84gw",
+            "connectivity": "7.0",
+            "provided_interface": "2"
+        }
+    }
+}

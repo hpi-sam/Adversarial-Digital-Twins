@@ -19,7 +19,7 @@ class FPHMM():
         index = pd.MultiIndex.from_tuples(tuples, names=["component", "status"])
         #User Management Service looks like it cant have a CF1
         #TODO: Change the probabilities accordingly.
-        self.transition_matrix = pd.DataFrame(np.array([[1, 0, 0, 0, 0.]*len(Components.list())]*len(long_components)), index=index, columns=index)
+        self.transition_matrix = pd.DataFrame(np.array([[0.955, 0.015, 0.015, 0.015, 0.]*len(Components.list())]*len(long_components)), index=index, columns=index)
     
         with open('rule_costs.json', "r") as json_file:
             self.sample_params = json.load(json_file)
