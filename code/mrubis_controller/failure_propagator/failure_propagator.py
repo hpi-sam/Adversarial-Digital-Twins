@@ -47,7 +47,7 @@ class FailureProgagator():
         mrubis_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sleep(1)
         mrubis_socket.connect((self.host, self.port))
-        logger.info('Connected to the Java side.')
+        logger.debug('Connected to the Java side.')
         return mrubis_socket
 
     def get_from_mrubis(self, message: Union[Messages, str]):
@@ -148,12 +148,11 @@ class FailureProgagator():
         failed_components = list(list(self.last_real_issue.values())[0].keys())
         
         if predicted_component not in failed_components:
-            #TODO: Pick rule based on real failure
-            picked_rule_message = {shop_name: {failure_name: {failed_components[0]: "HwRedeployComponent"}}}
-        else:
-            picked_rule_message = {shop_name: {failure_name: {predicted_component: predicted_rule}}}
+            return False
+       
+        picked_rule_message = {shop_name: {failure_name: {predicted_component: predicted_rule}}}
 
-        logger.info(
+        logger.debug(
             f"Handling {picked_rule_message}")
         logger.debug('Sending selected rule to mRUBIS...')
         self.socket.send(
@@ -163,7 +162,7 @@ class FailureProgagator():
         if data.decode('utf-8').strip() == 'rule_received':
             logger.debug('Rule transmitted successfully.')
 
-        return predicted_component not in failed_components
+        return True
 
         # Remember components that have been fixed in this run
         # logger.debug('Sending order in which to apply fixes to mRUBIS...')
@@ -189,7 +188,7 @@ class FailureProgagator():
 
     def send_order_in_which_to_apply_fixes(self, predicted_fixes, order_indices):
         '''Send the order in which to apply the fixes to mRUBiS'''
-        logger.debug('Sending order in which to apply fixes to mRUBIS...')
+        logger.info('Sending order in which to apply fixes to mRUBIS...')
         order_dict = {index: predicted_fixes[index] for index in order_indices}
         logger.info(order_dict)
         '''
