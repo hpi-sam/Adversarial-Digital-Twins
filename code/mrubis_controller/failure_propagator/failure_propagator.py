@@ -7,7 +7,6 @@ from time import sleep
 from typing import Union
 import copy
 from entities.messages import Messages
-import numpy as np
 from failure_propagator.failure_propagation_HMM import FPHMM
 
 logging.basicConfig()

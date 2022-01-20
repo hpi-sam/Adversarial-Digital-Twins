@@ -1,6 +1,8 @@
 from typing import Dict, List, Union
-from mrubis_controller.digital_twin.digital_twin import DigitalTwin
-from mrubis_controller.entities.observation import Observation, Issue, Fix, AppliedFix, InitialState, Component
+
+import re
+from digital_twin.digital_twin import DigitalTwin
+from entities.observation import Observation, Issue, Fix, AppliedFix, InitialState, Component
 from failure_propagator.failure_propagator import FailureProgagator
 from entities.components import Components
 from entities.component_failure import ComponentFailure
@@ -13,22 +15,23 @@ import json
 logging.basicConfig(filename='training.log', filemode='w', level=logging.DEBUG)
 logger = logging.getLogger('trainer')
 logger.setLevel(logging.DEBUG)
-
+list_string_regex = re.compile(r"[\[(?:\,\s)]?([A-z]+)[\]\,]")
+list_float_regex  = re.compile(r"[\[(?:\,\s)]?([\d\.]+)[\]\,]")
 
 def map_observation(mrubis_observation: Dict) -> Observation:
     broken_components = list(mrubis_observation.values())
     issues = []
-    for name, details in map(lambda x: x.items(), broken_components):
+    for name, details in [next(iter(x.items())) for x in broken_components]:
         issue = Issue(
             component_name=name,
-            utility=details["component_utility"],
+            utility=float(details["component_utility"]),
             failure_type=details["failure_name"],
-            fixes=[Fix(rule_name=rule_name, rule_cost=rule_cost) for rule_name, rule_cost in zip(details["rule_names"], details["rule_costs"])]
+            fixes=[Fix(fix_type=rule_name, fix_cost=float(rule_cost)) for rule_name, rule_cost in zip(list_string_regex.findall(details["rule_names"]), list_float_regex.findall(details["rule_costs"]))]
         )
         issues.append(issue)
     return Observation(
         shop_name=next(iter(mrubis_observation.keys())),
-        shop_utility=list(broken_components[0].values())[0]['shop_utility'],
+        shop_utility=float(list(broken_components[0].values())[0]['shop_utility']),
         issues=issues,
         applied_fix=None
     )
@@ -36,10 +39,10 @@ def map_observation(mrubis_observation: Dict) -> Observation:
 def map_initial_state(initial_state: Dict[str, Dict[str, Union[str, float]]]) -> Dict[str, InitialState]:
     inital_state_result = {}
     for shop_name, shop_details in initial_state.items():
-        components = [Component(component_name=c_name, utility=c_details["component_utility"]) for c_name, c_details in shop_details.items()]
+        components = [Component(component_name=c_name, utility=float(c_details["component_utility"])) for c_name, c_details in shop_details.items()]
         shop_state = InitialState(
             shop_name=shop_name,
-            shop_utility=next(iter(shop_details.values()))["shop_utility"],
+            shop_utility=float(next(iter(shop_details.values()))["shop_utility"]),
             components=components
         )
         inital_state_result[shop_name] = shop_state
@@ -160,9 +163,10 @@ class Trainer():
             #TODO: Think of digital twin training logic
             run_counter+=1
             self.train_agent(predicted_fixes_w_gradients, utility_differences, right_components_picked)
-            observation_batch += list(observations_of_run.values())
+            #observation_batch += list(observations_of_run.values())
+            self.train_digital_twin(list(observations_of_run.values()))
 
-        self.train_digital_twin(observation_batch)
+        #self.train_digital_twin(observation_batch)
 
         # gets data and calls train_agent and train_digital_twin
 
@@ -232,6 +236,8 @@ class Trainer():
             shop_state = self.environment.get_initial_state()
             shop_name = next(iter(shop_state))
             self.mrubis_state[shop_name] = shop_state[shop_name]
+        self.digital_twin.set_initial_state(map_initial_state(self.mrubis_state))
+        map_initial_state
 
     def _update_current_state(self, incoming_state):
         '''Update the controller's current mRUBiS state with an incoming state'''

@@ -1,9 +1,8 @@
 from dataclasses import dataclass
 from typing import List
-from mrubis_controller.entities.fixes import Fixes
-
-from mrubis_controller.entities.components import Components
-from mrubis_controller.entities.component_failure import ComponentFailure
+from entities.fixes import Fixes
+from entities.components import Components
+from entities.component_failure import ComponentFailure
 
 @dataclass
 class Component:
