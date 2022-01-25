@@ -23,6 +23,11 @@ class Fix:
 class Issue(Component):
     failure_type: ComponentFailure
     fixes: List[Fix]
+    shop_utility: float
+
+@dataclass
+class ShopIssue(Issue):
+    shop: str
 
 @dataclass
 class AppliedFix:

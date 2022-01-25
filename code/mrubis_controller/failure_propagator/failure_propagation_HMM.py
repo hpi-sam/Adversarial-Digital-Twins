@@ -1,3 +1,4 @@
+import logging
 import pandas as pd
 import numpy as np
 from typing import Dict, List
@@ -41,7 +42,8 @@ class FPHMM():
         return self.current_state
         
     def update_state(self, state):
-        print(state)
+        logging.debug(state)
+        # TODO update state
         pass
 
     def propagate_failures(self, failed_components: Dict[str, str]):
@@ -111,13 +113,13 @@ class FPHMM():
                 if isinstance(fixes, str):
                     fixes: List[str] = list_string_regex.findall(fixes)
                     costs = list(map(float, list_float_regex.findall(costs)))
-                print(fixes)
+                logging.debug(fixes)
                 if "ReplaceComponent" in fixes: # and component != Components.AUTHENTICATION_SERVICE.value:
-                    print("Found ReplaceComponent")
+                    logging.debug("Found ReplaceComponent")
                     index = fixes.index(Fixes.REPLACE_COMPONENT.value)
                     fixes.pop(index)
                     costs.pop(index)
-                    print(fixes)
+                    logging.debug(fixes)
                 issues[shop][component]["rule_names"] = str(fixes).replace("'", "")
                 issues[shop][component]["rule_costs"] = str(costs).replace("'", "")
         return issues

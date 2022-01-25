@@ -12,10 +12,6 @@ import pandas as pd
 from failure_propagator.failure_propagator import FailureProgagator
 import numpy as np
 import logging
-logging.basicConfig()
-logger = logging.getLogger('controller')
-logger.setLevel(logging.DEBUG)
-
 
 class MRubisController():
 
@@ -66,7 +62,7 @@ class MRubisController():
     def _get_initial_state(self):
         '''Query mRUBiS for the number of shops, get their initial states'''
         self.number_of_shops = self.environment.number_of_shops
-        logger.info(f'Number of mRUBIS shops: {self.number_of_shops}')
+        logging.info(f'Number of mRUBIS shops: {self.number_of_shops}')
         for _ in range(self.number_of_shops):
             shop_state = self.environment.get_initial_state()
             shop_name = next(iter(shop_state))
@@ -207,7 +203,7 @@ class MRubisController():
         history_df.columns = ['run', 'fix_status', 'shop',
                               'component'] + list(history_df.columns)[4:]
         self.output_path.mkdir(exist_ok=True)
-        logger.info('Writing run history to disk...')
+        logging.info('Writing run history to disk...')
         history_df.to_csv(self.output_path / f'{filename}.csv', index=False)
         #history_df.to_excel(self.output_path / f'{filename}.xls', index=False)
 
@@ -249,7 +245,7 @@ class MRubisController():
         # if not external_start:
         #     self._start_mrubis()
         #     if self.mrubis_process.poll() is None:
-        #         logger.info('MRUBIS is running')
+        #         logging.info('MRUBIS is running')
 
         # Account for Java being slow to start on some systems
         sleep(0.5)
@@ -265,7 +261,7 @@ class MRubisController():
             self.number_of_issues_in_run = 1  # make sure that the loop runs at least once
             #current_issues = []
 
-            logger.info(f"Getting state {self.run_counter}/{max_runs}...")
+            logging.info(f"Getting state {self.run_counter}/{max_runs}...")
 
             if self.run_counter == 1:
                 self._get_initial_state()
@@ -277,7 +273,7 @@ class MRubisController():
 
                 # Get the current issue to handle
                 current_issue = self.environment.get_current_issues()
-                logger.info(current_issue)
+                logging.info(current_issue)
                 # #current_issues.append(current_issue)
                 # self._update_current_state(current_issue)
 
@@ -289,14 +285,14 @@ class MRubisController():
                     current_issue, strategy=rule_picking_strategy)
 
                 new_issues, reward = self._send_rule_to_execute(current_issue, picked_rule)
-                logger.info(f"Reward {reward}, {new_issues}")
+                logging.info(f"Reward {reward}, {new_issues}")
 
 
                 self.number_of_issues_handled_in_this_run += 1
 
-            logger.info(
+            logging.info(
                 f'Total number of issues to handle in current run: {self.number_of_issues_in_run}')
-            logger.info(
+            logging.info(
                 f'Total number of issues handled: {self.number_of_issues_handled_in_this_run}')
 
             # Predict the optimal utility of the components to fix...
@@ -311,14 +307,14 @@ class MRubisController():
             fixed_issues = self._cumulative_utility_based_on_order(self.current_fixes)
             self.fix_history.append(fixed_issues)
 
-            logger.info(f'Fixing in this order: {component_fixing_order}')
+            logging.info(f'Fixing in this order: {component_fixing_order}')
             self.environment.send_order_in_which_to_apply_fixes(component_fixing_order)
             sys.exit()
 
             # Fixes are now being applied...
 
             # Query the state of the affected components once more
-            logger.info(
+            logging.info(
                 "Getting state of affected components after taking action...")
             state_after_action = self.environment.get_from_mrubis(
                 message=json.dumps(
