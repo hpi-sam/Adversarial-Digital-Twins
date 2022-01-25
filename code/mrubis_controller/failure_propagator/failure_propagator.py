@@ -7,12 +7,14 @@ from time import sleep
 from typing import Union
 import copy
 from entities.messages import Messages
-import numpy as np
 from failure_propagator.failure_propagation_HMM import FPHMM
 
+import re
 logging.basicConfig()
 logger = logging.getLogger('controller')
 logger.setLevel(logging.INFO)
+
+list_string_regex = re.compile(r"[\[(?:\,\s)]?([A-z]+)[\]\,]")
 
 class FailureProgagator():
     def __init__(self, host: str = 'localhost', port: int = 8080, json_path: str = 'path.json') -> None:
@@ -147,6 +149,7 @@ class FailureProgagator():
     def send_rule_to_execute(self, shop_name, failure_name, predicted_component, predicted_rule):
         '''Send a rule to apply to an issue to mRUBiS'''
         failed_components = list(list(self.last_real_issue.values())[0].keys())
+        self.last_real_issue
         # print("Real failure: ")
         # print(failed_components)
         # print("Predicted component: ")
@@ -154,7 +157,13 @@ class FailureProgagator():
         # print(predicted_component not in failed_components)
         if predicted_component not in failed_components:
             return False
-       
+        
+        if predicted_rule == "ReplaceComponent":
+            if isinstance(self.last_real_issue[shop_name][predicted_component]["rule_names"], str):
+                predicted_rule = list_string_regex.findall(self.last_real_issue[shop_name][predicted_component]["rule_names"])[0]
+            else:
+                predicted_rule = self.last_real_issue[shop_name][predicted_component]["rule_names"][0]
+            print("Switched rule to ", predicted_rule)
         picked_rule_message = {shop_name: {failure_name: {predicted_component: predicted_rule}}}
 
         logger.debug(

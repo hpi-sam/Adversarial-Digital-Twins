@@ -1,3 +1,8 @@
+from typing import Dict, List, Union
+
+import re
+from digital_twin.digital_twin import DigitalTwin
+from entities.observation import Observation, Issue, Fix, AppliedFix, InitialState, Component
 from failure_propagator.failure_propagator import FailureProgagator
 from entities.components import Components
 from entities.component_failure import ComponentFailure
@@ -5,20 +10,52 @@ from entities.fixes import Fixes
 import numpy as np
 import logging
 import torch
+import os
 import json
 import wandb
 #logging.basicConfig()
 logging.basicConfig(filename='training.log', filemode='w', level=logging.DEBUG)
 logger = logging.getLogger('trainer')
-logger.setLevel(logging.DEBUG)
-import os
+logger.setLevel(logging.INFO)
+list_string_regex = re.compile(r"[\[(?:\,\s)]?([A-z]+)[\]\,]")
+list_float_regex  = re.compile(r"[\[(?:\,\s)]?([\d\.]+)[\]\,]")
+
+def map_observation(mrubis_observation: Dict) -> Observation:
+    broken_components = list(mrubis_observation.values())
+    issues = []
+    for name, details in [next(iter(x.items())) for x in broken_components]:
+        issue = Issue(
+            component_name=name,
+            utility=float(details["component_utility"]),
+            failure_type=details["failure_name"],
+            fixes=[Fix(fix_type=rule_name, fix_cost=float(rule_cost)) for rule_name, rule_cost in zip(list_string_regex.findall(details["rule_names"]), list_float_regex.findall(details["rule_costs"]))]
+        )
+        issues.append(issue)
+    return Observation(
+        shop_name=next(iter(mrubis_observation.keys())),
+        shop_utility=float(list(broken_components[0].values())[0]['shop_utility']),
+        issues=issues,
+        applied_fix=None
+    )
+
+def map_initial_state(initial_state: Dict[str, Dict[str, Union[str, float]]]) -> Dict[str, InitialState]:
+    inital_state_result = {}
+    for shop_name, shop_details in initial_state.items():
+        components = [Component(component_name=c_name, utility=float(c_details["component_utility"])) for c_name, c_details in shop_details.items()]
+        shop_state = InitialState(
+            shop_name=shop_name,
+            shop_utility=float(next(iter(shop_details.values()))["shop_utility"]),
+            components=components
+        )
+        inital_state_result[shop_name] = shop_state
+    return inital_state_result
 
 
 class Trainer():
-    def __init__(self, agent, digital_twin=0, host='localhost', port=8080, json_path='path.json'):
+    def __init__(self, agent, digital_twin: DigitalTwin, host='localhost', port=8080, json_path='path.json'):
         # Get instances of agent and digital twin
         self.agent = agent
-        #self.digital_twin = digital_twin
+        self.digital_twin = digital_twin
         self.environment = FailureProgagator(host=host, port=port, json_path=json_path)
 
         self.mrubis_state = {}
@@ -41,6 +78,7 @@ class Trainer():
         for shop_name, state in self.mrubis_state.items():
             self.mrubis_utilities[shop_name] = list(state.values())[0]['shop_utility']
 
+        observation_batch: List[Observation] = []
         while run_counter < max_runs:
             number_of_issues = 1
             num_issues_handled = 0
@@ -53,6 +91,8 @@ class Trainer():
 
             # Utilities of failed components before fixing
             failed_utilities = {}
+            observations_of_run: Dict[str, Observation] = {}
+
             while num_issues_handled < number_of_issues:
                 num_issues_handled+=1
 
@@ -61,6 +101,9 @@ class Trainer():
 
                 # Get current observation
                 current_observation = self.environment.get_current_issues()
+                mapped_observaition = map_observation(current_observation)
+                observations_of_run[mapped_observaition.shop_name] = mapped_observaition
+
                 logging.debug("Current Observation:")
                 logging.debug(current_observation)
 
@@ -96,6 +139,7 @@ class Trainer():
                             'issue': failure_name,
                             'component': predicted_component
                         })
+                        observations_of_run[shop_name].applied_fix = AppliedFix(fix_type=predicted_rule, fixed_component=predicted_component, worked=False)
                         break
 
 
@@ -107,13 +151,19 @@ class Trainer():
 
             # send fixes to mRubis
             self.environment.send_order_in_which_to_apply_fixes(predicted_fixes, order_indices)
-            
+
             # getting the new state of the fixed components
             state_after_action = self.environment.get_from_mrubis(message=json.dumps({predicted_fix['shop']: [predicted_fix['component']] for predicted_fix in predicted_fixes}))
             utility_differences = {}
             for shop_name, state in state_after_action.items():
                 try:
                     utility_differences[shop_name] = float(list(state.values())[0]['shop_utility']) - float(failed_utilities[shop_name])
+                    if utility_differences > 0:
+                        # We have a utility increase so the fix worked :)
+                        observations_of_run[shop_name].applied_fix.worked = True
+                    else:
+                        # We don't have a utility increase so the fix did not work :(
+                        observations_of_run[shop_name].applied_fix.worked = False
                 except:
                     continue
             logging.debug(failed_utilities)
@@ -123,9 +173,10 @@ class Trainer():
             #TODO: Think of digital twin training logic
             run_counter+=1
             self.train_agent(predicted_fixes_w_gradients, utility_differences, right_components_picked)
+            #observation_batch += list(observations_of_run.values())
+            self.train_digital_twin(list(observations_of_run.values()))
 
-
-
+        #self.train_digital_twin(observation_batch)
 
         # gets data and calls train_agent and train_digital_twin
 
@@ -191,10 +242,6 @@ class Trainer():
         loss.backward()
         self.utility_optimizer.step()
 
-            
-
-            
-
     def _get_initial_observation(self):
         '''Query mRUBiS for the number of shops, get their initial states'''
         self.number_of_shops = self.environment.number_of_shops
@@ -203,6 +250,8 @@ class Trainer():
             shop_state = self.environment.get_initial_state()
             shop_name = next(iter(shop_state))
             self.mrubis_state[shop_name] = shop_state[shop_name]
+        self.digital_twin.set_initial_state(map_initial_state(self.mrubis_state))
+        map_initial_state
 
     def _update_current_state(self, incoming_state):
         '''Update the controller's current mRUBiS state with an incoming state'''
@@ -216,8 +265,8 @@ class Trainer():
                 for param, value in component_params.items():
                     self.mrubis_state[shop][component_type][param] = value
 
-    def train_digital_twin(self, data):
-        pass
+    def train_digital_twin(self, observations: List[Observation]) -> None:
+        self.digital_twin.train(observations)
 
     def observation_to_vector(self, observation):
         all_components_list = Components.list()
@@ -237,7 +286,7 @@ class Trainer():
         all_fixes_list = Fixes.list()
 
         max_index = torch.topk(fix_vector.view(-1), top_k+1)[1][-1].item()
-        
+
         idx_1, idx_2 = max_index // fix_vector.shape[1], max_index % fix_vector.shape[1]
         predicted_component = all_components_list[int(idx_2)]
         predicted_rule = all_fixes_list[int(idx_1)]

@@ -1,9 +1,8 @@
 from dataclasses import dataclass
 from typing import List
-from mrubis_controller.entities.fixes import Fixes
-
-from mrubis_controller.entities.components import Components
-from mrubis_controller.entities.component_failure import ComponentFailure
+from entities.fixes import Fixes
+from entities.components import Components
+from entities.component_failure import ComponentFailure
 
 @dataclass
 class Component:
@@ -19,6 +18,7 @@ class AgentFix:
 class Fix:
     fix_type: Fixes
     fix_cost: float
+
 @dataclass
 class Issue(Component):
     failure_type: ComponentFailure
@@ -36,7 +36,6 @@ class Observation:
     shop_utility: float
     issues: List[Issue]
     applied_fix: AppliedFix
-
 
 @dataclass
 class InitialState:

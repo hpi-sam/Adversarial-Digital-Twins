@@ -1,11 +1,16 @@
 import pandas as pd
 import numpy as np
-from typing import Dict
+from typing import Dict, List
+from entities.fixes import Fixes
 
 from entities.component_failure import ComponentFailure
 from entities.components import Components
 import json
 import copy
+import re
+
+list_string_regex = re.compile(r"[\[(?:\,\s)]?([A-z]+)[\]\,]")
+list_float_regex  = re.compile(r"[\[(?:\,\s)]?([\d\.]+)[\]\,]")
 
 class FPHMM():
     def __init__(self, config_path: str ="moin"):
@@ -99,13 +104,20 @@ class FPHMM():
             issues[shop_name][failed_component]["shop_utility"] = shop_utility
 
         self.lastshoppropagations[shop_name] = issues
-
+        for shop in issues.keys():
+            for component in issues[shop].keys():
+                fixes: List[str] = issues[shop][component]["rule_names"]
+                costs: List[str] = issues[shop][component]["rule_costs"]
+                if isinstance(fixes, str):
+                    fixes: List[str] = list_string_regex.findall(fixes)
+                    costs = list(map(float, list_float_regex.findall(costs)))
+                print(fixes)
+                if "ReplaceComponent" in fixes: # and component != Components.AUTHENTICATION_SERVICE.value:
+                    print("Found ReplaceComponent")
+                    index = fixes.index(Fixes.REPLACE_COMPONENT.value)
+                    fixes.pop(index)
+                    costs.pop(index)
+                    print(fixes)
+                issues[shop][component]["rule_names"] = str(fixes).replace("'", "")
+                issues[shop][component]["rule_costs"] = str(costs).replace("'", "")
         return issues
-
-
-
-
-
-            
-        
-        
