@@ -6,10 +6,12 @@ import numpy as np
 import logging
 import torch
 import json
+import wandb
 #logging.basicConfig()
 logging.basicConfig(filename='training.log', filemode='w', level=logging.DEBUG)
 logger = logging.getLogger('trainer')
 logger.setLevel(logging.DEBUG)
+import os
 
 
 class Trainer():
@@ -24,8 +26,16 @@ class Trainer():
         self.utility_loss = torch.nn.MSELoss()
         self.fix_loss = torch.nn.MSELoss()
         self.utility_optimizer = torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.01)
+        
 
-    def train(self, max_runs=50):
+    def train(self, max_runs=500):
+        os.environ['WANDB_MODE'] = 'offline'
+        wandb.init(project="test-project", entity="adversial-digital-twins") 
+        wandb.config = {
+            "learning_rate": 0.01,
+            "epochs": max_runs,
+            "batch_size": 1
+        }
         run_counter = 0
         self._get_initial_observation()
         for shop_name, state in self.mrubis_state.items():
@@ -173,7 +183,11 @@ class Trainer():
 
         loss = utility_loss + fix_loss
         print(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
-        logging.info(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
+        #logging.info(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
+        wandb.log({"loss": loss/counter})
+        wandb.log({"utility loss": utility_loss/counter})
+        wandb.log({"fix loss": fix_loss/counter})
+        wandb.log({"average needed attempts": utility_gain/counter})
         loss.backward()
         self.utility_optimizer.step()
 

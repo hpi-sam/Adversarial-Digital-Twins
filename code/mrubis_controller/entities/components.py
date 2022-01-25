@@ -20,6 +20,7 @@ class Components(enum.Enum):
     REPUTATION_SERVICE = 'Reputation Service'
     SELLER_REPUTATION_ITEM_FILTER = 'Seller Reputation Item Filter'
     USER_MANAGEMENT_SERVICE = 'User Management Service'
+    #GOOGLE_AUTHENTICATION_SERVICE = 'Google Authentication Service'
 
     @classmethod
     def list(self) -> List[str]:
