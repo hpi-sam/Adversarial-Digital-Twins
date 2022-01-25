@@ -10,9 +10,6 @@ from entities.messages import Messages
 from failure_propagator.failure_propagation_HMM import FPHMM
 
 import re
-logging.basicConfig()
-logger = logging.getLogger('controller')
-logger.setLevel(logging.INFO)
 
 list_string_regex = re.compile(r"[\[(?:\,\s)]?([A-z]+)[\]\,]")
 
@@ -49,7 +46,7 @@ class FailureProgagator():
         mrubis_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sleep(1)
         mrubis_socket.connect((self.host, self.port))
-        logger.debug('Connected to the Java side.')
+        logging.debug('Connected to the Java side.')
         return mrubis_socket
 
     def get_from_mrubis(self, message: Union[Messages, str]):
@@ -58,14 +55,14 @@ class FailureProgagator():
 
         '''Send a message to mRUBiS and return the response as a dictionary'''
         self.socket.send(f"{message}\n".encode("utf-8"))
-        logger.debug(f'Waiting for mRUBIS to answer to message {message}')
+        logging.debug(f'Waiting for mRUBIS to answer to message {message}')
         data = self.socket.recv(64000)
 
         try:
             mrubis_state = json.loads(data.decode("utf-8"))
         except JSONDecodeError:
-            logger.error("Could not decode JSON input, received this:")
-            logger.error(data)
+            logging.error("Could not decode JSON input, received this:")
+            logging.error(data)
             mrubis_state = "not available"
 
         return mrubis_state
@@ -163,23 +160,23 @@ class FailureProgagator():
                 predicted_rule = list_string_regex.findall(self.last_real_issue[shop_name][predicted_component]["rule_names"])[0]
             else:
                 predicted_rule = self.last_real_issue[shop_name][predicted_component]["rule_names"][0]
-            print("Switched rule to ", predicted_rule)
+            logging.debug(f"Switched rule to {predicted_rule}")
         picked_rule_message = {shop_name: {failure_name: {predicted_component: predicted_rule}}}
 
-        logger.debug(
+        logging.debug(
             f"Handling {picked_rule_message}")
-        logger.debug('Sending selected rule to mRUBIS...')
+        logging.debug('Sending selected rule to mRUBIS...')
         self.socket.send(
             (json.dumps(picked_rule_message) + '\n').encode("utf-8"))
-        logger.debug("Waiting for mRUBIS to answer with 'rule_received'...")
+        logging.debug("Waiting for mRUBIS to answer with 'rule_received'...")
         data = self.socket.recv(64000)
         if data.decode('utf-8').strip() == 'rule_received':
-            logger.debug('Rule transmitted successfully.')
+            logging.debug('Rule transmitted successfully.')
 
         return True
 
         # Remember components that have been fixed in this run
-        # logger.debug('Sending order in which to apply fixes to mRUBIS...')
+        # logging.debug('Sending order in which to apply fixes to mRUBIS...')
         # order_dict ={
         #     0: {
         #     'shop': shop_name,
@@ -188,11 +185,11 @@ class FailureProgagator():
         #         }
         #     }
         # self.socket.send((json.dumps(order_dict) + '\n').encode("utf-8"))
-        # logger.debug(
+        # logging.debug(
         #     "Waiting for mRUBIS to answer with 'fix_order_received'...")
         # data = self.socket.recv(64000)
         # if data.decode('utf-8').strip() == 'fix_order_received':
-        #     logger.debug('Order transmitted successfully.')
+        #     logging.debug('Order transmitted successfully.')
 
         # previous_shop_utility = float(list(self.current_issues[shop_name].items())[0]["shop_utility"])
         # current_issues = self.get_current_issues()
@@ -202,20 +199,20 @@ class FailureProgagator():
 
     def send_order_in_which_to_apply_fixes(self, predicted_fixes, order_indices):
         '''Send the order in which to apply the fixes to mRUBiS'''
-        logger.debug('Sending order in which to apply fixes to mRUBIS...')
+        logging.debug('Sending order in which to apply fixes to mRUBIS...')
         order_dict = {index: predicted_fixes[index] for index in order_indices}
-        logger.debug(order_dict)
+        logging.debug(order_dict)
         '''
         for issueComponent in order_dict:
             self.socket.send(json.dumps(issueComponent))
             data = self.socket.recv(64000)
         '''
         self.socket.send((json.dumps(order_dict) + '\n').encode("utf-8"))
-        logger.debug(
+        logging.debug(
             "Waiting for mRUBIS to answer with 'fix_order_received'...")
         data = self.socket.recv(64000)
         if data.decode('utf-8').strip() == 'fix_order_received':
-            logger.debug('Order transmitted successfully.')
+            logging.debug('Order transmitted successfully.')
 
     def send_exit_message(self):
         '''Tell mRUBiS to stop its main loop'''

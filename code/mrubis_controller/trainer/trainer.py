@@ -1,8 +1,9 @@
+import sys
 from typing import Dict, List, Union
 
 import re
 from digital_twin.digital_twin import DigitalTwin
-from entities.observation import Observation, Issue, Fix, AppliedFix, InitialState, Component
+from entities.observation import ShopIssue, Observation, Issue, Fix, AppliedFix, InitialState, Component
 from failure_propagator.failure_propagator import FailureProgagator
 from entities.components import Components
 from entities.component_failure import ComponentFailure
@@ -11,10 +12,11 @@ import numpy as np
 import logging
 import torch
 import json
-#logging.basicConfig()
+
 logging.basicConfig(filename='training.log', filemode='w', level=logging.DEBUG)
-logger = logging.getLogger('trainer')
-logger.setLevel(logging.DEBUG)
+logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+logging.getLogger().setLevel(logging.INFO)
+
 list_string_regex = re.compile(r"[\[(?:\,\s)]?([A-z]+)[\]\,]")
 list_float_regex  = re.compile(r"[\[(?:\,\s)]?([\d\.]+)[\]\,]")
 
@@ -26,7 +28,8 @@ def map_observation(mrubis_observation: Dict) -> Observation:
             component_name=name,
             utility=float(details["component_utility"]),
             failure_type=details["failure_name"],
-            fixes=[Fix(fix_type=rule_name, fix_cost=float(rule_cost)) for rule_name, rule_cost in zip(list_string_regex.findall(details["rule_names"]), list_float_regex.findall(details["rule_costs"]))]
+            fixes=[Fix(fix_type=rule_name, fix_cost=float(rule_cost)) for rule_name, rule_cost in zip(list_string_regex.findall(details["rule_names"]), list_float_regex.findall(details["rule_costs"]))],
+            shop_utility=0.0
         )
         issues.append(issue)
     return Observation(
@@ -55,7 +58,7 @@ class Trainer():
         self.agent = agent
         self.digital_twin = digital_twin
         self.environment = FailureProgagator(host=host, port=port, json_path=json_path)
-
+        self.train_real = True # Train witht the real environment
         self.mrubis_state = {}
         self.mrubis_utilities = {}
         self.utility_loss = torch.nn.MSELoss()
@@ -70,8 +73,110 @@ class Trainer():
 
         observation_batch: List[Observation] = []
         while run_counter < max_runs:
-            number_of_issues = 1
-            num_issues_handled = 0
+            if self.train_real:
+                logging.info(f"RUN {run_counter}")
+                number_of_issues = 1
+                num_issues_handled = 0
+                predicted_utilities = []
+
+                # shop_name -> (fix vector, predicted utility)
+                predicted_fixes_w_gradients = {}
+                right_components_picked = {}
+                predicted_fixes = []
+
+                # Utilities of failed components before fixing
+                failed_utilities = {}
+                observations_of_run: Dict[str, Observation] = {}
+
+                while num_issues_handled < number_of_issues:
+                    num_issues_handled+=1
+
+                    # Update number of issues
+                    number_of_issues = self.environment.get_number_of_issues_in_run()
+
+                    # Get current observation
+                    current_observation = self.environment.get_current_issues()
+                    mapped_observaition = map_observation(current_observation)
+                    observations_of_run[mapped_observaition.shop_name] = mapped_observaition
+
+                    logging.debug("Current Observation:")
+                    logging.debug(current_observation)
+
+                    # Update failed utilities
+                    for shop_name, state in current_observation.items():
+                        failed_utilities[shop_name] = list(state.values())[0]['shop_utility']
+
+                    # predict the fix
+                    self.utility_optimizer.zero_grad()
+                    predicted_fix_vector, predicted_utility = self.agent.predict_fix(self.observation_to_vector(current_observation))
+                    predicted_utilities.append(predicted_utility.item())
+                    predicted_fixes_w_gradients[shop_name] = (predicted_fix_vector, predicted_utility)
+                    logging.debug("Predictions: ")
+                    logging.debug(predicted_fix_vector)
+                    logging.debug(predicted_utility)
+
+                    # convert the fix to a json
+                    top_counter = 0
+                    while True:
+                        shop_name, failure_name, predicted_component, predicted_rule = self.vector_to_fix(predicted_fix_vector, current_observation, top_counter)
+
+                        logging.debug(f"We predicted fix: {shop_name, failure_name, predicted_component, predicted_rule}")
+
+                        # send the fix to mRubis
+                        right_component_picked = self.environment.send_rule_to_execute(shop_name, failure_name, predicted_component, predicted_rule)
+                        top_counter+=1
+                        if right_component_picked:
+                            
+                            right_components_picked[shop_name] = {'right_component_predicted': top_counter==1, 'attempts': top_counter, 'right_component': predicted_component}
+                            #print(right_components_picked[shop_name])
+                            predicted_fixes.append({
+                                'shop': shop_name,
+                                'issue': failure_name,
+                                'component': predicted_component
+                            })
+                            observations_of_run[shop_name].applied_fix = AppliedFix(fix_type=predicted_rule, fixed_component=predicted_component, worked=False)
+                            break
+
+
+                # predict the ranking of fixes
+                order_indices = self.agent.predict_ranking(predicted_utilities)
+                #print("We predicted order: ")
+                #print(order_indices)
+                #print(predicted_fixes)
+
+                # send fixes to mRubis
+                self.environment.send_order_in_which_to_apply_fixes(predicted_fixes, order_indices)
+
+                # getting the new state of the fixed components
+                state_after_action = self.environment.get_from_mrubis(message=json.dumps({predicted_fix['shop']: [predicted_fix['component']] for predicted_fix in predicted_fixes}))
+                utility_differences = {}
+                for shop_name, state in state_after_action.items():
+                    try:
+                        utility_differences[shop_name] = float(list(state.values())[0]['shop_utility']) - float(failed_utilities[shop_name])
+                        if utility_differences > 0:
+                            # We have a utility increase so the fix worked :)
+                            observations_of_run[shop_name].applied_fix.worked = True
+                        else:
+                            # We don't have a utility increase so the fix did not work :(
+                            observations_of_run[shop_name].applied_fix.worked = False
+                    except:
+                        continue
+                logging.debug(failed_utilities)
+                logging.debug(utility_differences)
+                self._update_current_state(state_after_action)
+                #TODO: Get reward & train predictors
+                #TODO: Think of digital twin training logic
+                run_counter+=1
+                self.train_agent(predicted_fixes_w_gradients, utility_differences, right_components_picked)
+                #observation_batch += list(observations_of_run.values())
+                self.train_digital_twin(list(observations_of_run.values()))
+        
+        # self.train_digital_twin(observation_batch)
+
+        # gets data and calls train_agent and train_digital_twin
+        else:
+            logging.info(f"RUN {run_counter}")
+            logging.debug("Using DigitalTwin")
             predicted_utilities = []
 
             # shop_name -> (fix vector, predicted utility)
@@ -83,27 +188,23 @@ class Trainer():
             failed_utilities = {}
             observations_of_run: Dict[str, Observation] = {}
 
-            while num_issues_handled < number_of_issues:
-                num_issues_handled+=1
-
-                # Update number of issues
-                number_of_issues = self.environment.get_number_of_issues_in_run()
+            for issue_num in range(self.digital_twin.get_number_of_issues_in_run()):
 
                 # Get current observation
-                current_observation = self.environment.get_current_issues()
-                mapped_observaition = map_observation(current_observation)
-                observations_of_run[mapped_observaition.shop_name] = mapped_observaition
+                current_observation = self.digital_twin.get_current_issues()
 
                 logging.debug("Current Observation:")
                 logging.debug(current_observation)
 
                 # Update failed utilities
-                for shop_name, state in current_observation.items():
-                    failed_utilities[shop_name] = list(state.values())[0]['shop_utility']
+                for observation in current_observation:
+                    failed_utilities[observation.shop] = observation.shop_utility
 
                 # predict the fix
                 self.utility_optimizer.zero_grad()
-                predicted_fix_vector, predicted_utility = self.agent.predict_fix(self.observation_to_vector(current_observation))
+                # TODO
+                observation_vector = self.digital_twin_observation_to_vector(current_observation)
+                predicted_fix_vector, predicted_utility = self.agent.predict_fix(observation_vector)
                 predicted_utilities.append(predicted_utility.item())
                 predicted_fixes_w_gradients[shop_name] = (predicted_fix_vector, predicted_utility)
                 logging.debug("Predictions: ")
@@ -166,11 +267,8 @@ class Trainer():
             #observation_batch += list(observations_of_run.values())
             self.train_digital_twin(list(observations_of_run.values()))
 
-        #self.train_digital_twin(observation_batch)
-
-        # gets data and calls train_agent and train_digital_twin
-
-        #Loop:
+            pass
+        # Loop:
             # train twin
             # train agent / or use exploration agent / use batch (both on real environment)
 
@@ -223,7 +321,7 @@ class Trainer():
             fix_loss += new_fix_loss
 
         loss = utility_loss + fix_loss
-        print(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
+        logging.info(f"Avg loss: {loss/counter}, Avg Utility loss: {utility_loss/counter}, Avg Fix loss: {fix_loss/counter}, Avg needed attempts: {avg_attempts/counter}, Avg Utility Gain: {utility_gain/counter}")
         logging.info(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
         loss.backward()
         self.utility_optimizer.step()
@@ -266,6 +364,9 @@ class Trainer():
             else:
                 failed_vector[all_failures_list.index(ComponentFailure.GOOD.value), index] = 1
         return failed_vector
+    
+    def digital_twin_observation_to_vector(self, observations: List[ShopIssue]):
+        pass
 
     def vector_to_fix(self, fix_vector, observation, top_k):
         all_components_list = Components.list()

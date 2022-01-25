@@ -4,13 +4,14 @@ from typing import Dict, List, Union
 from filelock import warnings
 import pandas as pd
 import numpy as np
-from entities.observation import Fix, AgentFix, Issue, Observation, InitialState
+from entities.observation import ShopIssue, Fix, AgentFix, Issue, Observation, InitialState
 from entities.fixes import Fixes
 from entities.component_failure import ComponentFailure
 from entities.components import Components
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
+# TODO initialize probabilities with baisian distrib
 class ShopDigitalTwin:
     def __init__(self) -> None:
         self.build_propagation_matrix()
@@ -246,13 +247,15 @@ class ShopDigitalTwin:
                         )
                     ))
             issues.append(
-                Issue(component_name=component, utility=utility, failure_type=failure, fixes=fixes)
+                Issue(component_name=component, utility=utility, failure_type=failure, fixes=fixes, shop_utility=0.0)
             )
             # Store the issue that was selected to be the initial failed component
             if component == failed_component:
                 self.real_failed_component = issues[-1]
         self._is_fixed = False
         self.current_issues = issues
+        for issue in self.current_issues:
+            issue.shop_utility = self.get_shop_utility()
         return issues
 
 class DigitalTwin:
@@ -272,7 +275,7 @@ class DigitalTwin:
         for shop_name, sim in self.shop_simulations.items():
             sim.train(list(filter(lambda x: x.shop_name == shop_name, observations)))
 
-    def get_number_of_issues_in_run(self):
+    def get_number_of_issues_in_run(self) -> int:
         assert self._initialized
         counter = self._number_of_issues()
 
@@ -290,14 +293,17 @@ class DigitalTwin:
                 counter += 1
         return counter
 
-    def get_current_issues(self) -> List[Issue]:
+    def get_current_issues(self) -> List[ShopIssue]:
         assert self._initialized
+        simulation_names = list(self.shop_simulations.keys())
         simulations = list(self.shop_simulations.values())
         while self._number_of_issues > 0:
             self.current_shop_index = (self.current_shop_index + 1) % len(self.shop_simulations)
             sim = simulations[self.current_shop_index]
+            sim_name = simulation_names[self.current_shop_index]
             if not sim.is_fixed():
-                return sim.get_next_issue()
+                issues = sim.get_next_issue()
+                return [ShopIssue(shop=sim_name, **issue.__dict__) for issue in issues]
         return []
 
     def send_rule_to_execute(self, shop_name: str, failure_name: ComponentFailure, predicted_component: Components, predicted_rule: Fixes) -> bool:
