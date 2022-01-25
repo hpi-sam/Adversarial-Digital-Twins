@@ -330,13 +330,13 @@ class Trainer():
             new_fix_loss = self.fix_loss(predicted_fix, label)
             fix_loss += new_fix_loss
 
-        loss = utility_loss + fix_loss
+        loss = utility_loss + 5 * fix_loss
         print(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
         #logging.info(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
-        wandb.log({"loss": loss/counter})
-        wandb.log({"utility loss": utility_loss/counter})
-        wandb.log({"fix loss": fix_loss/counter})
-        wandb.log({"average needed attempts": utility_gain/counter})
+        wandb.log({"loss": loss/counter}, commit=False)
+        wandb.log({"utility loss": utility_loss/counter}, commit=False)
+        wandb.log({"fix loss": fix_loss/counter}, commit=False)
+        wandb.log({"average needed attempts": utility_gain/counter}, commit=True)
         loss.backward()
         self.utility_optimizer.step()
 
