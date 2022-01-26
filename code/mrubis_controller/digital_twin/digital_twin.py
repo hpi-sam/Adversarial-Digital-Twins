@@ -20,7 +20,7 @@ class ShopDigitalTwin:
         self.build_healthy_component_utilities()
         self.build_fix_success_rate()
         self.previous_observation = []
-        self.issue_distribution = []
+        self.issue_distribution = self.compute_issue_injection_distribution()
         self.real_failed_component: Union[None, Issue] = None
         self.correct_fix: Union[None, Fixes] = None
         self._is_fixed = True
@@ -33,7 +33,7 @@ class ShopDigitalTwin:
 
     def get_shop_utility(self) -> float:
         if self.is_fixed():
-            return self._healthy_shop_utility()
+            return self._healthy_shop_utility
         assert self.current_issues != None
         failed_components = [issue.component_name for issue in self.current_issues]
         computed_utility = 0.0
@@ -57,7 +57,7 @@ class ShopDigitalTwin:
                 self.current_issues = None
                 self.real_failed_component = None
                 self.correct_fix = None
-                self.is_fixed = True
+                self._is_fixed = True
 
     def build_fix_success_rate(self) -> None:
         components = Components.list()
@@ -82,7 +82,7 @@ class ShopDigitalTwin:
         return fix_component == self.real_failed_component
 
     def is_fixed(self) -> bool:
-        return self.is_fixed
+        return self._is_fixed
 
     def build_utility_series(self):
         self.utility_means = self.numerical_component_failure_series()
@@ -160,11 +160,13 @@ class ShopDigitalTwin:
         """
         self.propagation_matrix -= self.propagation_matrix
 
-    def compute_issue_injection_distribution(self):
+    def compute_issue_injection_distribution(self) -> np.ndarray:
         """Computes the probability that a component fails with a specific error.
         """
-        self.issue_distribution = np.copy(np.diag(self.propagation_matrix))
+        self.issue_distribution = np.copy(np.diag(self.propagation_matrix.to_numpy()))
         self.issue_distribution /= self.issue_distribution.sum()
+        self.issue_distribution[np.isnan(self.issue_distribution)] = 0
+        return self.issue_distribution
 
     def train(self, observations: List[Observation]) -> None:
         """Train the DigitalTwin using a batch ob observations that are sampled from
@@ -220,15 +222,22 @@ class ShopDigitalTwin:
         if not self.is_fixed():
             return self.current_issues
         failures = []
+        failed_component, failure_type = None,None
         # Get failed component
-        failed_component, failure_type = np.random.choice(self.utility_means.index, self.issue_distribution)
+        if self.issue_distribution.sum() != 0:
+            failed_component, failure_type = np.random.choice(self.utility_means.index, p=self.issue_distribution)
+        else:
+            failed_component, failure_type = np.random.choice(self.utility_means.index)
         failures.append((failed_component, failure_type))
-        self.correct_fix = np.random.choice(self.fix_probs[failed_component, failure_type].index, self.fix_probs[failed_component, failure_type].to_numpy())
+        if self.fix_probs[failed_component, failure_type].sum() != 0:
+            self.correct_fix = np.random.choice(self.fix_probs[failed_component, failure_type].index, p = self.fix_probs[failed_component, failure_type])
+        else:
+            self.correct_fix = np.random.choice(self.fix_probs[failed_component, failure_type].index)
         # Get propagation
         # TODO: We assume that only one failure type per component was ever seen
         # This assumption is equal to that a cf<n> failure can only trigger a cf<n> failure where n=n
         for idx in self.propagation_matrix.columns:
-            if random.random() <= self.propagation_matrix.iloc[failed_component, failure_type][idx]:
+            if random.random() < self.propagation_matrix.loc[failed_component, failure_type][idx]:
                 failures.append(idx)
         # Compute utility and build issue
         issues = []
@@ -238,12 +247,12 @@ class ShopDigitalTwin:
             # TODO use np.where here instead of if and iteration
             fixes = []
             for fix_name in self.fix_cost_means.columns:
-                if self.fix_cost_means.iloc[component, failure][fix_name] != 0:
+                if self.fix_cost_means.loc[component, failure][fix_name] != 0 or self.fix_cost_means.loc[component, failure].sum() == 0:
                     fixes.append(Fix(
                         fix_type=fix_name,
                         fix_cost=np.random.normal(
-                            self.fix_cost_means.iloc[component, failure][fix_name],
-                            self.fix_cost_std.iloc[component, failure][fix_name]
+                            self.fix_cost_means.loc[component, failure][fix_name],
+                            self.fix_cost_stds.loc[component, failure][fix_name]
                         )
                     ))
             issues.append(
@@ -251,7 +260,7 @@ class ShopDigitalTwin:
             )
             # Store the issue that was selected to be the initial failed component
             if component == failed_component:
-                self.real_failed_component = issues[-1]
+                self.real_failed_component = issues[-1].component_name
         self._is_fixed = False
         self.current_issues = issues
         for issue in self.current_issues:
@@ -297,7 +306,7 @@ class DigitalTwin:
         assert self._initialized
         simulation_names = list(self.shop_simulations.keys())
         simulations = list(self.shop_simulations.values())
-        while self._number_of_issues > 0:
+        while self._number_of_issues() > 0:
             self.current_shop_index = (self.current_shop_index + 1) % len(self.shop_simulations)
             sim = simulations[self.current_shop_index]
             sim_name = simulation_names[self.current_shop_index]

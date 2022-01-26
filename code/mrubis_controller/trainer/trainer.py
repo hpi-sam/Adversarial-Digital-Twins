@@ -3,7 +3,7 @@ from typing import Dict, List, Union
 
 import re
 from digital_twin.digital_twin import DigitalTwin
-from entities.observation import ShopIssue, Observation, Issue, Fix, AppliedFix, InitialState, Component
+from entities.observation import AgentFix, ShopIssue, Observation, Issue, Fix, AppliedFix, InitialState, Component
 from failure_propagator.failure_propagator import FailureProgagator
 from entities.components import Components
 from entities.component_failure import ComponentFailure
@@ -69,7 +69,7 @@ class Trainer():
         
 
     def train(self, max_runs=500):
-        #os.environ['WANDB_MODE'] = 'offline'
+        # os.environ['WANDB_MODE'] = 'disabled'
         wandb.init(project="test-project", entity="adversial-digital-twins") 
         wandb.config = {
             "learning_rate": 0.01,
@@ -83,6 +83,9 @@ class Trainer():
 
         observation_batch: List[Observation] = []
         while run_counter < max_runs:
+            if run_counter != 0 and run_counter % 50 == 0:
+                self.train_real = not self.train_real
+                logging.info(f"train real: {self.train_real}")
             if self.train_real:
                 logging.info(f"RUN {run_counter}")
                 number_of_issues = 1
@@ -150,9 +153,6 @@ class Trainer():
 
                 # predict the ranking of fixes
                 order_indices = self.agent.predict_ranking(predicted_utilities)
-                #print("We predicted order: ")
-                #print(order_indices)
-                #print(predicted_fixes)
 
                 # send fixes to mRubis
                 self.environment.send_order_in_which_to_apply_fixes(predicted_fixes, order_indices)
@@ -184,111 +184,82 @@ class Trainer():
         # self.train_digital_twin(observation_batch)
 
         # gets data and calls train_agent and train_digital_twin
-        else:
-            logging.info(f"RUN {run_counter}")
-            logging.debug("Using DigitalTwin")
-            predicted_utilities = []
+            else:
+                logging.info(f"RUN {run_counter}")
+                logging.info("Using DigitalTwin")
+                predicted_utilities = []
 
-            # shop_name -> (fix vector, predicted utility)
-            predicted_fixes_w_gradients = {}
-            right_components_picked = {}
-            predicted_fixes = []
+                # shop_name -> (fix vector, predicted utility)
+                predicted_fixes_w_gradients = {}
+                right_components_picked = {}
+                predicted_fixes = []
 
-            # Utilities of failed components before fixing
-            failed_utilities = {}
-            observations_of_run: Dict[str, Observation] = {}
+                # Utilities of failed components before fixing
+                failed_utilities = {}
+                observations_of_run: Dict[str, Observation] = {}
 
-            for issue_num in range(self.digital_twin.get_number_of_issues_in_run()):
+                for issue_num in range(self.digital_twin.get_number_of_issues_in_run()):
 
-                # Get current observation
-                current_observation = self.digital_twin.get_current_issues()
+                    # Get current observation
+                    current_observation = self.digital_twin.get_current_issues()
 
-                logging.debug("Current Observation:")
-                logging.debug(current_observation)
+                    logging.debug("Current Observation:")
+                    logging.debug(current_observation)
 
-                # Update failed utilities
-                for observation in current_observation:
-                    failed_utilities[observation.shop] = observation.shop_utility
+                    # Update failed utilities
+                    for observation in current_observation:
+                        failed_utilities[observation.shop] = observation.shop_utility
 
-                # predict the fix
-                self.utility_optimizer.zero_grad()
-                # TODO
-                observation_vector = self.digital_twin_observation_to_vector(current_observation)
-                predicted_fix_vector, predicted_utility = self.agent.predict_fix(observation_vector)
-                predicted_utilities.append(predicted_utility.item())
-                predicted_fixes_w_gradients[shop_name] = (predicted_fix_vector, predicted_utility)
-                logging.debug("Predictions: ")
-                logging.debug(predicted_fix_vector)
-                logging.debug(predicted_utility)
+                    # predict the fix
+                    self.utility_optimizer.zero_grad()
+                    observation_vector = self.digital_twin_observation_to_vector(current_observation)
+                    predicted_fix_vector, predicted_utility = self.agent.predict_fix(observation_vector)
+                    predicted_utilities.append(predicted_utility.item())
+                    predicted_fixes_w_gradients[current_observation[0].shop] = (predicted_fix_vector, predicted_utility)
+                    logging.debug("Predictions: ")
+                    logging.debug(predicted_fix_vector)
+                    logging.debug(predicted_utility)
 
-                # convert the fix to a json
-                top_counter = 0
-                while True:
-                    shop_name, failure_name, predicted_component, predicted_rule = self.vector_to_fix(predicted_fix_vector, current_observation, top_counter)
+                    # convert the fix to a json
+                    top_counter = 0
+                    while True:
+                        shop_name, failure_name, predicted_component, predicted_rule, agent_fix = self.vector_to_digital_twin_fix(predicted_fix_vector, current_observation[0], top_counter)
 
-                    logging.debug(f"We predicted fix: {shop_name, failure_name, predicted_component, predicted_rule}")
+                        logging.debug(f"We predicted fix: {shop_name, failure_name, predicted_component, predicted_rule}")
 
-                    # send the fix to mRubis
-                    right_component_picked = self.environment.send_rule_to_execute(shop_name, failure_name, predicted_component, predicted_rule)
-                    top_counter+=1
-                    if right_component_picked:
-                        
-                        right_components_picked[shop_name] = {'right_component_predicted': top_counter==1, 'attempts': top_counter, 'right_component': predicted_component}
-                        #print(right_components_picked[shop_name])
-                        predicted_fixes.append({
-                            'shop': shop_name,
-                            'issue': failure_name,
-                            'component': predicted_component
-                        })
-                        observations_of_run[shop_name].applied_fix = AppliedFix(fix_type=predicted_rule, fixed_component=predicted_component, worked=False)
-                        break
+                        # send the fix to mRubis
+                        right_component_picked = self.digital_twin.send_rule_to_execute(shop_name, failure_name, predicted_component, predicted_rule)
+                        top_counter+=1
+                        if right_component_picked:
+                            
+                            right_components_picked[shop_name] = {'right_component_predicted': top_counter==1, 'attempts': top_counter, 'right_component': predicted_component}
+                            #print(right_components_picked[shop_name])
+                            predicted_fixes.append({
+                                'shop': shop_name,
+                                'issue': failure_name,
+                                'component': predicted_component
+                            })
+                            break
+                order_indices = self.agent.predict_ranking(predicted_utilities)
+                # send fixes to mRubis
+                self.digital_twin.send_order_in_which_to_apply_fixes(predicted_fixes, order_indices)
+                # getting the new state of the fixed components
+                state_after_action = self.digital_twin.get_from_mrubis(message=json.dumps({predicted_fix['shop']: [predicted_fix['component']] for predicted_fix in predicted_fixes}))
+                utility_differences = {}
+                for shop_name, state in state_after_action.items():
+                    try:
+                        utility_differences[shop_name] = float(list(state.values())[0]) - float(failed_utilities[shop_name])
+                    except:
+                        continue
+                logging.debug(failed_utilities)
+                logging.debug(utility_differences)
+                # self._update_current_state(state_after_action)
+                #TODO: Get reward & train predictors
+                #TODO: Think of digital twin training logic
+                run_counter+=1
+                self.train_agent(predicted_fixes_w_gradients, utility_differences, right_components_picked, True)
 
-
-            # predict the ranking of fixes
-            order_indices = self.agent.predict_ranking(predicted_utilities)
-            #print("We predicted order: ")
-            #print(order_indices)
-            #print(predicted_fixes)
-
-            # send fixes to mRubis
-            self.environment.send_order_in_which_to_apply_fixes(predicted_fixes, order_indices)
-
-            # getting the new state of the fixed components
-            state_after_action = self.environment.get_from_mrubis(message=json.dumps({predicted_fix['shop']: [predicted_fix['component']] for predicted_fix in predicted_fixes}))
-            utility_differences = {}
-            for shop_name, state in state_after_action.items():
-                try:
-                    utility_differences[shop_name] = float(list(state.values())[0]['shop_utility']) - float(failed_utilities[shop_name])
-                    if utility_differences > 0:
-                        # We have a utility increase so the fix worked :)
-                        observations_of_run[shop_name].applied_fix.worked = True
-                    else:
-                        # We don't have a utility increase so the fix did not work :(
-                        observations_of_run[shop_name].applied_fix.worked = False
-                except:
-                    continue
-            logging.debug(failed_utilities)
-            logging.debug(utility_differences)
-            self._update_current_state(state_after_action)
-            #TODO: Get reward & train predictors
-            #TODO: Think of digital twin training logic
-            run_counter+=1
-            self.train_agent(predicted_fixes_w_gradients, utility_differences, right_components_picked)
-            #observation_batch += list(observations_of_run.values())
-            self.train_digital_twin(list(observations_of_run.values()))
-
-            pass
-        # Loop:
-            # train twin
-            # train agent / or use exploration agent / use batch (both on real environment)
-
-            # swtich to twin
-            #Loop:
-                # periodically execute "validation step" (short switch to the real environment) to detect if we can stay on the twin
-                # break if we overfit
-        pass
-
-    def train_agent(self, predicted_fixes_w_gradients, utility_differences, right_components_picked):
+    def train_agent(self, predicted_fixes_w_gradients, utility_differences, right_components_picked, digitial_twin = False):
         # -------
         #   Optimzation step:
         # LOOP:
@@ -331,11 +302,12 @@ class Trainer():
             fix_loss += new_fix_loss
 
         loss = utility_loss + 5 * fix_loss
-        print(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
+        logging.debug(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
         #logging.info(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
         wandb.log({"loss": loss/counter}, commit=False)
         wandb.log({"utility loss": utility_loss/counter}, commit=False)
         wandb.log({"fix loss": fix_loss/counter}, commit=False)
+        wandb.log({"digital twin": int(digitial_twin)}, commit=False)
         wandb.log({"average needed attempts": utility_gain/counter}, commit=True)
         loss.backward()
         self.utility_optimizer.step()
@@ -380,7 +352,17 @@ class Trainer():
         return failed_vector
     
     def digital_twin_observation_to_vector(self, observations: List[ShopIssue]):
-        pass
+        all_components_list = Components.list()
+        all_failures_list = ComponentFailure.list()
+        failed_components = [obs.component_name for obs in observations]
+        failure_names = [obs.failure_type for obs in observations]
+        failed_vector = np.zeros((len(all_failures_list), len(all_components_list)))
+        for index, component in enumerate(all_components_list):
+            if component in failed_components:
+                failed_vector[all_failures_list.index(failure_names[failed_components.index(component)]), index] = 1
+            else:
+                failed_vector[all_failures_list.index(ComponentFailure.GOOD.value), index] = 1
+        return failed_vector
 
     def vector_to_fix(self, fix_vector, observation, top_k):
         all_components_list = Components.list()
@@ -393,5 +375,19 @@ class Trainer():
         predicted_rule = all_fixes_list[int(idx_1)]
         shop_name = list(observation.keys())[0]
         failure_name = list(list(observation.values())[0].values())[0]['failure_name']
-
+        agentfix = AgentFix(failure_name, predicted_rule)
         return shop_name, failure_name, predicted_component, predicted_rule
+
+    def vector_to_digital_twin_fix(self, fix_vector, observation: Observation, top_k):
+        all_components_list = Components.list()
+        all_fixes_list = Fixes.list()
+
+        max_index = torch.topk(fix_vector.view(-1), top_k+1)[1][-1].item()
+
+        idx_1, idx_2 = max_index // fix_vector.shape[1], max_index % fix_vector.shape[1]
+        predicted_component = all_components_list[int(idx_2)]
+        predicted_rule = all_fixes_list[int(idx_1)]
+        shop_name = observation.shop
+        failure_name = observation.failure_type
+        agentfix = AgentFix(failure_name, predicted_rule)
+        return shop_name, failure_name, predicted_component, predicted_rule, agentfix
