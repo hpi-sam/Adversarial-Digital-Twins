@@ -10,4 +10,4 @@ if __name__ == "__main__":
     ranking_predictor = RankingPredictor()
     agent = Agent(fix_predictor, ranking_predictor)
     trainer = Trainer(agent=agent, digital_twin=DigitalTwin())
-    trainer.train(max_runs=10000)
+    trainer.train(max_runs=500)

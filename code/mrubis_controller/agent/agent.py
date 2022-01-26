@@ -3,10 +3,10 @@ class Agent():
         self.fix_predictor = fix_predictor
         self.ranking_predictor = ranking_predictor
 
-    def predict_fix(self, shop_observation):
+    def predict_fix(self, shop_observation, explore):
         # predict next fix for shop 
         # predict utility 
-        return self.fix_predictor.forward(shop_observation)
+        return self.fix_predictor.forward(shop_observation, explore)
     
     def predict_ranking(self, utilities):
         # predict an optimal ranking for predicted fixes

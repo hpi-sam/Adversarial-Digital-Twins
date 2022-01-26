@@ -74,27 +74,32 @@ class Trainer():
         self.mrubis_utilities = {}
         self.utility_loss = torch.nn.MSELoss()
         self.fix_loss = torch.nn.MSELoss()
-        self.utility_optimizer = torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.01)
+        self.utility_optimizer = torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.002)
+        self.scheduler = torch.optim.lr_scheduler.StepLR(self.utility_optimizer, step_size=300, gamma=0.1)
         
 
-    def train(self, max_runs=500):
-        # os.environ['WANDB_MODE'] = 'disabled'
+    def train(self, max_runs=500, num_exploration=50):
+        #os.environ['WANDB_MODE'] = 'offline'
         wandb.init(project="test-project", entity="adversial-digital-twins") 
-        wandb.config = {
+        wandb.config.update({
             "learning_rate": 0.01,
             "epochs": max_runs,
             "batch_size": 1
-        }
+        })
         run_counter = 0
         self._get_initial_observation()
         for shop_name, state in self.mrubis_state.items():
             self.mrubis_utilities[shop_name] = list(state.values())[0]['shop_utility']
 
         observation_batch: List[Observation] = []
+        explore = True
         while run_counter < max_runs:
             if run_counter != 0 and run_counter % 50 == 0:
                 self.train_real = not self.train_real
                 logging.info(f"train real: {self.train_real}")
+            if num_exploration == num_exploration:
+                explore = False
+
             if self.train_real:
                 logging.info(f"RUN {run_counter}")
                 number_of_issues = 1
@@ -130,7 +135,7 @@ class Trainer():
 
                     # predict the fix
                     self.utility_optimizer.zero_grad()
-                    predicted_fix_vector, predicted_utility = self.agent.predict_fix(self.observation_to_vector(current_observation))
+                    predicted_fix_vector, predicted_utility = self.agent.predict_fix(self.observation_to_vector(current_observation), explore)
                     predicted_utilities.append(predicted_utility.item())
                     predicted_fixes_w_gradients[shop_name] = (predicted_fix_vector, predicted_utility)
                     logging.debug("Predictions: ")
@@ -186,7 +191,8 @@ class Trainer():
                 #TODO: Get reward & train predictors
                 #TODO: Think of digital twin training logic
                 run_counter+=1
-                self.train_agent(predicted_fixes_w_gradients, utility_differences, right_components_picked)
+                if not explore:
+                    self.train_agent(predicted_fixes_w_gradients, utility_differences, right_components_picked)
                 #observation_batch += list(observations_of_run.values())
                 self.train_digital_twin(list(observations_of_run.values()))
         
@@ -295,14 +301,15 @@ class Trainer():
             utility_gain+=utility_difference
 
             predicted_fix = predicted_fixes_w_gradients[shop_name][0]
-            acceptance_threshold = 20000
+            acceptance_threshold = 1000
             avg_attempts += right_components_picked[shop_name]['attempts']
             correct_attempt_index = torch.topk(predicted_fix.view(-1), right_components_picked[shop_name]['attempts'])[1][-1].item()
             idx_1, idx_2 = correct_attempt_index // predicted_fix.shape[1], correct_attempt_index % predicted_fix.shape[1]
             label = torch.zeros(predicted_fix.shape)
 
             if utility_difference > acceptance_threshold:
-                label[idx_1,idx_2] = 1.0
+                #label[:,idx_2] = 1.0
+                label[idx_1,idx_2] = 10.0
             else:
                 label[:,idx_2] = 1.0
                 label[idx_1,idx_2] = 0.0
@@ -310,16 +317,19 @@ class Trainer():
             new_fix_loss = self.fix_loss(predicted_fix, label)
             fix_loss += new_fix_loss
 
-        loss = utility_loss + 5 * fix_loss
-        logging.debug(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
+        avg_utility_gain = utility_gain/counter
+        loss = utility_loss + 2*fix_loss + ((100000 - (avg_utility_gain))/100000)*counter# + avg_attempts/20
+        print(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
         #logging.info(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
         wandb.log({"loss": loss/counter}, commit=False)
         wandb.log({"utility loss": utility_loss/counter}, commit=False)
         wandb.log({"fix loss": fix_loss/counter}, commit=False)
         wandb.log({"digital twin": int(digitial_twin)}, commit=False)
-        wandb.log({"average needed attempts": utility_gain/counter}, commit=True)
+        wandb.log({"avg utility gain": avg_utility_gain}, commit=False)
+        wandb.log({"average needed attempts": avg_attempts/counter})
         loss.backward()
         self.utility_optimizer.step()
+        self.scheduler.step()
 
     def _get_initial_observation(self):
         '''Query mRUBiS for the number of shops, get their initial states'''
@@ -352,13 +362,55 @@ class Trainer():
         all_failures_list = ComponentFailure.list()
         failed_components = list(list(observation.values())[0].keys())
         failure_names = [dictionary['failure_name'] for dictionary in list(list(observation.values())[0].values())]
-        failed_vector = np.zeros((len(all_failures_list), len(all_components_list)))
+
+        criticalities = [float(dictionary['criticality']) for dictionary in list(list(observation.values())[0].values())]
+        connectivities = [float(dictionary['connectivity']) for dictionary in list(list(observation.values())[0].values())]
+        reliabilities = [float(dictionary['reliability']) for dictionary in list(list(observation.values())[0].values())]
+        importances = [float(dictionary['importance']) for dictionary in list(list(observation.values())[0].values())]
+        provided_interfaces = [float(dictionary['provided_interface']) for dictionary in list(list(observation.values())[0].values())]
+        required_interfaces = [float(dictionary['required_interface']) for dictionary in list(list(observation.values())[0].values())]
+        adts = [float(dictionary['adt']) for dictionary in list(list(observation.values())[0].values())]
+        perf_maxes = [float(dictionary['perf_max']) for dictionary in list(list(observation.values())[0].values())]
+        sat_points = [float(dictionary['sat_point']) for dictionary in list(list(observation.values())[0].values())]
+        replicas = [float(dictionary['replica']) for dictionary in list(list(observation.values())[0].values())]
+        requests = [float(dictionary['request']) for dictionary in list(list(observation.values())[0].values())]
+
+        padded_criticalities =np.zeros(len(all_components_list))
+        padded_connectivities =np.zeros(len(all_components_list))
+        padded_reliabilities =np.zeros(len(all_components_list))
+        padded_importances =np.zeros(len(all_components_list))
+        padded_provided_interfaces =np.zeros(len(all_components_list))
+        padded_required_interfaces =np.zeros(len(all_components_list))
+        padded_adts =np.zeros(len(all_components_list))
+        padded_perf_maxes =np.zeros(len(all_components_list))
+        padded_sat_points =np.zeros(len(all_components_list))
+        padded_replicas =np.zeros(len(all_components_list))
+        padded_requests =np.zeros(len(all_components_list))
+
+        failed_vector = np.zeros((len(all_failures_list)-1, len(all_components_list)))
+        counter = 0
         for index, component in enumerate(all_components_list):
-            if component in failed_components:
-                failed_vector[all_failures_list.index(failure_names[failed_components.index(component)]), index] = 1
+            
+            if component in failed_components:     
+                padded_criticalities[index] = criticalities[counter]
+                padded_connectivities[index] = connectivities[counter]
+                padded_reliabilities[index] = reliabilities[counter]
+                padded_importances[index] = importances[counter]
+                padded_provided_interfaces[index] = provided_interfaces[counter]
+                padded_required_interfaces[index] = required_interfaces[counter]
+                padded_adts[index] = adts[counter]
+                padded_perf_maxes[index] = perf_maxes[counter]
+                padded_sat_points[index] = sat_points[counter]
+                padded_replicas[index] = replicas[counter]
+                padded_requests[index] = requests[counter]
+                counter+=1
+                failed_vector[all_failures_list.index(failure_names[failed_components.index(component)])-1, index] = 1
             else:
+                continue
                 failed_vector[all_failures_list.index(ComponentFailure.GOOD.value), index] = 1
-        return failed_vector
+
+        numberic_vector = np.array([padded_criticalities, padded_connectivities, padded_reliabilities, padded_importances, padded_provided_interfaces, padded_required_interfaces, padded_adts, padded_perf_maxes, padded_sat_points, padded_replicas, padded_requests])
+        return np.concatenate([failed_vector.reshape(-1), numberic_vector.reshape(-1)])
     
     def digital_twin_observation_to_vector(self, observations: List[ShopIssue]):
         all_components_list = Components.list()

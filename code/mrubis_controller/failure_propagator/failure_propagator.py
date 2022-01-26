@@ -154,13 +154,16 @@ class FailureProgagator():
         # print(predicted_component not in failed_components)
         if predicted_component not in failed_components:
             return False
-        
-        if predicted_rule == "ReplaceComponent":
-            if isinstance(self.last_real_issue[shop_name][predicted_component]["rule_names"], str):
-                predicted_rule = list_string_regex.findall(self.last_real_issue[shop_name][predicted_component]["rule_names"])[0]
-            else:
-                predicted_rule = self.last_real_issue[shop_name][predicted_component]["rule_names"][0]
-            logging.debug(f"Switched rule to {predicted_rule}")
+
+        if isinstance(self.last_real_issue[shop_name][predicted_component]["rule_names"], str):
+            allowed_rules = list_string_regex.findall(self.last_real_issue[shop_name][predicted_component]["rule_names"])
+        else:
+            allowed_rules = self.last_real_issue[shop_name][predicted_component]["rule_names"]
+
+        #if predicted_rule not in allowed_rules or (predicted_rule == "ReplaceComponent" and predicted_component != 'Authentication Service'):
+        if predicted_rule not in allowed_rules or (predicted_rule == "ReplaceComponent"):
+            return False
+
         picked_rule_message = {shop_name: {failure_name: {predicted_component: predicted_rule}}}
 
         logging.debug(
