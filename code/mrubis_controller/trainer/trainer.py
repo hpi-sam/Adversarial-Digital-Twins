@@ -31,7 +31,10 @@ def map_observation(mrubis_observation: Dict) -> Observation:
             utility=float(details["component_utility"]),
             failure_type=details["failure_name"],
             fixes=[Fix(fix_type=rule_name, fix_cost=float(rule_cost)) for rule_name, rule_cost in zip(list_string_regex.findall(details["rule_names"]), list_float_regex.findall(details["rule_costs"]))],
-            shop_utility=0.0
+            shop_utility=0.0,
+            criticality=float(details["criticality"]),
+            importance=float(details["importance"]),
+            reliability=float(details["reliability"])
         )
         issues.append(issue)
     return Observation(
@@ -44,7 +47,13 @@ def map_observation(mrubis_observation: Dict) -> Observation:
 def map_initial_state(initial_state: Dict[str, Dict[str, Union[str, float]]]) -> Dict[str, InitialState]:
     inital_state_result = {}
     for shop_name, shop_details in initial_state.items():
-        components = [Component(component_name=c_name, utility=float(c_details["component_utility"])) for c_name, c_details in shop_details.items()]
+        components = [Component(
+            component_name=c_name,
+            utility=float(c_details["component_utility"]),
+            criticality=float(c_details["criticality"]),
+            importance=float(c_details["importance"]),
+            reliability=float(c_details["reliability"])
+        ) for c_name, c_details in shop_details.items()]
         shop_state = InitialState(
             shop_name=shop_name,
             shop_utility=float(next(iter(shop_details.values()))["shop_utility"]),

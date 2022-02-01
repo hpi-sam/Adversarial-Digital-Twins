@@ -11,11 +11,14 @@ from entities.components import Components
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
-# TODO initialize probabilities with baisian distrib
+# TODO initialize probabilities with baisian distribution
 class ShopDigitalTwin:
     def __init__(self) -> None:
         self.build_propagation_matrix()
         self.build_utility_series()
+        self.build_criticality_series()
+        self.build_importance_series()
+        self.build_reliability_series()
         self.build_fix_cost_matrix()
         self.build_healthy_component_utilities()
         self.build_fix_success_rate()
@@ -87,6 +90,19 @@ class ShopDigitalTwin:
     def build_utility_series(self):
         self.utility_means = self.numerical_component_failure_series()
         self.utility_stds = self.numerical_component_failure_series()
+
+    def build_criticality_series(self):
+        self.criticality_means = self.numerical_component_failure_series()
+        self.criticality_stds = self.numerical_component_failure_series()
+
+    def build_importance_series(self):
+        self.importance_means = self.numerical_component_failure_series()
+        self.importance_stds = self.numerical_component_failure_series()
+
+    def build_reliability_series(self):
+        self.reliability_means = self.numerical_component_failure_series()
+        self.reliability_stds = self.numerical_component_failure_series()
+
 
     def build_healthy_component_utilities(self):
         components = Components.list()
@@ -179,11 +195,17 @@ class ShopDigitalTwin:
         self.reset_propagation_matrix()
         self.reset_fix_success_rate()
         utilities = self.component_failure_series()
+        criticalities = self.component_failure_series()
+        importances = self.component_failure_series()
+        reliabilities = self.component_failure_series()
         fix_lists = self.build_fix_lists()
         # Count the number of other issues for each issue that is observed
         for observation in observations:
             for issue in observation.issues:
                 utilities[issue.component_name][issue.failure_type].append(issue.utility)
+                criticalities[issue.component_name][issue.failure_type].append(issue.criticality)
+                importances[issue.component_name][issue.failure_type].append(issue.importance)
+                reliabilities[issue.component_name][issue.failure_type].append(issue.reliability)
                 costs_series = fix_lists.loc[issue.component_name, issue.failure_type]
                 if issue.component_name == observation.applied_fix.fixed_component:
                     if observation.applied_fix.worked:
@@ -211,10 +233,26 @@ class ShopDigitalTwin:
         for idx in utilities.index:
             self.utility_means[idx] = np.mean(utilities[idx])
             self.utility_stds[idx] = np.std(utilities[idx])
+
+            self.criticality_means[idx] = np.mean(criticalities[idx])
+            self.criticality_stds[idx] = np.std(criticalities[idx])
+
+            self.importance_means[idx] = np.mean(importances[idx])
+            self.importance_stds[idx] = np.std(importances[idx])
+
+            self.reliability_means[idx] = np.mean(reliabilities[idx])
+            self.reliability_stds[idx] = np.std(reliabilities[idx])
+
             self.fix_cost_means.loc[idx] = [np.mean(costs) for costs in fix_lists.loc[idx].to_list()]
             self.fix_cost_stds.loc[idx] = [np.std(costs) for costs in fix_lists.loc[idx].to_list()]
         self.utility_means.fillna(0, inplace=True)
         self.utility_stds.fillna(0, inplace=True)
+        self.criticality_means.fillna(0, inplace=True)
+        self.criticality_stds.fillna(0, inplace=True)
+        self.importance_means.fillna(0, inplace=True)
+        self.importance_stds.fillna(0, inplace=True)
+        self.reliability_means.fillna(0, inplace=True)
+        self.reliability_stds.fillna(0, inplace=True)
         self.fix_cost_means.fillna(0, inplace=True)
         self.fix_cost_stds.fillna(0, inplace=True)
 
@@ -243,6 +281,9 @@ class ShopDigitalTwin:
         issues = []
         for component, failure in failures:
             utility = np.random.normal(self.utility_means[component, failure], self.utility_stds[component, failure])
+            criticality = np.random.normal(self.criticality_means[component, failure], self.criticality_stds[component, failure])
+            importance = np.random.normal(self.importance_means[component, failure], self.importance_stds[component, failure])
+            reliability = np.random.normal(self.reliability_means[component, failure], self.reliability_stds[component, failure])
             # Get fixes that can be applied (which have a mean of greater than zero)
             # TODO use np.where here instead of if and iteration
             fixes = []
@@ -256,7 +297,7 @@ class ShopDigitalTwin:
                         )
                     ))
             issues.append(
-                Issue(component_name=component, utility=utility, failure_type=failure, fixes=fixes, shop_utility=0.0)
+                Issue(component_name=component, utility=utility, criticality=criticality, importance=importance, reliability=reliability, failure_type=failure, fixes=fixes, shop_utility=0.0)
             )
             # Store the issue that was selected to be the initial failed component
             if component == failed_component:

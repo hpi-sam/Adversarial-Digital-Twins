@@ -8,6 +8,9 @@ from entities.component_failure import ComponentFailure
 class Component:
     component_name: Components
     utility: float
+    importance: float
+    criticality: float
+    reliability: float
 
 @dataclass
 class AgentFix:
