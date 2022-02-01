@@ -22,17 +22,21 @@ class ShopDigitalTwin:
         self.build_fix_cost_matrix()
         self.build_healthy_component_utilities()
         self.build_fix_success_rate()
+        self.build_fix_utility()
         self.previous_observation = []
         self.issue_distribution = self.compute_issue_injection_distribution()
-        self.real_failed_component: Union[None, Issue] = None
+        self.real_failed_component: Union[None, Components] = None
+        self.real_failed_issue: Union[None, Issue] = None
         self.correct_fix: Union[None, Fixes] = None
         self._is_fixed = True
         self.current_issues: Union[None, List[Issue]] = None
+        self.initial_healthy_shop_utility = 0.0
         self._healthy_shop_utility = 0.0
 
     def set_initial_state(self, inital_state: InitialState) -> None:
         assert len(inital_state.components) == len(Components.list())
         self._healthy_shop_utility = inital_state.shop_utility
+        self.initial_healthy_shop_utility = inital_state.shop_utility
 
     def get_shop_utility(self) -> float:
         if self.is_fixed():
@@ -56,11 +60,13 @@ class ShopDigitalTwin:
 
     def apply_fix(self, fix: AgentFix) -> None:
         if fix.component == self.real_failed_component:
-            if fix.fix == self.correct_fix:
-                self.current_issues = None
-                self.real_failed_component = None
-                self.correct_fix = None
-                self._is_fixed = True
+            # if fix.fix == self.correct_fix:
+            self._healthy_shop_utility = np.random.normal(self.fix_utility_means[self.real_failed_component, self.real_failed_issue.failure_type], self.fix_utility_stds[self.real_failed_component, self.real_failed_issue.failure_type])
+            self.current_issues = None
+            self.real_failed_component = None
+            self.real_failed_issue = None
+            self.correct_fix = None
+            self._is_fixed = True
 
     def build_fix_success_rate(self) -> None:
         components = Components.list()
@@ -74,6 +80,10 @@ class ShopDigitalTwin:
         index = ['worked', 'failed']
         self.fix_success = pd.DataFrame(np.zeros((2, len(long_components))), index=index, columns=columns)
         self.fix_probs = pd.Series(np.zeros(len(long_components)), index=columns)
+
+    def build_fix_utility(self) -> None:
+        self.fix_utility_means = self.numerical_component_failure_series()
+        self.fix_utility_stds = self.numerical_component_failure_series()
 
     def reset_fix_success_rate(self) -> None:
         self.fix_success -= self.fix_success
@@ -198,14 +208,16 @@ class ShopDigitalTwin:
         criticalities = self.component_failure_series()
         importances = self.component_failure_series()
         reliabilities = self.component_failure_series()
+        fix_utilities = self.component_failure_series()
         fix_lists = self.build_fix_lists()
         # Count the number of other issues for each issue that is observed
-        for observation in observations:
+        for observation in self.previous_observation:
             for issue in observation.issues:
                 utilities[issue.component_name][issue.failure_type].append(issue.utility)
                 criticalities[issue.component_name][issue.failure_type].append(issue.criticality)
                 importances[issue.component_name][issue.failure_type].append(issue.importance)
                 reliabilities[issue.component_name][issue.failure_type].append(issue.reliability)
+                fix_utilities[issue.component_name][issue.failure_type].append(observation.applied_fix.utility_after)
                 costs_series = fix_lists.loc[issue.component_name, issue.failure_type]
                 if issue.component_name == observation.applied_fix.fixed_component:
                     if observation.applied_fix.worked:
@@ -243,8 +255,12 @@ class ShopDigitalTwin:
             self.reliability_means[idx] = np.mean(reliabilities[idx])
             self.reliability_stds[idx] = np.std(reliabilities[idx])
 
+            self.fix_utility_means[idx] = np.mean(fix_utilities[idx])
+            self.fix_utility_means[idx] = np.std(fix_utilities[idx])
+
             self.fix_cost_means.loc[idx] = [np.mean(costs) for costs in fix_lists.loc[idx].to_list()]
             self.fix_cost_stds.loc[idx] = [np.std(costs) for costs in fix_lists.loc[idx].to_list()]
+
         self.utility_means.fillna(0, inplace=True)
         self.utility_stds.fillna(0, inplace=True)
         self.criticality_means.fillna(0, inplace=True)
@@ -255,6 +271,8 @@ class ShopDigitalTwin:
         self.reliability_stds.fillna(0, inplace=True)
         self.fix_cost_means.fillna(0, inplace=True)
         self.fix_cost_stds.fillna(0, inplace=True)
+        self.fix_utility_means.fillna(self.initial_healthy_shop_utility, inplace=True)
+        self.fix_utility_stds.fillna(0, inplace=True)
 
     def get_next_issue(self) -> List[Issue]:
         if not self.is_fixed():
@@ -302,6 +320,8 @@ class ShopDigitalTwin:
             # Store the issue that was selected to be the initial failed component
             if component == failed_component:
                 self.real_failed_component = issues[-1].component_name
+                self.real_failed_issue = issues[-1]
+                print(f"Real issue:", self.real_failed_component)
         self._is_fixed = False
         self.current_issues = issues
         for issue in self.current_issues:

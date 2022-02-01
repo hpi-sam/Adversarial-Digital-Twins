@@ -37,6 +37,7 @@ class AppliedFix:
     fix_type: Fixes
     fixed_component: Components
     worked: bool
+    utility_after: float
 
 @dataclass
 class Observation:
