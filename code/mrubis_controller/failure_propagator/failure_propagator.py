@@ -3,11 +3,13 @@ import logging
 import socket
 from pathlib import Path
 from json.decoder import JSONDecodeError
+import sys
 from time import sleep
 from typing import Union
 import copy
 from entities.messages import Messages
 from failure_propagator.failure_propagation_HMM import FPHMM
+import numpy as np
 
 import re
 
@@ -89,54 +91,55 @@ class FailureProgagator():
 
         #     issues = {**self.propagator.create_observation(issue), **issues}
         # self.current_issues = issues
-        return self.propagator.create_observation(issue)
         # #print(issue)
-        # component_name = list(list(issue.values())[0].keys())[0]
-        # failure_name = list(issue.values())[0][component_name]["failure_name"]
-        # rule_cost = list(issue.values())[0][component_name]["rule_costs"]
-        # rule_names = list(issue.values())[0][component_name]["rule_names"]
-        # component_utility = list(issue.values())[0][component_name]["component_utility"]
-        # criticality = list(issue.values())[0][component_name]["criticality"]
-        # importance = list(issue.values())[0][component_name]["importance"]
-        # reliability = list(issue.values())[0][component_name]["reliability"]
+        component_name = list(list(issue.values())[0].keys())[0]
+        failure_name = list(issue.values())[0][component_name]["failure_name"]
+        rule_cost = list(issue.values())[0][component_name]["rule_costs"]
+        rule_names = list(issue.values())[0][component_name]["rule_names"]
+        component_utility = list(issue.values())[0][component_name]["component_utility"]
+        criticality = list(issue.values())[0][component_name]["criticality"]
+        importance = list(issue.values())[0][component_name]["importance"]
+        reliability = list(issue.values())[0][component_name]["reliability"]
 
 
-        # #rule_names = issue.values()[0][component_name]["rule_names"]
-        # if component_name not in self.analytics:
-        #     self.analytics[component_name] = {}
-        # if failure_name not in self.analytics[component_name]:
-        #     self.analytics[component_name][failure_name] = {}
-        #     self.analytics[component_name][failure_name]["component_utility"] = []
-        #     self.analytics[component_name][failure_name]["criticality"] = []
-        #     self.analytics[component_name][failure_name]["importance"] = []
-        #     self.analytics[component_name][failure_name]["reliability"] = []
-        # self.analytics[component_name][failure_name]["component_utility"].append(float(component_utility))
-        # self.analytics[component_name][failure_name]["criticality"].append(float(criticality))
-        # self.analytics[component_name][failure_name]["importance"].append(float(importance))
-        # self.analytics[component_name][failure_name]["reliability"].append(float(reliability))
+        #rule_names = issue.values()[0][component_name]["rule_names"]
+        if component_name not in self.analytics:
+            self.analytics[component_name] = {}
+        if failure_name not in self.analytics[component_name]:
+            self.analytics[component_name][failure_name] = {}
+            self.analytics[component_name][failure_name]["component_utility"] = []
+            self.analytics[component_name][failure_name]["criticality"] = []
+            self.analytics[component_name][failure_name]["importance"] = []
+            self.analytics[component_name][failure_name]["reliability"] = []
+        self.analytics[component_name][failure_name]["component_utility"].append(float(component_utility))
+        self.analytics[component_name][failure_name]["criticality"].append(float(criticality))
+        self.analytics[component_name][failure_name]["importance"].append(float(importance))
+        self.analytics[component_name][failure_name]["reliability"].append(float(reliability))
 
-        # for name, cost in zip(rule_names[1:-1].replace(" ", "").split(","), rule_cost[1:-1].replace(" ", "").split(",")):
-        #     if name not in self.analytics[component_name][failure_name]:
-        #         self.analytics[component_name][failure_name][name] = []
-        #     self.analytics[component_name][failure_name][name].append(float(cost)) 
+        for name, cost in zip(rule_names[1:-1].replace(" ", "").split(","), rule_cost[1:-1].replace(" ", "").split(",")):
+            if name not in self.analytics[component_name][failure_name]:
+                self.analytics[component_name][failure_name][name] = []
+            self.analytics[component_name][failure_name][name].append(float(cost)) 
 
-        # self.counter += 1
-        # print(self.counter)
-        # if self.counter > 3000:
+        self.counter += 1
+        #print(self.counter)
+        if self.counter > 5000:
 
-        #     for component_name in self.analytics.keys():
-        #         for failure_name in self.analytics[component_name].keys():
-        #             for rule_name in self.analytics[component_name][failure_name].keys():
-        #                 self.analytics[component_name][failure_name][rule_name] = [np.mean(self.analytics[component_name][failure_name][rule_name]), np.std(self.analytics[component_name][failure_name][rule_name])]
-        #                 self.analytics[component_name][failure_name]["component_utility"] = [np.mean(self.analytics[component_name][failure_name]["component_utility"]), np.std(self.analytics[component_name][failure_name]["component_utility"])]
-        #                 self.analytics[component_name][failure_name]["criticality"] = [np.mean(self.analytics[component_name][failure_name]["criticality"]), np.std(self.analytics[component_name][failure_name]["criticality"])]
-        #                 self.analytics[component_name][failure_name]["importance"] = [np.mean(self.analytics[component_name][failure_name]["importance"]), np.std(self.analytics[component_name][failure_name]["importance"])]
-        #                 self.analytics[component_name][failure_name]["reliability"] = [np.mean(self.analytics[component_name][failure_name]["reliability"]), np.std(self.analytics[component_name][failure_name]["reliability"])]
+            for component_name in self.analytics.keys():
+                for failure_name in self.analytics[component_name].keys():
+                    for rule_name in self.analytics[component_name][failure_name].keys():
+                        self.analytics[component_name][failure_name][rule_name] = [np.mean(self.analytics[component_name][failure_name][rule_name]), np.std(self.analytics[component_name][failure_name][rule_name])]
+                        self.analytics[component_name][failure_name]["component_utility"] = [np.mean(self.analytics[component_name][failure_name]["component_utility"]), np.std(self.analytics[component_name][failure_name]["component_utility"])]
+                        self.analytics[component_name][failure_name]["criticality"] = [np.mean(self.analytics[component_name][failure_name]["criticality"]), np.std(self.analytics[component_name][failure_name]["criticality"])]
+                        self.analytics[component_name][failure_name]["importance"] = [np.mean(self.analytics[component_name][failure_name]["importance"]), np.std(self.analytics[component_name][failure_name]["importance"])]
+                        self.analytics[component_name][failure_name]["reliability"] = [np.mean(self.analytics[component_name][failure_name]["reliability"]), np.std(self.analytics[component_name][failure_name]["reliability"])]
 
-        #     with open("rule_costs.json", "w") as file:
-        #         json.dump(self.analytics, file, indent=2)
+            with open("rule_costs.json", "w") as file:
+                json.dump(self.analytics, file, indent=2)
+            sys.exit()
         
-        #     sys.exit()
+        return self.propagator.create_observation(issue)
+            # sys.exit()
         # return issue
         # with open("test_issue.json", "w") as file:
         #     json.dump(self.propagator.create_observation(issue), file, indent=2)

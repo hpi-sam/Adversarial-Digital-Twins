@@ -4,6 +4,7 @@ from typing import Dict, List, Union
 from filelock import warnings
 import pandas as pd
 import numpy as np
+import wandb
 from entities.observation import ShopIssue, Fix, AgentFix, Issue, Observation, InitialState
 from entities.fixes import Fixes
 from entities.component_failure import ComponentFailure
@@ -32,6 +33,114 @@ class ShopDigitalTwin:
         self.current_issues: Union[None, List[Issue]] = None
         self.initial_healthy_shop_utility = 0.0
         self._healthy_shop_utility = 0.0
+        
+        self.read_sampled_rule_costs()
+
+    def log_distributions(self, step=None):
+        self._log_utility(step=step)
+        self._log_propagation(step=step)
+        self._log_criticality(step=step)
+        self._log_importance(step=step)
+        self._log_reliability(step=step)
+        self._log_fix_costs(step=step)
+
+    def _log_utility(self, step=None) -> None:
+        wandb.log({
+            "digital twin utility": {
+                 "mean of absolute mean differences": (self.utility_means - self._read_utilities_means).abs().to_numpy().mean(),
+                "mean of absolute std differences": (self.utility_stds - self._read_utilities_stds).abs().to_numpy().mean()
+            }
+        }, commit=False)
+    
+    def _log_propagation(self, step=None):
+        wandb.log({
+            "digital twin propagation": {
+                "propagation matrix": wandb.Image(self.propagation_matrix.to_numpy())
+            }
+        }, commit=False)
+    
+    def _log_criticality(self, step=None):
+        wandb.log({
+            "digital twin criticality": {
+                 "mean of absolute mean differences": (self.criticality_means - self._read_criticality_means).abs().to_numpy().mean(),
+                "mean of absolute std differences": (self.criticality_stds - self._read_criticality_stds).abs().to_numpy().mean()
+            }
+        }, commit=False)
+    
+    def _log_importance(self, step=None):
+        wandb.log({
+            "digital twin importance": {
+                "mean of absolute mean differences": (self.importance_means - self._read_importance_means).abs().to_numpy().mean(),
+                "mean of absolute std differences": (self.importance_stds - self._read_importance_stds).abs().to_numpy().mean()
+            }
+        }, commit=False)
+    
+    def _log_reliability(self, step=None):
+        wandb.log({
+            "digital twin reliability": {
+                "mean of absolute mean differences": (self.reliability_means - self._read_reliability_means).abs().to_numpy().mean(),
+                "mean of absolute std differences": (self.reliability_stds - self._read_reliability_stds).abs().to_numpy().mean()
+            }
+        }, commit=False)
+
+    def _log_fix_costs(self, step=None):
+        fix_costs_mean = (self.fix_cost_means - self._read_fix_costs_means).abs().to_numpy()
+        fix_costs_std = (self.fix_cost_stds - self._read_fix_costs_stds).abs().to_numpy()
+        wandb.log({
+            "digital twin fix costs": {
+                "absolute mean differences": wandb.Histogram(fix_costs_mean),
+                "absolute std differences": wandb.Histogram(fix_costs_std),
+            }
+        }, commit=False)
+
+    def read_sampled_rule_costs(self):
+        with open("rule_costs.json", "r") as read_handle:
+            self.sampled_rule_costs = json.load(read_handle)
+        for comp in Components.list():
+            for state in ComponentFailure.list():
+                if state == ComponentFailure.GOOD.value:
+                    continue
+                if comp not in self.sampled_rule_costs:
+                    print(comp, " is missing")
+                    self.sampled_rule_costs[comp] = {}
+                if state not in self.sampled_rule_costs[comp]:
+                    print(comp, state, " is missing")
+                    self.sampled_rule_costs[comp][state] = {}
+                    self.sampled_rule_costs[comp][state]["component_utility"] = [0.0, 0.0]
+                    self.sampled_rule_costs[comp][state]["reliability"] = [0.0, 0.0]
+                    self.sampled_rule_costs[comp][state]["criticality"] = [0.0, 0.0]
+                    self.sampled_rule_costs[comp][state]["importance"] = [0.0, 0.0]
+                for fix in Fixes.list():
+                    if fix not in self.sampled_rule_costs[comp][state]:
+                        self.sampled_rule_costs[comp][state][fix] = [0.0, 0.0]
+        self._read_utilities_means = self.numerical_component_failure_series()
+        self._read_utilities_stds = self.numerical_component_failure_series()
+        self._read_reliability_means = self.numerical_component_failure_series()
+        self._read_reliability_stds = self.numerical_component_failure_series()
+        self._read_criticality_means = self.numerical_component_failure_series()
+        self._read_criticality_stds = self.numerical_component_failure_series()
+        self._read_importance_means = self.numerical_component_failure_series()
+        self._read_importance_stds = self.numerical_component_failure_series()
+        self._read_fix_costs_means = zero_dataframe(self.fix_cost_means.copy(True))
+        self._read_fix_costs_stds= zero_dataframe(self.fix_cost_stds.copy(True))
+        for comp, state in self._read_utilities_means.index:
+            read = self.sampled_rule_costs[comp][state]
+            self._read_utilities_means[comp, state] = read["component_utility"][0]
+            self._read_utilities_stds[comp, state] = read["component_utility"][1]
+            self._read_reliability_means[comp, state] = read["reliability"][0]
+            self._read_reliability_stds[comp, state] = read["reliability"][1]
+            self._read_criticality_means[comp, state] = read["criticality"][0]
+            self._read_criticality_stds[comp, state] = read["criticality"][1]
+            self._read_importance_means[comp, state] = read["importance"][0]
+            self._read_importance_stds[comp, state] = read["importance"][1]
+            for fix in Fixes.list():
+                self._read_fix_costs_means[fix][comp, state] = read[fix][0]
+                self._read_fix_costs_stds[fix][comp, state] = read[fix][1]
+
+    def log_table(self, labels, values):
+        data = [[label, val] for (label, val) in zip(labels, values)]
+        table = wandb.Table(data=data, columns = ["label", "value"])
+        wandb.log({"my_bar_chart_id" : wandb.plot.bar(table, "label", "value", title="Custom Bar Chart")})
 
     def set_initial_state(self, inital_state: InitialState) -> None:
         assert len(inital_state.components) == len(Components.list())
@@ -194,7 +303,7 @@ class ShopDigitalTwin:
         self.issue_distribution[np.isnan(self.issue_distribution)] = 0
         return self.issue_distribution
 
-    def train(self, observations: List[Observation]) -> None:
+    def train(self, observations: List[Observation], step=None) -> None:
         """Train the DigitalTwin using a batch ob observations that are sampled from
         an environment.
 
@@ -273,6 +382,7 @@ class ShopDigitalTwin:
         self.fix_cost_stds.fillna(0, inplace=True)
         self.fix_utility_means.fillna(self.initial_healthy_shop_utility, inplace=True)
         self.fix_utility_stds.fillna(0, inplace=True)
+        self.log_distributions(step=step)
 
     def get_next_issue(self) -> List[Issue]:
         if not self.is_fixed():
@@ -321,7 +431,6 @@ class ShopDigitalTwin:
             if component == failed_component:
                 self.real_failed_component = issues[-1].component_name
                 self.real_failed_issue = issues[-1]
-                print(f"Real issue:", self.real_failed_component)
         self._is_fixed = False
         self.current_issues = issues
         for issue in self.current_issues:
@@ -340,10 +449,10 @@ class DigitalTwin:
             self.shop_simulations[shop_name].set_initial_state(initial_state)
             self._initialized = True
 
-    def train(self, observations: List[Observation]) -> None:
+    def train(self, observations: List[Observation], step=None) -> None:
         assert self._initialized
         for shop_name, sim in self.shop_simulations.items():
-            sim.train(list(filter(lambda x: x.shop_name == shop_name, observations)))
+            sim.train(list(filter(lambda x: x.shop_name == shop_name, observations)), step=step)
 
     def get_number_of_issues_in_run(self) -> int:
         assert self._initialized
@@ -405,3 +514,9 @@ class DigitalTwin:
             for component in components:
                 result[shop] = {component: sim.get_shop_utility()}
         return result
+
+
+def zero_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+    for col in df.columns:
+        df[col].values[:] = 0
+    return df

@@ -97,10 +97,10 @@ class Trainer():
         observation_batch: List[Observation] = []
         explore = True
         while run_counter < max_runs:
-            if run_counter != 0 and run_counter % 50 == 0:
+            if False: #run_counter != 0 and run_counter % 50 == 0:
                 self.train_real = not self.train_real
                 logging.info(f"train real: {self.train_real}")
-            if run_counter == num_exploration:
+            if False: #run_counter == num_exploration:
                 explore = False
 
             if self.train_real:
@@ -209,7 +209,7 @@ class Trainer():
         # gets data and calls train_agent and train_digital_twin
             else:
                 if len(observation_batch) != 0:
-                    self.train_digital_twin(observation_batch)
+                    self.train_digital_twin(observation_batch, step=run_counter)
                     observation_batch = []
                 logging.info(f"RUN {run_counter}")
                 logging.info("Using DigitalTwin")
@@ -365,8 +365,8 @@ class Trainer():
                 for param, value in component_params.items():
                     self.mrubis_state[shop][component_type][param] = value
 
-    def train_digital_twin(self, observations: List[Observation]) -> None:
-        self.digital_twin.train(observations)
+    def train_digital_twin(self, observations: List[Observation], step=None) -> None:
+        self.digital_twin.train(observations, step=step)
 
     def observation_to_vector(self, observation):
         all_components_list = Components.list()
