@@ -97,10 +97,10 @@ class Trainer():
         observation_batch: List[Observation] = []
         explore = True
         while run_counter < max_runs:
-            if False: #run_counter != 0 and run_counter % 50 == 0:
+            if run_counter != 0 and run_counter % 50 == 0:
                 self.train_real = not self.train_real
                 logging.info(f"train real: {self.train_real}")
-            if False: #run_counter == num_exploration:
+            if run_counter == num_exploration:
                 explore = False
 
             if self.train_real:

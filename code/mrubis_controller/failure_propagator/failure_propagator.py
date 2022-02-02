@@ -88,7 +88,7 @@ class FailureProgagator():
         #         break
         issue = self.get_from_mrubis(Messages.GET_CURRENT_ISSUE)
         self.last_real_issue = copy.deepcopy(issue)
-
+        return self.propagator.create_observation(issue)
         #     issues = {**self.propagator.create_observation(issue), **issues}
         # self.current_issues = issues
         # #print(issue)
@@ -122,8 +122,8 @@ class FailureProgagator():
             self.analytics[component_name][failure_name][name].append(float(cost)) 
 
         self.counter += 1
-        #print(self.counter)
-        if self.counter > 5000:
+        print(self.counter)
+        if self.counter > 10000:
 
             for component_name in self.analytics.keys():
                 for failure_name in self.analytics[component_name].keys():

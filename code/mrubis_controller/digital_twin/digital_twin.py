@@ -55,7 +55,7 @@ class ShopDigitalTwin:
     def _log_propagation(self, step=None):
         wandb.log({
             "digital twin propagation": {
-                "propagation matrix": wandb.Image(self.propagation_matrix.to_numpy())
+                "propagation matrix": wandb.Image(self.propagation_matrix.to_numpy() * 255)
             }
         }, commit=False)
     
