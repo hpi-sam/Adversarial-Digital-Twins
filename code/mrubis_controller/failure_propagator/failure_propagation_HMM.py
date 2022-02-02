@@ -3,29 +3,22 @@ import pandas as pd
 import numpy as np
 from typing import Dict, List
 from entities.fixes import Fixes
-
+import random
 from entities.component_failure import ComponentFailure
 from entities.components import Components
 import json
 import copy
 import re
+from copy import deepcopy
 
 list_string_regex = re.compile(r"[\[(?:\,\s)]?([A-z]+)[\]\,]")
 list_float_regex  = re.compile(r"[\[(?:\,\s)]?([\d\.]+)[\]\,]")
 
 class FPHMM():
-    def __init__(self, config_path: str ="moin"):
-        #self.transition_matrix = pd.read_csv(config_path)
-        long_components = np.array([[component]*5 for component in Components.list()]).flat
-        arrays = [
-        long_components,
-        ComponentFailure.list()*len(Components.list()),
-        ]
-        tuples = list(zip(*arrays))
-        index = pd.MultiIndex.from_tuples(tuples, names=["component", "status"])
-        #User Management Service looks like it cant have a CF1
-        #TODO: Change the probabilities accordingly.
-        self.transition_matrix = pd.DataFrame(np.array([[0.955, 0.015, 0.015, 0.015, 0.]*len(Components.list())]*len(long_components)), index=index, columns=index)
+    def __init__(self, config_path: str ='transition_matrix.csv'):
+        self.components = np.array(Components.list()).flat
+        self.transition_matrix = pd.read_csv(config_path)
+        self.transition_matrix = self.transition_matrix.set_index('Sources')
     
         with open('rule_costs.json', "r") as json_file:
             self.sample_params = json.load(json_file)
@@ -48,29 +41,14 @@ class FPHMM():
 
     def propagate_failures(self, failed_components: Dict[str, str]):
         matrix = self.transition_matrix
-        # assumption: observation of failed components can not differ from the real state
-        # "we cant unfail components"
-        all_failed_components = failed_components.copy()
-        while True:
-            if len(failed_components) == 0:
-                break
+        all_failed_components = deepcopy(failed_components)
+        for component, errorId in failed_components.items():
+            probabilities = matrix.loc[component]
+            for index, new_component in enumerate(self.components):
+                choice = random.random()
+                if choice < probabilities[index]:
+                    all_failed_components[new_component] = errorId
 
-            new_failed_components = {}
-            for component, errorId in failed_components.items():
-                probabilities = matrix.loc[component,errorId]
-
-                for computed_component in Components.list():
-                    if computed_component in all_failed_components:
-                        continue
-                    new_state = np.random.choice(ComponentFailure.list(), p=np.array(probabilities[computed_component])/np.sum(probabilities[computed_component]))
-
-                    if new_state == 'good':
-                        continue
-                    else:
-                        all_failed_components[computed_component] = new_state
-                        new_failed_components[computed_component] = new_state
-            failed_components = new_failed_components
-            
         return all_failed_components
 
     def create_observation(self, issues):
