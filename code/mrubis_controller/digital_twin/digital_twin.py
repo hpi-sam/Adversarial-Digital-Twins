@@ -320,7 +320,7 @@ class ShopDigitalTwin:
         fix_utilities = self.component_failure_series()
         fix_lists = self.build_fix_lists()
         # Count the number of other issues for each issue that is observed
-        for observation in self.previous_observation:
+        for observation in self.previous_observation[:100]:
             for issue in observation.issues:
                 utilities[issue.component_name][issue.failure_type].append(issue.utility)
                 criticalities[issue.component_name][issue.failure_type].append(issue.criticality)
