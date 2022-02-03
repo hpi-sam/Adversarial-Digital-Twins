@@ -20,9 +20,30 @@ class FPHMM():
         self.transition_matrix = pd.read_csv(config_path)
         self.transition_matrix = self.transition_matrix.set_index('Sources')
     
-        with open('rule_costs.json', "r") as json_file:
-            self.sample_params = json.load(json_file)
+        with open("rule_costs.json", "r") as read_handle:
 
+            self.sample_params = json.load(read_handle)
+            for comp in Components.list():
+                for state in ComponentFailure.list():
+                    if state == ComponentFailure.GOOD.value:
+                        continue
+                    if comp not in self.sample_params:
+                        print(comp, " is missing")
+                        self.sample_params[comp] = {}
+                    if state not in self.sample_params[comp]:
+                        print(comp, state, " is missing")
+                        self.sample_params[comp][state] = {}
+                        self.sample_params[comp][state]["component_utility"] = [0.0, 0.0]
+                        self.sample_params[comp][state]["reliability"] = [0.0, 0.0]
+                        self.sample_params[comp][state]["criticality"] = [0.0, 0.0]
+                        self.sample_params[comp][state]["importance"] = [0.0, 0.0]
+                    for fix in Fixes.list():
+                        if fix not in self.sample_params[comp][state]:
+                            self.sample_params[comp][state][fix] = [0.0, 0.0]
+        with open("rule_costs.json", "w") as read_handle:
+            json.dump(self.sample_params, read_handle, indent=4)
+        print("Wrote file")
+    
         self.current_state = None
         self.initial_shop_states = {}
         self.lastshopstates = {}

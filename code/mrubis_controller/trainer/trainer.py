@@ -209,7 +209,7 @@ class Trainer():
         # gets data and calls train_agent and train_digital_twin
             else:
                 if len(observation_batch) != 0:
-                    self.train_digital_twin(observation_batch)
+                    self.train_digital_twin(observation_batch, step=run_counter)
                     observation_batch = []
                 logging.info(f"RUN {run_counter}")
                 logging.info("Using DigitalTwin")
@@ -365,8 +365,8 @@ class Trainer():
                 for param, value in component_params.items():
                     self.mrubis_state[shop][component_type][param] = value
 
-    def train_digital_twin(self, observations: List[Observation]) -> None:
-        self.digital_twin.train(observations)
+    def train_digital_twin(self, observations: List[Observation], step=None) -> None:
+        self.digital_twin.train(observations, step=step)
 
     def observation_to_vector(self, observation):
         all_components_list = Components.list()
