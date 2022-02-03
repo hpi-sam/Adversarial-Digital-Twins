@@ -51,6 +51,12 @@ class ShopDigitalTwin:
                 "mean of absolute std differences": (self.utility_stds - self._read_utilities_stds).abs().to_numpy().mean()
             }
         }, commit=False)
+        wandb.log({
+            "digital twin utility values": {
+                 "mean of absolute means": (self.utility_means).to_numpy().mean(),
+                "mean of absolute stds": (self.utility_stds).to_numpy().mean()
+            }
+        }, commit=False)
     
     def _log_propagation(self, step=None):
         wandb.log({
@@ -320,7 +326,7 @@ class ShopDigitalTwin:
         fix_utilities = self.component_failure_series()
         fix_lists = self.build_fix_lists()
         # Count the number of other issues for each issue that is observed
-        for observation in self.previous_observation[:100]:
+        for observation in self.previous_observation:
             for issue in observation.issues:
                 utilities[issue.component_name][issue.failure_type].append(issue.utility)
                 criticalities[issue.component_name][issue.failure_type].append(issue.criticality)
