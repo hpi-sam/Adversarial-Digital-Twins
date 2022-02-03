@@ -77,8 +77,8 @@ class Trainer():
         self.mrubis_utilities = {}
         self.utility_loss = torch.nn.MSELoss()
         self.fix_loss = torch.nn.MSELoss()
-        self.utility_optimizer = torch.optim.RMSprop(self.agent.fix_predictor.parameters(), lr=0.00001) # torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.002)
-        self.scheduler = torch.optim.lr_scheduler.StepLR(self.utility_optimizer, step_size=300, gamma=0.1)
+        self.utility_optimizer = torch.optim.RMSprop(self.agent.fix_predictor.parameters(), lr=0.0001) # torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.002)
+        self.scheduler = torch.optim.lr_scheduler.StepLR(self.utility_optimizer, step_size=1000, gamma=0.1)
         
 
     def train(self, max_runs=500, num_exploration=50):
@@ -132,6 +132,10 @@ class Trainer():
                     logging.debug("Current Observation:")
                     logging.debug(current_observation)
 
+                    rule_costs = [[float(cost) for cost in dictionary['rule_costs'][1:-1].split(',')] for dictionary in list(list(current_observation.values())[0].values())]
+                    rule_names = [[rule_name.replace(' ', '') for rule_name in dictionary['rule_names'][1:-1].split(', ')] for dictionary in list(list(current_observation.values())[0].values())]
+                    failed_components = list(list(current_observation.values())[0].keys())
+
                     # Update failed utilities
                     for shop_name, state in current_observation.items():
                         failed_utilities[shop_name] = list(state.values())[0]['shop_utility']
@@ -139,6 +143,15 @@ class Trainer():
                     # predict the fix
                     self.utility_optimizer.zero_grad()
                     predicted_fix_vector, predicted_utility = self.agent.predict_fix(self.observation_to_vector(current_observation), explore)
+                    image = predicted_fix_vector.cpu().detach().numpy()
+                    image -= np.min(image)
+                    image /= np.max(image)
+                    image *= 255
+                    wandb.log({
+                        "agent prediction": {
+                            "prediction matrix": wandb.Image(image)
+                        }
+                    }, commit=False)
                     predicted_utilities.append(predicted_utility.item())
                     predicted_fixes_w_gradients[shop_name] = (predicted_fix_vector, predicted_utility)
                     logging.debug("Predictions: ")
@@ -156,14 +169,15 @@ class Trainer():
                         right_component_picked = self.environment.send_rule_to_execute(shop_name, failure_name, predicted_component, predicted_rule)
                         top_counter+=1
                         if right_component_picked:
-                            
-                            right_components_picked[shop_name] = {'right_component_predicted': top_counter==1, 'attempts': top_counter, 'right_component': predicted_component}
+                            right_components_picked[shop_name] = {'right_component_predicted': top_counter==1, 'attempts': top_counter, 'right_component': predicted_component, 'rule_cost': rule_costs[failed_components.index(predicted_component)][rule_names[failed_components.index(predicted_component)].index(predicted_rule)]}
                             #print(right_components_picked[shop_name])
                             predicted_fixes.append({
                                 'shop': shop_name,
                                 'issue': failure_name,
                                 'component': predicted_component
                             })
+
+
                             observations_of_run[shop_name].applied_fix = AppliedFix(fix_type=predicted_rule, fixed_component=predicted_component, worked=False, utility_after=0)
                             break
 
@@ -232,6 +246,10 @@ class Trainer():
                     logging.debug("Current Observation:")
                     logging.debug(current_observation)
 
+                    rule_costs = [[fix.fix_cost for fix in obs.fixes] for obs in current_observation]
+                    rule_names = [[fix.fix_type for fix in obs.fixes] for obs in current_observation]
+                    failed_components = [obs.component_name for obs in current_observation]
+
                     # Update failed utilities
                     for observation in current_observation:
                         failed_utilities[observation.shop] = observation.shop_utility
@@ -240,6 +258,15 @@ class Trainer():
                     self.utility_optimizer.zero_grad()
                     observation_vector = self.digital_twin_observation_to_vector2(current_observation)
                     predicted_fix_vector, predicted_utility = self.agent.predict_fix(observation_vector, False)
+                    image = predicted_fix_vector.cpu().detach().numpy()
+                    image -= np.min(image)
+                    image /= np.max(image)
+                    image *= 255
+                    wandb.log({
+                        "agent prediction": {
+                            "prediction matrix": wandb.Image(image)
+                        }
+                    }, commit=False)
                     predicted_utilities.append(predicted_utility.item())
                     predicted_fixes_w_gradients[current_observation[0].shop] = (predicted_fix_vector, predicted_utility)
                     logging.debug("Predictions: ")
@@ -257,8 +284,7 @@ class Trainer():
                         right_component_picked = self.digital_twin.send_rule_to_execute(shop_name, failure_name, predicted_component, predicted_rule)
                         top_counter+=1
                         if right_component_picked:
-                            
-                            right_components_picked[shop_name] = {'right_component_predicted': top_counter==1, 'attempts': top_counter, 'right_component': predicted_component}
+                            right_components_picked[shop_name] = {'right_component_predicted': top_counter==1, 'attempts': top_counter, 'right_component': predicted_component, 'rule_cost': rule_costs[failed_components.index(predicted_component)][rule_names[failed_components.index(predicted_component)].index(predicted_rule)]}
                             #print(right_components_picked[shop_name])
                             predicted_fixes.append({
                                 'shop': shop_name,
@@ -301,6 +327,7 @@ class Trainer():
         avg_attempts = 0
         counter = 0
         utility_gain = 0
+        all_rule_costs = 0
         for shop_name, utility_difference in utility_differences.items():
             counter+=1
 
@@ -314,6 +341,7 @@ class Trainer():
             predicted_fix = predicted_fixes_w_gradients[shop_name][0]
             acceptance_threshold = 1000
             avg_attempts += right_components_picked[shop_name]['attempts']
+            all_rule_costs += right_components_picked[shop_name]['rule_cost']
             correct_attempt_index = torch.topk(predicted_fix.view(-1), right_components_picked[shop_name]['attempts'])[1][-1].item()
             idx_1, idx_2 = correct_attempt_index // predicted_fix.shape[1], correct_attempt_index % predicted_fix.shape[1]
             label = torch.zeros(predicted_fix.shape)
@@ -328,16 +356,25 @@ class Trainer():
             new_fix_loss = self.fix_loss(predicted_fix, label)
             fix_loss += new_fix_loss
 
-        avg_utility_gain = utility_gain/counter
-        loss = utility_loss + 2*fix_loss + (( -(avg_utility_gain))/100000)*counter# + avg_attempts/20
+        # Counter is the number of failed shops
+        # We normalize all the values by dividiing by counter
+        # (The number of failed shops can vary)
+        utility_loss /= counter
+        fix_loss /= counter
+        utility_gain /= counter
+        all_rule_costs /= counter
+        avg_attempts /= counter
+        loss = (utility_loss + 2*fix_loss -(utility_gain * utility_scaling_factor)) * all_rule_costs# + avg_attempts/20
+
         print(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
         #logging.info(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
         wandb.log({"loss": loss/counter}, commit=False)
-        wandb.log({"utility loss": utility_loss/counter}, commit=False)
-        wandb.log({"fix loss": fix_loss/counter}, commit=False)
+        wandb.log({"utility loss": utility_loss}, commit=False)
+        wandb.log({"fix loss": fix_loss}, commit=False)
         wandb.log({"digital twin": int(digitial_twin)}, commit=False)
-        wandb.log({"avg utility gain": avg_utility_gain}, commit=False)
-        wandb.log({"average needed attempts": avg_attempts/counter})
+        wandb.log({"avg utility gain": utility_gain}, commit=False)
+        wandb.log({"avg rule costs": all_rule_costs}, commit=False)
+        wandb.log({"average needed attempts": avg_attempts})
         loss.backward()
         self.utility_optimizer.step()
         self.scheduler.step()
