@@ -7,7 +7,7 @@ class FixPredictor(nn.Module):
     def __init__(self):
         super().__init__()
         self.input_part = nn.Sequential(
-            nn.Linear(18*15, 256),
+            nn.Linear(18*19, 256),
             nn.LeakyReLU(),
             nn.Linear(256, 128),
             nn.LeakyReLU()

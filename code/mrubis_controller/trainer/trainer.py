@@ -371,8 +371,10 @@ class Trainer():
     def observation_to_vector(self, observation):
         all_components_list = Components.list()
         all_failures_list = ComponentFailure.list()
+        all_fixes_list = Fixes.list()
         failed_components = list(list(observation.values())[0].keys())
         failure_names = [dictionary['failure_name'] for dictionary in list(list(observation.values())[0].values())]
+        rule_names = [[rule_name.replace(' ', '') for rule_name in dictionary['rule_names'][1:-1].split(', ')] for dictionary in list(list(observation.values())[0].values())]
 
         criticalities = [float(dictionary['criticality']) for dictionary in list(list(observation.values())[0].values())]
         connectivities = [float(dictionary['connectivity']) for dictionary in list(list(observation.values())[0].values())]
@@ -385,6 +387,7 @@ class Trainer():
         sat_points = [float(dictionary['sat_point']) for dictionary in list(list(observation.values())[0].values())]
         replicas = [float(dictionary['replica']) for dictionary in list(list(observation.values())[0].values())]
         requests = [float(dictionary['request']) for dictionary in list(list(observation.values())[0].values())]
+        rule_costs = [[float(cost) for cost in dictionary['rule_costs'][1:-1].split(',')] for dictionary in list(list(observation.values())[0].values())]
 
         padded_criticalities =np.zeros(len(all_components_list))
         padded_connectivities =np.zeros(len(all_components_list))
@@ -399,6 +402,7 @@ class Trainer():
         padded_requests =np.zeros(len(all_components_list))
 
         failed_vector = np.zeros((len(all_failures_list)-1, len(all_components_list)))
+        rule_cost_vector = np.zeros((len(all_fixes_list), len(all_components_list)))
         counter = 0
         for index, component in enumerate(all_components_list):
             
@@ -416,19 +420,20 @@ class Trainer():
                 padded_requests[index] = requests[counter]
                 counter+=1
                 failed_vector[all_failures_list.index(failure_names[failed_components.index(component)])-1, index] = 1
-            else:
-                continue
-                failed_vector[all_failures_list.index(ComponentFailure.GOOD.value), index] = 1
+                for i, rule_name in enumerate(rule_names[failed_components.index(component)]):
+                    rule_cost_vector[all_fixes_list.index(rule_name)-1, index] = rule_costs[failed_components.index(component)][i]
 
         numberic_vector = np.array([padded_criticalities, padded_connectivities, padded_reliabilities, padded_importances, padded_provided_interfaces, padded_required_interfaces, padded_adts, padded_perf_maxes, padded_sat_points, padded_replicas, padded_requests])
-        return np.concatenate([failed_vector.reshape(-1), numberic_vector.reshape(-1)])
+        return np.concatenate([failed_vector.reshape(-1), rule_cost_vector.reshape(-1), numberic_vector.reshape(-1)])
     
     # ToDo ändere dieses epische naming
     def digital_twin_observation_to_vector2(self, observation: List[ShopIssue]):
         all_components_list = Components.list()
         all_failures_list = ComponentFailure.list()
+        all_fixes_list = Fixes.list()
         failed_components = [obs.component_name for obs in observation]
         failure_names = [obs.failure_type for obs in observation]
+        rule_names = [[fix.fix_type for fix in obs.fixes] for obs in observation]
 
         criticalities = [issue.criticality for issue in observation]
         connectivities = [self.inital_state[issue.shop][issue.component_name]["connectivity"] for issue in observation]
@@ -441,6 +446,7 @@ class Trainer():
         sat_points = [self.inital_state[issue.shop][issue.component_name]["sat_point"] for issue in observation]
         replicas = [self.inital_state[issue.shop][issue.component_name]["replica"] for issue in observation]
         requests = [self.inital_state[issue.shop][issue.component_name]["request"] for issue in observation]
+        rule_costs = [[fix.fix_cost for fix in obs.fixes] for obs in observation]
 
         padded_criticalities =np.zeros(len(all_components_list))
         padded_connectivities =np.zeros(len(all_components_list))
@@ -455,6 +461,7 @@ class Trainer():
         padded_requests =np.zeros(len(all_components_list))
 
         failed_vector = np.zeros((len(all_failures_list)-1, len(all_components_list)))
+        rule_cost_vector = np.zeros((len(all_fixes_list), len(all_components_list)))
         counter = 0
         for index, component in enumerate(all_components_list):
             
@@ -472,13 +479,12 @@ class Trainer():
                 padded_requests[index] = requests[counter]
                 counter+=1
                 failed_vector[all_failures_list.index(failure_names[failed_components.index(component)])-1, index] = 1
-            else:
-                continue
-                failed_vector[all_failures_list.index(ComponentFailure.GOOD.value), index] = 1
+                for i, rule_name in enumerate(rule_names[failed_components.index(component)]):
+                    rule_cost_vector[all_fixes_list.index(rule_name)-1, index] = rule_costs[failed_components.index(component)][i]
 
         numberic_vector = np.array([padded_criticalities, padded_connectivities, padded_reliabilities, padded_importances, padded_provided_interfaces, padded_required_interfaces, padded_adts, padded_perf_maxes, padded_sat_points, padded_replicas, padded_requests])
-        return np.concatenate([failed_vector.reshape(-1), numberic_vector.reshape(-1)])
-    
+        return np.concatenate([failed_vector.reshape(-1), rule_cost_vector.reshape(-1), numberic_vector.reshape(-1)])
+       
 
     def digital_twin_observation_to_vector(self, observations: List[ShopIssue]):
         all_components_list = Components.list()
