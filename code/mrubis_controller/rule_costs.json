@@ -1,1696 +1,2486 @@
 {
-  "Inventory Service": {
-    "CF3": {
-      "component_utility": [
-        1.0420618836000365e-12,
-        7.422650308017769e-13
-      ],
-      "criticality": [
-        1.625,
-        0.0
-      ],
-      "importance": [
-        2.287903225806452,
-        0.4293595646961248
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.152193548387096,
-        0.34820511376012164
-      ],
-      "ReplaceComponent": [
-        2.152193548387096,
-        0.34820511376012164
-      ]
+    "Inventory Service": {
+        "CF3": {
+            "component_utility": [
+                1.0420618836000365e-12,
+                7.422650308017769e-13
+            ],
+            "criticality": [
+                1.625,
+                0.0
+            ],
+            "importance": [
+                2.287903225806452,
+                0.4293595646961248
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.152193548387096,
+                0.34820511376012164
+            ],
+            "ReplaceComponent": [
+                2.152193548387096,
+                0.34820511376012164
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                5.155965281976456e-13,
+                2.479340609886307e-13
+            ],
+            "criticality": [
+                0.8125,
+                0.0
+            ],
+            "importance": [
+                1.0831117021276595,
+                0.27597570771000646
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35000000000000014,
+                1.6653345369377348e-16
+            ],
+            "HwRedeployComponent": [
+                2.1594680851063828,
+                0.3327076763731336
+            ],
+            "ReplaceComponent": [
+                2.1594680851063828,
+                0.3327076763731336
+            ],
+            "LwRedeployComponent": [
+                1.6399999999999995,
+                4.440892098500626e-16
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                5.308516981552706e-13,
+                2.4259959120951994e-13
+            ],
+            "criticality": [
+                0.8125,
+                0.0
+            ],
+            "importance": [
+                1.0044642857142858,
+                0.19679602400398122
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.1053124999999997,
+                0.3483697884240353
+            ],
+            "ReplaceComponent": [
+                2.1053124999999997,
+                0.3483697884240353
+            ],
+            "LwRedeployComponent": [
+                1.53,
+                0.0
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
     },
-    "CF2": {
-      "component_utility": [
-        5.155965281976456e-13,
-        2.479340609886307e-13
-      ],
-      "criticality": [
-        0.8125,
-        0.0
-      ],
-      "importance": [
-        1.0831117021276595,
-        0.27597570771000646
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35000000000000014,
-        1.6653345369377348e-16
-      ],
-      "HwRedeployComponent": [
-        2.1594680851063828,
-        0.3327076763731336
-      ],
-      "ReplaceComponent": [
-        2.1594680851063828,
-        0.3327076763731336
-      ],
-      "LwRedeployComponent": [
-        1.6399999999999995,
-        4.440892098500626e-16
-      ]
+    "Bid and Buy Service": {
+        "CF3": {
+            "component_utility": [
+                1.9024987080105153e-13,
+                1.0285951984336688e-13
+            ],
+            "criticality": [
+                2.625,
+                0.0
+            ],
+            "importance": [
+                2.21875,
+                0.4357426439834806
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                1.7199999999999993,
+                4.440892098500626e-16
+            ],
+            "ReplaceComponent": [
+                1.7199999999999993,
+                4.440892098500626e-16
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                9.804027923787907e-14,
+                5.612990314288992e-14
+            ],
+            "criticality": [
+                1.3125,
+                0.0
+            ],
+            "importance": [
+                1.038702928870293,
+                0.20296054512749762
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35000000000000003,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                1.7199999999999993,
+                4.440892098500626e-16
+            ],
+            "ReplaceComponent": [
+                1.7199999999999993,
+                4.440892098500626e-16
+            ],
+            "LwRedeployComponent": [
+                1.5300000000000002,
+                2.220446049250313e-16
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                7.79410958262035e-14,
+                3.092281986027956e-14
+            ],
+            "criticality": [
+                1.3125,
+                0.0
+            ],
+            "importance": [
+                1.1375,
+                0.23598199083828408
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                1.719999999999999,
+                6.661338147750939e-16
+            ],
+            "ReplaceComponent": [
+                1.719999999999999,
+                6.661338147750939e-16
+            ],
+            "LwRedeployComponent": [
+                1.6399999999999997,
+                2.220446049250313e-16
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
     },
-    "CF1": {
-      "component_utility": [
-        5.308516981552706e-13,
-        2.4259959120951994e-13
-      ],
-      "criticality": [
-        0.8125,
-        0.0
-      ],
-      "importance": [
-        1.0044642857142858,
-        0.19679602400398122
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.1053124999999997,
-        0.3483697884240353
-      ],
-      "ReplaceComponent": [
-        2.1053124999999997,
-        0.3483697884240353
-      ],
-      "LwRedeployComponent": [
-        1.53,
-        0.0
-      ]
+    "Authentication Service": {
+        "CF3": {
+            "component_utility": [
+                2.0906310618250902e-12,
+                0.0
+            ],
+            "criticality": [
+                1.75,
+                0.0
+            ],
+            "importance": [
+                2.3336864406779663,
+                0.3996340635273712
+            ],
+            "reliability": [
+                0.10624999999999994,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                3.3786440677966096,
+                1.1602797114943824
+            ],
+            "ReplaceComponent": [
+                3.3786440677966096,
+                1.1602797114943824
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                1.2719856773562266e-12,
+                4.2147315448013745e-13
+            ],
+            "criticality": [
+                0.875,
+                0.0
+            ],
+            "importance": [
+                1.1211890243902438,
+                0.2787144447437275
+            ],
+            "reliability": [
+                0.05312499999999998,
+                2.0816681711721685e-17
+            ],
+            "RestartComponent": [
+                0.3500000000000001,
+                1.1102230246251565e-16
+            ],
+            "HwRedeployComponent": [
+                3.0630487804878044,
+                1.244885820040351
+            ],
+            "ReplaceComponent": [
+                3.0630487804878044,
+                1.244885820040351
+            ],
+            "LwRedeployComponent": [
+                1.5299999999999998,
+                2.220446049250313e-16
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                9.301571596575052e-13,
+                1.6842494477276524e-14
+            ],
+            "criticality": [
+                0.875,
+                0.0
+            ],
+            "importance": [
+                1.3101851851851851,
+                0.20552375045902482
+            ],
+            "reliability": [
+                0.053125000000000006,
+                6.938893903907228e-18
+            ],
+            "RestartComponent": [
+                0.35000000000000014,
+                1.6653345369377348e-16
+            ],
+            "HwRedeployComponent": [
+                3.0833333333333326,
+                1.0387920335124297
+            ],
+            "ReplaceComponent": [
+                3.0833333333333326,
+                1.0387920335124297
+            ],
+            "LwRedeployComponent": [
+                1.6400000000000001,
+                2.220446049250313e-16
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Availability Item Filter": {
+        "CF3": {
+            "component_utility": [
+                3.0993752971662317e-12,
+                6.821210263296962e-13
+            ],
+            "criticality": [
+                3.0,
+                0.0
+            ],
+            "importance": [
+                2.2261904761904763,
+                0.40388560604017565
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.4003571428571426,
+                0.656396995198883
+            ],
+            "ReplaceComponent": [
+                2.4003571428571426,
+                0.656396995198883
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                1.082552909766455e-12,
+                1.2921235300518488e-13
+            ],
+            "criticality": [
+                1.5,
+                0.0
+            ],
+            "importance": [
+                1.024229074889868,
+                0.20815415001355753
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.3499999999999999,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                2.27136563876652,
+                0.4736533270629563
+            ],
+            "ReplaceComponent": [
+                2.27136563876652,
+                0.4736533270629563
+            ],
+            "LwRedeployComponent": [
+                1.5300000000000002,
+                2.220446049250313e-16
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                6.483423925305896e-13,
+                8.920044190465256e-14
+            ],
+            "criticality": [
+                1.5,
+                0.0
+            ],
+            "importance": [
+                1.1745192307692307,
+                0.2544904592729298
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35000000000000003,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                2.2812307692307687,
+                0.5069016220509358
+            ],
+            "ReplaceComponent": [
+                2.2812307692307687,
+                0.5069016220509358
+            ],
+            "LwRedeployComponent": [
+                1.6400000000000001,
+                2.220446049250313e-16
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "User Management Service": {
+        "CF3": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                2.5,
+                0.0
+            ],
+            "importance": [
+                2.25,
+                0.0
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                1.6899999999999997,
+                0.0
+            ],
+            "ReplaceComponent": [
+                1.6899999999999997,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                1.25,
+                0.0
+            ],
+            "importance": [
+                1.125,
+                0.0
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                1.6900000000000002,
+                4.440892098500626e-16
+            ],
+            "ReplaceComponent": [
+                1.6900000000000002,
+                4.440892098500626e-16
+            ],
+            "LwRedeployComponent": [
+                1.6400000000000001,
+                2.220446049250313e-16
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Category Item Filter": {
+        "CF3": {
+            "component_utility": [
+                1.7295173190450837e-12,
+                4.458556429082371e-13
+            ],
+            "criticality": [
+                1.875,
+                0.0
+            ],
+            "importance": [
+                2.2416201117318435,
+                0.40306909292791293
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.333240223463687,
+                0.6022755761833524
+            ],
+            "ReplaceComponent": [
+                2.333240223463687,
+                0.6022755761833524
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                7.213463500089727e-13,
+                2.448953027623342e-13
+            ],
+            "criticality": [
+                0.9375,
+                0.0
+            ],
+            "importance": [
+                1.051747311827957,
+                0.17747789438283812
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.3500000000000001,
+                1.1102230246251565e-16
+            ],
+            "HwRedeployComponent": [
+                2.4324731182795696,
+                0.6535817871568788
+            ],
+            "ReplaceComponent": [
+                2.4324731182795696,
+                0.6535817871568788
+            ],
+            "LwRedeployComponent": [
+                1.5299999999999998,
+                2.220446049250313e-16
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                1.294238421611213e-12,
+                5.632271578727389e-13
+            ],
+            "criticality": [
+                0.9375,
+                0.0
+            ],
+            "importance": [
+                1.0958969465648856,
+                0.24240585421688038
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.3500000000000001,
+                1.1102230246251565e-16
+            ],
+            "HwRedeployComponent": [
+                2.4555725190839692,
+                0.7718750445736919
+            ],
+            "ReplaceComponent": [
+                2.4555725190839692,
+                0.7718750445736919
+            ],
+            "LwRedeployComponent": [
+                1.6400000000000003,
+                4.440892098500626e-16
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Comment Item Filter": {
+        "CF3": {
+            "component_utility": [
+                6.316449134926044e-13,
+                4.356971240250042e-13
+            ],
+            "criticality": [
+                1.25,
+                0.0
+            ],
+            "importance": [
+                2.162837837837838,
+                0.30104668880186736
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.171378378378378,
+                0.35813102323420093
+            ],
+            "ReplaceComponent": [
+                2.171378378378378,
+                0.35813102323420093
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                2.1014520224980177e-13,
+                9.685456320458064e-14
+            ],
+            "criticality": [
+                0.625,
+                0.0
+            ],
+            "importance": [
+                1.0151699029126213,
+                0.2381069816809942
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.3500000000000001,
+                1.1102230246251565e-16
+            ],
+            "HwRedeployComponent": [
+                2.165631067961165,
+                0.34086033327709475
+            ],
+            "ReplaceComponent": [
+                2.165631067961165,
+                0.34086033327709475
+            ],
+            "LwRedeployComponent": [
+                1.6399999999999992,
+                6.661338147750939e-16
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                2.6391203382908866e-13,
+                1.5270362226512922e-13
+            ],
+            "criticality": [
+                0.625,
+                0.0
+            ],
+            "importance": [
+                1.0754437869822486,
+                0.2527470870957029
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35000000000000003,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                2.0826627218934908,
+                0.3067205980965955
+            ],
+            "ReplaceComponent": [
+                2.0826627218934908,
+                0.3067205980965955
+            ],
+            "LwRedeployComponent": [
+                1.5299999999999996,
+                4.440892098500626e-16
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Persistence Service": {
+        "CF2": {
+            "component_utility": [
+                5.574613341279585e-13,
+                2.4927315004622337e-13
+            ],
+            "criticality": [
+                1.875,
+                0.0
+            ],
+            "importance": [
+                1.0470058626465661,
+                0.15307836055919877
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.3500000000000001,
+                1.1102230246251565e-16
+            ],
+            "HwRedeployComponent": [
+                3.5717587939698494,
+                1.1285519792904333
+            ],
+            "ReplaceComponent": [
+                3.5717587939698494,
+                1.1285519792904333
+            ],
+            "LwRedeployComponent": [
+                1.6400000000000001,
+                2.220446049250313e-16
+            ]
+        },
+        "CF3": {
+            "component_utility": [
+                1.2052610514163544e-12,
+                4.559254528317658e-13
+            ],
+            "criticality": [
+                3.75,
+                0.0
+            ],
+            "importance": [
+                2.163860103626943,
+                0.39027059313945145
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                3.635647668393782,
+                1.274282372546058
+            ],
+            "ReplaceComponent": [
+                3.635647668393782,
+                1.274282372546058
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                6.160215452776505e-13,
+                2.3994733491474714e-13
+            ],
+            "criticality": [
+                1.875,
+                0.0
+            ],
+            "importance": [
+                1.090725806451613,
+                0.20355344903767425
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.3499999999999999,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                3.8217972350230416,
+                1.4859185417792642
+            ],
+            "ReplaceComponent": [
+                3.8217972350230416,
+                1.4859185417792642
+            ],
+            "LwRedeployComponent": [
+                1.53,
+                0.0
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Reputation Service": {
+        "CF1": {
+            "component_utility": [
+                3.0269656604041276e-14,
+                9.804869192148108e-15
+            ],
+            "criticality": [
+                0.8125,
+                0.0
+            ],
+            "importance": [
+                1.067958515283843,
+                0.2150935549057381
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35000000000000003,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                1.6900000000000002,
+                4.440892098500626e-16
+            ],
+            "ReplaceComponent": [
+                1.6900000000000002,
+                4.440892098500626e-16
+            ],
+            "LwRedeployComponent": [
+                1.53,
+                0.0
+            ]
+        },
+        "CF3": {
+            "component_utility": [
+                5.070227409980401e-14,
+                1.9286159970631292e-14
+            ],
+            "criticality": [
+                1.625,
+                0.0
+            ],
+            "importance": [
+                2.2075892857142856,
+                0.4167775947152541
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                1.6899999999999997,
+                0.0
+            ],
+            "ReplaceComponent": [
+                1.6899999999999997,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                3.098091168661943e-14,
+                9.061994311143303e-15
+            ],
+            "criticality": [
+                0.8125,
+                0.0
+            ],
+            "importance": [
+                1.129981884057971,
+                0.2427692544448261
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.3500000000000001,
+                1.1102230246251565e-16
+            ],
+            "HwRedeployComponent": [
+                1.6899999999999997,
+                0.0
+            ],
+            "ReplaceComponent": [
+                1.6899999999999997,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                1.6400000000000001,
+                2.220446049250313e-16
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Last Second Sales Item Filter": {
+        "CF2": {
+            "component_utility": [
+                3.5737811424556047e-13,
+                2.770519574728458e-14
+            ],
+            "criticality": [
+                0.875,
+                0.0
+            ],
+            "importance": [
+                1.1418067226890756,
+                0.2511394044330899
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35000000000000003,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                2.1208403361344534,
+                0.3364285478147789
+            ],
+            "ReplaceComponent": [
+                2.1208403361344534,
+                0.3364285478147789
+            ],
+            "LwRedeployComponent": [
+                1.6399999999999995,
+                4.440892098500626e-16
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                2.6591628986636973e-13,
+                4.715627673983431e-14
+            ],
+            "criticality": [
+                0.875,
+                0.0
+            ],
+            "importance": [
+                1.054863344051447,
+                0.18358578203046383
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.3500000000000001,
+                1.1102230246251565e-16
+            ],
+            "HwRedeployComponent": [
+                2.109807073954984,
+                0.4190204026390274
+            ],
+            "ReplaceComponent": [
+                2.109807073954984,
+                0.4190204026390274
+            ],
+            "LwRedeployComponent": [
+                1.5299999999999998,
+                2.220446049250313e-16
+            ]
+        },
+        "CF3": {
+            "component_utility": [
+                7.354737663470416e-13,
+                7.919757234539543e-14
+            ],
+            "criticality": [
+                1.75,
+                0.0
+            ],
+            "importance": [
+                2.175561797752809,
+                0.4071943868141453
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.09752808988764,
+                0.40376676129365197
+            ],
+            "ReplaceComponent": [
+                2.09752808988764,
+                0.40376676129365197
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Item Management Service": {
+        "CF1": {
+            "component_utility": [
+                5.484891293586739e-14,
+                4.990252229871931e-14
+            ],
+            "criticality": [
+                0.625,
+                0.0
+            ],
+            "importance": [
+                1.0910087719298245,
+                0.21494025059667626
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35000000000000003,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                1.6899999999999997,
+                0.0
+            ],
+            "ReplaceComponent": [
+                1.6899999999999997,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                1.5299999999999998,
+                2.220446049250313e-16
+            ]
+        },
+        "CF3": {
+            "component_utility": [
+                7.521000502507825e-14,
+                3.2029418676987795e-14
+            ],
+            "criticality": [
+                1.25,
+                0.0
+            ],
+            "importance": [
+                2.139705882352941,
+                0.26734792592202705
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                1.6899999999999997,
+                0.0
+            ],
+            "ReplaceComponent": [
+                1.6899999999999997,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                6.920068383054889e-14,
+                5.548398210522456e-14
+            ],
+            "criticality": [
+                0.625,
+                0.0
+            ],
+            "importance": [
+                1.0869565217391304,
+                0.030502641740004943
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.34999999999999987,
+                1.1102230246251565e-16
+            ],
+            "HwRedeployComponent": [
+                1.6899999999999995,
+                2.220446049250313e-16
+            ],
+            "ReplaceComponent": [
+                1.6899999999999995,
+                2.220446049250313e-16
+            ],
+            "LwRedeployComponent": [
+                1.64,
+                0.0
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Query Service": {
+        "CF1": {
+            "component_utility": [
+                5.049454312171327e-12,
+                3.764829383917937e-12
+            ],
+            "criticality": [
+                0.875,
+                0.0
+            ],
+            "importance": [
+                1.0421052631578946,
+                0.2248797385590895
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.3500000000000001,
+                1.1102230246251565e-16
+            ],
+            "HwRedeployComponent": [
+                4.883894736842105,
+                2.3089798589246437
+            ],
+            "ReplaceComponent": [
+                4.883894736842105,
+                2.3089798589246437
+            ],
+            "LwRedeployComponent": [
+                1.53,
+                0.0
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                4.847220745305418e-12,
+                3.867295847282323e-12
+            ],
+            "criticality": [
+                0.875,
+                0.0
+            ],
+            "importance": [
+                1.1169871794871795,
+                0.26333790536065455
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35000000000000003,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                5.402051282051282,
+                2.4316894828410747
+            ],
+            "ReplaceComponent": [
+                5.402051282051282,
+                2.4316894828410747
+            ],
+            "LwRedeployComponent": [
+                1.6399999999999997,
+                2.220446049250313e-16
+            ]
+        },
+        "CF3": {
+            "component_utility": [
+                1.454005762193415e-11,
+                1.2563948667114549e-11
+            ],
+            "criticality": [
+                1.75,
+                0.0
+            ],
+            "importance": [
+                2.1953551912568305,
+                0.4020341169804129
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                6.107868852459015,
+                3.248717333143832
+            ],
+            "ReplaceComponent": [
+                6.107868852459015,
+                3.248717333143832
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Buy Now Item Filter": {
+        "CF3": {
+            "component_utility": [
+                5.942674987787997e-13,
+                5.2558739047179296e-14
+            ],
+            "criticality": [
+                3.75,
+                0.0
+            ],
+            "importance": [
+                2.190954773869347,
+                0.36787600730214365
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.1558291457286427,
+                0.3569443053761696
+            ],
+            "ReplaceComponent": [
+                2.1558291457286427,
+                0.3569443053761696
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                2.9374370259974045e-13,
+                1.5494265239563426e-14
+            ],
+            "criticality": [
+                1.875,
+                0.0
+            ],
+            "importance": [
+                1.0282224958949098,
+                0.15390421019028677
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35000000000000003,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                2.0644827586206898,
+                0.3046052172446913
+            ],
+            "ReplaceComponent": [
+                2.0644827586206898,
+                0.3046052172446913
+            ],
+            "LwRedeployComponent": [
+                1.6400000000000001,
+                2.220446049250313e-16
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                2.928402354706372e-13,
+                7.209409221370779e-15
+            ],
+            "criticality": [
+                1.875,
+                0.0
+            ],
+            "importance": [
+                1.0591463414634146,
+                0.20214219349026102
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.127268292682927,
+                0.34366653039916073
+            ],
+            "ReplaceComponent": [
+                2.127268292682927,
+                0.34366653039916073
+            ],
+            "LwRedeployComponent": [
+                1.5299999999999998,
+                2.220446049250313e-16
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Recommendation Item Filter": {
+        "CF3": {
+            "component_utility": [
+                9.377861542819285e-13,
+                1.5033997119470537e-13
+            ],
+            "criticality": [
+                3.5,
+                0.0
+            ],
+            "importance": [
+                2.235655737704918,
+                0.38683401300120934
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.1901639344262294,
+                0.38344637260833164
+            ],
+            "ReplaceComponent": [
+                2.1901639344262294,
+                0.38344637260833164
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                3.3723945684227063e-13,
+                2.6235424089603606e-15
+            ],
+            "criticality": [
+                1.75,
+                0.0
+            ],
+            "importance": [
+                1.0615384615384615,
+                0.18805760283021938
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.1183076923076922,
+                0.3284336684266901
+            ],
+            "ReplaceComponent": [
+                2.1183076923076922,
+                0.3284336684266901
+            ],
+            "LwRedeployComponent": [
+                1.53,
+                0.0
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                4.954742002735495e-13,
+                9.719790705970224e-14
+            ],
+            "criticality": [
+                1.75,
+                0.0
+            ],
+            "importance": [
+                1.1202290076335877,
+                0.24935727502709626
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.3500000000000001,
+                1.1102230246251565e-16
+            ],
+            "HwRedeployComponent": [
+                2.0490839694656486,
+                0.2765475550444032
+            ],
+            "ReplaceComponent": [
+                2.0490839694656486,
+                0.2765475550444032
+            ],
+            "LwRedeployComponent": [
+                1.6400000000000003,
+                4.440892098500626e-16
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Past Sales Item Filter": {
+        "CF2": {
+            "component_utility": [
+                2.8006315215651945e-13,
+                2.083529929782694e-13
+            ],
+            "criticality": [
+                1.75,
+                0.0
+            ],
+            "importance": [
+                1.1322115384615385,
+                0.24362479715731067
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35000000000000003,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                2.0843846153846157,
+                0.2801208636015034
+            ],
+            "ReplaceComponent": [
+                2.0843846153846157,
+                0.2801208636015034
+            ],
+            "LwRedeployComponent": [
+                1.6400000000000001,
+                2.220446049250313e-16
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                3.8280862108040055e-13,
+                2.871572711416681e-13
+            ],
+            "criticality": [
+                1.75,
+                0.0
+            ],
+            "importance": [
+                1.0416666666666667,
+                0.20667442977633121
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.111954022988505,
+                0.351792908910452
+            ],
+            "ReplaceComponent": [
+                2.111954022988505,
+                0.351792908910452
+            ],
+            "LwRedeployComponent": [
+                1.5300000000000002,
+                2.220446049250313e-16
+            ]
+        },
+        "CF3": {
+            "component_utility": [
+                8.792522679927497e-13,
+                6.568927673970904e-13
+            ],
+            "criticality": [
+                3.5,
+                0.0
+            ],
+            "importance": [
+                2.2226123595505616,
+                0.40563696790958526
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.1539887640449438,
+                0.33786065189434594
+            ],
+            "ReplaceComponent": [
+                2.1539887640449438,
+                0.33786065189434594
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Seller Reputation Item Filter": {
+        "CF1": {
+            "component_utility": [
+                6.611049194690451e-13,
+                3.661101553746956e-13
+            ],
+            "criticality": [
+                1.5,
+                0.0
+            ],
+            "importance": [
+                1.0654131355932204,
+                0.19866507320238008
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.113940677966102,
+                0.2952651434820449
+            ],
+            "ReplaceComponent": [
+                2.113940677966102,
+                0.2952651434820449
+            ],
+            "LwRedeployComponent": [
+                1.5300000000000002,
+                2.220446049250313e-16
+            ]
+        },
+        "CF3": {
+            "component_utility": [
+                1.4899070418889848e-12,
+                8.78432724253361e-13
+            ],
+            "criticality": [
+                3.0,
+                0.0
+            ],
+            "importance": [
+                2.164617486338798,
+                0.38760877707530395
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.1193442622950815,
+                0.3375313894447765
+            ],
+            "ReplaceComponent": [
+                2.1193442622950815,
+                0.3375313894447765
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                6.980427127561274e-13,
+                2.6235424089603707e-13
+            ],
+            "criticality": [
+                1.5,
+                0.0
+            ],
+            "importance": [
+                1.1586538461538463,
+                0.2390830145991607
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35000000000000003,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                2.034423076923077,
+                0.2829678798130932
+            ],
+            "ReplaceComponent": [
+                2.034423076923077,
+                0.2829678798130932
+            ],
+            "LwRedeployComponent": [
+                1.64,
+                0.0
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Region Item Filter": {
+        "CF3": {
+            "component_utility": [
+                2.227487308636136e-12,
+                6.932124251318051e-13
+            ],
+            "criticality": [
+                3.625,
+                0.0
+            ],
+            "importance": [
+                2.2278963414634148,
+                0.4043249360218266
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.2054878048780484,
+                0.41718467700687156
+            ],
+            "ReplaceComponent": [
+                2.2054878048780484,
+                0.41718467700687156
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF1": {
+            "component_utility": [
+                7.901040474896395e-13,
+                3.084591405829141e-13
+            ],
+            "criticality": [
+                1.8125,
+                0.0
+            ],
+            "importance": [
+                1.0778952205882353,
+                0.20040229543077076
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.3500000000000001,
+                1.1102230246251565e-16
+            ],
+            "HwRedeployComponent": [
+                2.0420588235294117,
+                0.37100344386989426
+            ],
+            "ReplaceComponent": [
+                2.0420588235294117,
+                0.37100344386989426
+            ],
+            "LwRedeployComponent": [
+                1.5299999999999998,
+                2.220446049250313e-16
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                9.67899123099929e-13,
+                4.529136922135349e-13
+            ],
+            "criticality": [
+                1.8125,
+                0.0
+            ],
+            "importance": [
+                1.0952620967741935,
+                0.23256542145575693
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.1298387096774194,
+                0.34683356581007063
+            ],
+            "ReplaceComponent": [
+                2.1298387096774194,
+                0.34683356581007063
+            ],
+            "LwRedeployComponent": [
+                1.64,
+                0.0
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "Future Sales Item Filter": {
+        "CF1": {
+            "component_utility": [
+                6.544764282583774e-13,
+                3.655347629521404e-13
+            ],
+            "criticality": [
+                1.625,
+                0.0
+            ],
+            "importance": [
+                1.0538194444444444,
+                0.17633283229992536
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35000000000000003,
+                5.551115123125783e-17
+            ],
+            "HwRedeployComponent": [
+                2.1382291666666666,
+                0.30433326986924314
+            ],
+            "ReplaceComponent": [
+                2.1382291666666666,
+                0.30433326986924314
+            ],
+            "LwRedeployComponent": [
+                1.5299999999999998,
+                2.220446049250313e-16
+            ]
+        },
+        "CF3": {
+            "component_utility": [
+                1.7181024261185127e-12,
+                7.630882375850911e-13
+            ],
+            "criticality": [
+                3.25,
+                0.0
+            ],
+            "importance": [
+                2.21890243902439,
+                0.39589280421987416
+            ],
+            "reliability": [
+                0.0625,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.1637073170731704,
+                0.3713218473732785
+            ],
+            "ReplaceComponent": [
+                2.1637073170731704,
+                0.3713218473732785
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        },
+        "CF2": {
+            "component_utility": [
+                7.043875148466223e-13,
+                3.8873563866100966e-13
+            ],
+            "criticality": [
+                1.625,
+                0.0
+            ],
+            "importance": [
+                1.1184475806451613,
+                0.23570770939521735
+            ],
+            "reliability": [
+                0.03125,
+                0.0
+            ],
+            "RestartComponent": [
+                0.35,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                2.0449193548387092,
+                0.2847508700820543
+            ],
+            "ReplaceComponent": [
+                2.0449193548387092,
+                0.2847508700820543
+            ],
+            "LwRedeployComponent": [
+                1.64,
+                0.0
+            ]
+        },
+        "CF5": {
+            "component_utility": [
+                0.0,
+                0.0
+            ],
+            "reliability": [
+                0.0,
+                0.0
+            ],
+            "criticality": [
+                0.0,
+                0.0
+            ],
+            "importance": [
+                0.0,
+                0.0
+            ],
+            "HwRedeployComponent": [
+                0.0,
+                0.0
+            ],
+            "ReplaceComponent": [
+                0.0,
+                0.0
+            ],
+            "RestartComponent": [
+                0.0,
+                0.0
+            ],
+            "LwRedeployComponent": [
+                0.0,
+                0.0
+            ]
+        }
     }
-  },
-  "Bid and Buy Service": {
-    "CF3": {
-      "component_utility": [
-        1.9024987080105153e-13,
-        1.0285951984336688e-13
-      ],
-      "criticality": [
-        2.625,
-        0.0
-      ],
-      "importance": [
-        2.21875,
-        0.4357426439834806
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        1.7199999999999993,
-        4.440892098500626e-16
-      ],
-      "ReplaceComponent": [
-        1.7199999999999993,
-        4.440892098500626e-16
-      ]
-    },
-    "CF1": {
-      "component_utility": [
-        9.804027923787907e-14,
-        5.612990314288992e-14
-      ],
-      "criticality": [
-        1.3125,
-        0.0
-      ],
-      "importance": [
-        1.038702928870293,
-        0.20296054512749762
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35000000000000003,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        1.7199999999999993,
-        4.440892098500626e-16
-      ],
-      "ReplaceComponent": [
-        1.7199999999999993,
-        4.440892098500626e-16
-      ],
-      "LwRedeployComponent": [
-        1.5300000000000002,
-        2.220446049250313e-16
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        7.79410958262035e-14,
-        3.092281986027956e-14
-      ],
-      "criticality": [
-        1.3125,
-        0.0
-      ],
-      "importance": [
-        1.1375,
-        0.23598199083828408
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        1.719999999999999,
-        6.661338147750939e-16
-      ],
-      "ReplaceComponent": [
-        1.719999999999999,
-        6.661338147750939e-16
-      ],
-      "LwRedeployComponent": [
-        1.6399999999999997,
-        2.220446049250313e-16
-      ]
-    }
-  },
-  "Authentication Service": {
-    "CF3": {
-      "component_utility": [
-        2.0906310618250902e-12,
-        0.0
-      ],
-      "criticality": [
-        1.75,
-        0.0
-      ],
-      "importance": [
-        2.3336864406779663,
-        0.3996340635273712
-      ],
-      "reliability": [
-        0.10624999999999994,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        3.3786440677966096,
-        1.1602797114943824
-      ],
-      "ReplaceComponent": [
-        3.3786440677966096,
-        1.1602797114943824
-      ]
-    },
-    "CF1": {
-      "component_utility": [
-        1.2719856773562266e-12,
-        4.2147315448013745e-13
-      ],
-      "criticality": [
-        0.875,
-        0.0
-      ],
-      "importance": [
-        1.1211890243902438,
-        0.2787144447437275
-      ],
-      "reliability": [
-        0.05312499999999998,
-        2.0816681711721685e-17
-      ],
-      "RestartComponent": [
-        0.3500000000000001,
-        1.1102230246251565e-16
-      ],
-      "HwRedeployComponent": [
-        3.0630487804878044,
-        1.244885820040351
-      ],
-      "ReplaceComponent": [
-        3.0630487804878044,
-        1.244885820040351
-      ],
-      "LwRedeployComponent": [
-        1.5299999999999998,
-        2.220446049250313e-16
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        9.301571596575052e-13,
-        1.6842494477276524e-14
-      ],
-      "criticality": [
-        0.875,
-        0.0
-      ],
-      "importance": [
-        1.3101851851851851,
-        0.20552375045902482
-      ],
-      "reliability": [
-        0.053125000000000006,
-        6.938893903907228e-18
-      ],
-      "RestartComponent": [
-        0.35000000000000014,
-        1.6653345369377348e-16
-      ],
-      "HwRedeployComponent": [
-        3.0833333333333326,
-        1.0387920335124297
-      ],
-      "ReplaceComponent": [
-        3.0833333333333326,
-        1.0387920335124297
-      ],
-      "LwRedeployComponent": [
-        1.6400000000000001,
-        2.220446049250313e-16
-      ]
-    }
-  },
-  "Availability Item Filter": {
-    "CF3": {
-      "component_utility": [
-        3.0993752971662317e-12,
-        6.821210263296962e-13
-      ],
-      "criticality": [
-        3.0,
-        0.0
-      ],
-      "importance": [
-        2.2261904761904763,
-        0.40388560604017565
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.4003571428571426,
-        0.656396995198883
-      ],
-      "ReplaceComponent": [
-        2.4003571428571426,
-        0.656396995198883
-      ]
-    },
-    "CF1": {
-      "component_utility": [
-        1.082552909766455e-12,
-        1.2921235300518488e-13
-      ],
-      "criticality": [
-        1.5,
-        0.0
-      ],
-      "importance": [
-        1.024229074889868,
-        0.20815415001355753
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.3499999999999999,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        2.27136563876652,
-        0.4736533270629563
-      ],
-      "ReplaceComponent": [
-        2.27136563876652,
-        0.4736533270629563
-      ],
-      "LwRedeployComponent": [
-        1.5300000000000002,
-        2.220446049250313e-16
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        6.483423925305896e-13,
-        8.920044190465256e-14
-      ],
-      "criticality": [
-        1.5,
-        0.0
-      ],
-      "importance": [
-        1.1745192307692307,
-        0.2544904592729298
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35000000000000003,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        2.2812307692307687,
-        0.5069016220509358
-      ],
-      "ReplaceComponent": [
-        2.2812307692307687,
-        0.5069016220509358
-      ],
-      "LwRedeployComponent": [
-        1.6400000000000001,
-        2.220446049250313e-16
-      ]
-    }
-  },
-  "User Management Service": {
-    "CF3": {
-      "component_utility": [
-        0.0,
-        0.0
-      ],
-      "criticality": [
-        2.5,
-        0.0
-      ],
-      "importance": [
-        2.25,
-        0.0
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        1.6899999999999997,
-        0.0
-      ],
-      "ReplaceComponent": [
-        1.6899999999999997,
-        0.0
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        0.0,
-        0.0
-      ],
-      "criticality": [
-        1.25,
-        0.0
-      ],
-      "importance": [
-        1.125,
-        0.0
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        1.6900000000000002,
-        4.440892098500626e-16
-      ],
-      "ReplaceComponent": [
-        1.6900000000000002,
-        4.440892098500626e-16
-      ],
-      "LwRedeployComponent": [
-        1.6400000000000001,
-        2.220446049250313e-16
-      ]
-    }
-  },
-  "Category Item Filter": {
-    "CF3": {
-      "component_utility": [
-        1.7295173190450837e-12,
-        4.458556429082371e-13
-      ],
-      "criticality": [
-        1.875,
-        0.0
-      ],
-      "importance": [
-        2.2416201117318435,
-        0.40306909292791293
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.333240223463687,
-        0.6022755761833524
-      ],
-      "ReplaceComponent": [
-        2.333240223463687,
-        0.6022755761833524
-      ]
-    },
-    "CF1": {
-      "component_utility": [
-        7.213463500089727e-13,
-        2.448953027623342e-13
-      ],
-      "criticality": [
-        0.9375,
-        0.0
-      ],
-      "importance": [
-        1.051747311827957,
-        0.17747789438283812
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.3500000000000001,
-        1.1102230246251565e-16
-      ],
-      "HwRedeployComponent": [
-        2.4324731182795696,
-        0.6535817871568788
-      ],
-      "ReplaceComponent": [
-        2.4324731182795696,
-        0.6535817871568788
-      ],
-      "LwRedeployComponent": [
-        1.5299999999999998,
-        2.220446049250313e-16
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        1.294238421611213e-12,
-        5.632271578727389e-13
-      ],
-      "criticality": [
-        0.9375,
-        0.0
-      ],
-      "importance": [
-        1.0958969465648856,
-        0.24240585421688038
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.3500000000000001,
-        1.1102230246251565e-16
-      ],
-      "HwRedeployComponent": [
-        2.4555725190839692,
-        0.7718750445736919
-      ],
-      "ReplaceComponent": [
-        2.4555725190839692,
-        0.7718750445736919
-      ],
-      "LwRedeployComponent": [
-        1.6400000000000003,
-        4.440892098500626e-16
-      ]
-    }
-  },
-  "Comment Item Filter": {
-    "CF3": {
-      "component_utility": [
-        6.316449134926044e-13,
-        4.356971240250042e-13
-      ],
-      "criticality": [
-        1.25,
-        0.0
-      ],
-      "importance": [
-        2.162837837837838,
-        0.30104668880186736
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.171378378378378,
-        0.35813102323420093
-      ],
-      "ReplaceComponent": [
-        2.171378378378378,
-        0.35813102323420093
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        2.1014520224980177e-13,
-        9.685456320458064e-14
-      ],
-      "criticality": [
-        0.625,
-        0.0
-      ],
-      "importance": [
-        1.0151699029126213,
-        0.2381069816809942
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.3500000000000001,
-        1.1102230246251565e-16
-      ],
-      "HwRedeployComponent": [
-        2.165631067961165,
-        0.34086033327709475
-      ],
-      "ReplaceComponent": [
-        2.165631067961165,
-        0.34086033327709475
-      ],
-      "LwRedeployComponent": [
-        1.6399999999999992,
-        6.661338147750939e-16
-      ]
-    },
-    "CF1": {
-      "component_utility": [
-        2.6391203382908866e-13,
-        1.5270362226512922e-13
-      ],
-      "criticality": [
-        0.625,
-        0.0
-      ],
-      "importance": [
-        1.0754437869822486,
-        0.2527470870957029
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35000000000000003,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        2.0826627218934908,
-        0.3067205980965955
-      ],
-      "ReplaceComponent": [
-        2.0826627218934908,
-        0.3067205980965955
-      ],
-      "LwRedeployComponent": [
-        1.5299999999999996,
-        4.440892098500626e-16
-      ]
-    }
-  },
-  "Persistence Service": {
-    "CF2": {
-      "component_utility": [
-        5.574613341279585e-13,
-        2.4927315004622337e-13
-      ],
-      "criticality": [
-        1.875,
-        0.0
-      ],
-      "importance": [
-        1.0470058626465661,
-        0.15307836055919877
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.3500000000000001,
-        1.1102230246251565e-16
-      ],
-      "HwRedeployComponent": [
-        3.5717587939698494,
-        1.1285519792904333
-      ],
-      "ReplaceComponent": [
-        3.5717587939698494,
-        1.1285519792904333
-      ],
-      "LwRedeployComponent": [
-        1.6400000000000001,
-        2.220446049250313e-16
-      ]
-    },
-    "CF3": {
-      "component_utility": [
-        1.2052610514163544e-12,
-        4.559254528317658e-13
-      ],
-      "criticality": [
-        3.75,
-        0.0
-      ],
-      "importance": [
-        2.163860103626943,
-        0.39027059313945145
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        3.635647668393782,
-        1.274282372546058
-      ],
-      "ReplaceComponent": [
-        3.635647668393782,
-        1.274282372546058
-      ]
-    },
-    "CF1": {
-      "component_utility": [
-        6.160215452776505e-13,
-        2.3994733491474714e-13
-      ],
-      "criticality": [
-        1.875,
-        0.0
-      ],
-      "importance": [
-        1.090725806451613,
-        0.20355344903767425
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.3499999999999999,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        3.8217972350230416,
-        1.4859185417792642
-      ],
-      "ReplaceComponent": [
-        3.8217972350230416,
-        1.4859185417792642
-      ],
-      "LwRedeployComponent": [
-        1.53,
-        0.0
-      ]
-    }
-  },
-  "Reputation Service": {
-    "CF1": {
-      "component_utility": [
-        3.0269656604041276e-14,
-        9.804869192148108e-15
-      ],
-      "criticality": [
-        0.8125,
-        0.0
-      ],
-      "importance": [
-        1.067958515283843,
-        0.2150935549057381
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35000000000000003,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        1.6900000000000002,
-        4.440892098500626e-16
-      ],
-      "ReplaceComponent": [
-        1.6900000000000002,
-        4.440892098500626e-16
-      ],
-      "LwRedeployComponent": [
-        1.53,
-        0.0
-      ]
-    },
-    "CF3": {
-      "component_utility": [
-        5.070227409980401e-14,
-        1.9286159970631292e-14
-      ],
-      "criticality": [
-        1.625,
-        0.0
-      ],
-      "importance": [
-        2.2075892857142856,
-        0.4167775947152541
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        1.6899999999999997,
-        0.0
-      ],
-      "ReplaceComponent": [
-        1.6899999999999997,
-        0.0
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        3.098091168661943e-14,
-        9.061994311143303e-15
-      ],
-      "criticality": [
-        0.8125,
-        0.0
-      ],
-      "importance": [
-        1.129981884057971,
-        0.2427692544448261
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.3500000000000001,
-        1.1102230246251565e-16
-      ],
-      "HwRedeployComponent": [
-        1.6899999999999997,
-        0.0
-      ],
-      "ReplaceComponent": [
-        1.6899999999999997,
-        0.0
-      ],
-      "LwRedeployComponent": [
-        1.6400000000000001,
-        2.220446049250313e-16
-      ]
-    }
-  },
-  "Last Second Sales Item Filter": {
-    "CF2": {
-      "component_utility": [
-        3.5737811424556047e-13,
-        2.770519574728458e-14
-      ],
-      "criticality": [
-        0.875,
-        0.0
-      ],
-      "importance": [
-        1.1418067226890756,
-        0.2511394044330899
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35000000000000003,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        2.1208403361344534,
-        0.3364285478147789
-      ],
-      "ReplaceComponent": [
-        2.1208403361344534,
-        0.3364285478147789
-      ],
-      "LwRedeployComponent": [
-        1.6399999999999995,
-        4.440892098500626e-16
-      ]
-    },
-    "CF1": {
-      "component_utility": [
-        2.6591628986636973e-13,
-        4.715627673983431e-14
-      ],
-      "criticality": [
-        0.875,
-        0.0
-      ],
-      "importance": [
-        1.054863344051447,
-        0.18358578203046383
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.3500000000000001,
-        1.1102230246251565e-16
-      ],
-      "HwRedeployComponent": [
-        2.109807073954984,
-        0.4190204026390274
-      ],
-      "ReplaceComponent": [
-        2.109807073954984,
-        0.4190204026390274
-      ],
-      "LwRedeployComponent": [
-        1.5299999999999998,
-        2.220446049250313e-16
-      ]
-    },
-    "CF3": {
-      "component_utility": [
-        7.354737663470416e-13,
-        7.919757234539543e-14
-      ],
-      "criticality": [
-        1.75,
-        0.0
-      ],
-      "importance": [
-        2.175561797752809,
-        0.4071943868141453
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.09752808988764,
-        0.40376676129365197
-      ],
-      "ReplaceComponent": [
-        2.09752808988764,
-        0.40376676129365197
-      ]
-    }
-  },
-  "Item Management Service": {
-    "CF1": {
-      "component_utility": [
-        5.484891293586739e-14,
-        4.990252229871931e-14
-      ],
-      "criticality": [
-        0.625,
-        0.0
-      ],
-      "importance": [
-        1.0910087719298245,
-        0.21494025059667626
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35000000000000003,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        1.6899999999999997,
-        0.0
-      ],
-      "ReplaceComponent": [
-        1.6899999999999997,
-        0.0
-      ],
-      "LwRedeployComponent": [
-        1.5299999999999998,
-        2.220446049250313e-16
-      ]
-    },
-    "CF3": {
-      "component_utility": [
-        7.521000502507825e-14,
-        3.2029418676987795e-14
-      ],
-      "criticality": [
-        1.25,
-        0.0
-      ],
-      "importance": [
-        2.139705882352941,
-        0.26734792592202705
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        1.6899999999999997,
-        0.0
-      ],
-      "ReplaceComponent": [
-        1.6899999999999997,
-        0.0
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        6.920068383054889e-14,
-        5.548398210522456e-14
-      ],
-      "criticality": [
-        0.625,
-        0.0
-      ],
-      "importance": [
-        1.0869565217391304,
-        0.030502641740004943
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.34999999999999987,
-        1.1102230246251565e-16
-      ],
-      "HwRedeployComponent": [
-        1.6899999999999995,
-        2.220446049250313e-16
-      ],
-      "ReplaceComponent": [
-        1.6899999999999995,
-        2.220446049250313e-16
-      ],
-      "LwRedeployComponent": [
-        1.64,
-        0.0
-      ]
-    }
-  },
-  "Query Service": {
-    "CF1": {
-      "component_utility": [
-        5.049454312171327e-12,
-        3.764829383917937e-12
-      ],
-      "criticality": [
-        0.875,
-        0.0
-      ],
-      "importance": [
-        1.0421052631578946,
-        0.2248797385590895
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.3500000000000001,
-        1.1102230246251565e-16
-      ],
-      "HwRedeployComponent": [
-        4.883894736842105,
-        2.3089798589246437
-      ],
-      "ReplaceComponent": [
-        4.883894736842105,
-        2.3089798589246437
-      ],
-      "LwRedeployComponent": [
-        1.53,
-        0.0
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        4.847220745305418e-12,
-        3.867295847282323e-12
-      ],
-      "criticality": [
-        0.875,
-        0.0
-      ],
-      "importance": [
-        1.1169871794871795,
-        0.26333790536065455
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35000000000000003,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        5.402051282051282,
-        2.4316894828410747
-      ],
-      "ReplaceComponent": [
-        5.402051282051282,
-        2.4316894828410747
-      ],
-      "LwRedeployComponent": [
-        1.6399999999999997,
-        2.220446049250313e-16
-      ]
-    },
-    "CF3": {
-      "component_utility": [
-        1.454005762193415e-11,
-        1.2563948667114549e-11
-      ],
-      "criticality": [
-        1.75,
-        0.0
-      ],
-      "importance": [
-        2.1953551912568305,
-        0.4020341169804129
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        6.107868852459015,
-        3.248717333143832
-      ],
-      "ReplaceComponent": [
-        6.107868852459015,
-        3.248717333143832
-      ]
-    }
-  },
-  "Buy Now Item Filter": {
-    "CF3": {
-      "component_utility": [
-        5.942674987787997e-13,
-        5.2558739047179296e-14
-      ],
-      "criticality": [
-        3.75,
-        0.0
-      ],
-      "importance": [
-        2.190954773869347,
-        0.36787600730214365
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.1558291457286427,
-        0.3569443053761696
-      ],
-      "ReplaceComponent": [
-        2.1558291457286427,
-        0.3569443053761696
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        2.9374370259974045e-13,
-        1.5494265239563426e-14
-      ],
-      "criticality": [
-        1.875,
-        0.0
-      ],
-      "importance": [
-        1.0282224958949098,
-        0.15390421019028677
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35000000000000003,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        2.0644827586206898,
-        0.3046052172446913
-      ],
-      "ReplaceComponent": [
-        2.0644827586206898,
-        0.3046052172446913
-      ],
-      "LwRedeployComponent": [
-        1.6400000000000001,
-        2.220446049250313e-16
-      ]
-    },
-    "CF1": {
-      "component_utility": [
-        2.928402354706372e-13,
-        7.209409221370779e-15
-      ],
-      "criticality": [
-        1.875,
-        0.0
-      ],
-      "importance": [
-        1.0591463414634146,
-        0.20214219349026102
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.127268292682927,
-        0.34366653039916073
-      ],
-      "ReplaceComponent": [
-        2.127268292682927,
-        0.34366653039916073
-      ],
-      "LwRedeployComponent": [
-        1.5299999999999998,
-        2.220446049250313e-16
-      ]
-    }
-  },
-  "Recommendation Item Filter": {
-    "CF3": {
-      "component_utility": [
-        9.377861542819285e-13,
-        1.5033997119470537e-13
-      ],
-      "criticality": [
-        3.5,
-        0.0
-      ],
-      "importance": [
-        2.235655737704918,
-        0.38683401300120934
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.1901639344262294,
-        0.38344637260833164
-      ],
-      "ReplaceComponent": [
-        2.1901639344262294,
-        0.38344637260833164
-      ]
-    },
-    "CF1": {
-      "component_utility": [
-        3.3723945684227063e-13,
-        2.6235424089603606e-15
-      ],
-      "criticality": [
-        1.75,
-        0.0
-      ],
-      "importance": [
-        1.0615384615384615,
-        0.18805760283021938
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.1183076923076922,
-        0.3284336684266901
-      ],
-      "ReplaceComponent": [
-        2.1183076923076922,
-        0.3284336684266901
-      ],
-      "LwRedeployComponent": [
-        1.53,
-        0.0
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        4.954742002735495e-13,
-        9.719790705970224e-14
-      ],
-      "criticality": [
-        1.75,
-        0.0
-      ],
-      "importance": [
-        1.1202290076335877,
-        0.24935727502709626
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.3500000000000001,
-        1.1102230246251565e-16
-      ],
-      "HwRedeployComponent": [
-        2.0490839694656486,
-        0.2765475550444032
-      ],
-      "ReplaceComponent": [
-        2.0490839694656486,
-        0.2765475550444032
-      ],
-      "LwRedeployComponent": [
-        1.6400000000000003,
-        4.440892098500626e-16
-      ]
-    }
-  },
-  "Past Sales Item Filter": {
-    "CF2": {
-      "component_utility": [
-        2.8006315215651945e-13,
-        2.083529929782694e-13
-      ],
-      "criticality": [
-        1.75,
-        0.0
-      ],
-      "importance": [
-        1.1322115384615385,
-        0.24362479715731067
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35000000000000003,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        2.0843846153846157,
-        0.2801208636015034
-      ],
-      "ReplaceComponent": [
-        2.0843846153846157,
-        0.2801208636015034
-      ],
-      "LwRedeployComponent": [
-        1.6400000000000001,
-        2.220446049250313e-16
-      ]
-    },
-    "CF1": {
-      "component_utility": [
-        3.8280862108040055e-13,
-        2.871572711416681e-13
-      ],
-      "criticality": [
-        1.75,
-        0.0
-      ],
-      "importance": [
-        1.0416666666666667,
-        0.20667442977633121
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.111954022988505,
-        0.351792908910452
-      ],
-      "ReplaceComponent": [
-        2.111954022988505,
-        0.351792908910452
-      ],
-      "LwRedeployComponent": [
-        1.5300000000000002,
-        2.220446049250313e-16
-      ]
-    },
-    "CF3": {
-      "component_utility": [
-        8.792522679927497e-13,
-        6.568927673970904e-13
-      ],
-      "criticality": [
-        3.5,
-        0.0
-      ],
-      "importance": [
-        2.2226123595505616,
-        0.40563696790958526
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.1539887640449438,
-        0.33786065189434594
-      ],
-      "ReplaceComponent": [
-        2.1539887640449438,
-        0.33786065189434594
-      ]
-    }
-  },
-  "Seller Reputation Item Filter": {
-    "CF1": {
-      "component_utility": [
-        6.611049194690451e-13,
-        3.661101553746956e-13
-      ],
-      "criticality": [
-        1.5,
-        0.0
-      ],
-      "importance": [
-        1.0654131355932204,
-        0.19866507320238008
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.113940677966102,
-        0.2952651434820449
-      ],
-      "ReplaceComponent": [
-        2.113940677966102,
-        0.2952651434820449
-      ],
-      "LwRedeployComponent": [
-        1.5300000000000002,
-        2.220446049250313e-16
-      ]
-    },
-    "CF3": {
-      "component_utility": [
-        1.4899070418889848e-12,
-        8.78432724253361e-13
-      ],
-      "criticality": [
-        3.0,
-        0.0
-      ],
-      "importance": [
-        2.164617486338798,
-        0.38760877707530395
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.1193442622950815,
-        0.3375313894447765
-      ],
-      "ReplaceComponent": [
-        2.1193442622950815,
-        0.3375313894447765
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        6.980427127561274e-13,
-        2.6235424089603707e-13
-      ],
-      "criticality": [
-        1.5,
-        0.0
-      ],
-      "importance": [
-        1.1586538461538463,
-        0.2390830145991607
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35000000000000003,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        2.034423076923077,
-        0.2829678798130932
-      ],
-      "ReplaceComponent": [
-        2.034423076923077,
-        0.2829678798130932
-      ],
-      "LwRedeployComponent": [
-        1.64,
-        0.0
-      ]
-    }
-  },
-  "Region Item Filter": {
-    "CF3": {
-      "component_utility": [
-        2.227487308636136e-12,
-        6.932124251318051e-13
-      ],
-      "criticality": [
-        3.625,
-        0.0
-      ],
-      "importance": [
-        2.2278963414634148,
-        0.4043249360218266
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.2054878048780484,
-        0.41718467700687156
-      ],
-      "ReplaceComponent": [
-        2.2054878048780484,
-        0.41718467700687156
-      ]
-    },
-    "CF1": {
-      "component_utility": [
-        7.901040474896395e-13,
-        3.084591405829141e-13
-      ],
-      "criticality": [
-        1.8125,
-        0.0
-      ],
-      "importance": [
-        1.0778952205882353,
-        0.20040229543077076
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.3500000000000001,
-        1.1102230246251565e-16
-      ],
-      "HwRedeployComponent": [
-        2.0420588235294117,
-        0.37100344386989426
-      ],
-      "ReplaceComponent": [
-        2.0420588235294117,
-        0.37100344386989426
-      ],
-      "LwRedeployComponent": [
-        1.5299999999999998,
-        2.220446049250313e-16
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        9.67899123099929e-13,
-        4.529136922135349e-13
-      ],
-      "criticality": [
-        1.8125,
-        0.0
-      ],
-      "importance": [
-        1.0952620967741935,
-        0.23256542145575693
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.1298387096774194,
-        0.34683356581007063
-      ],
-      "ReplaceComponent": [
-        2.1298387096774194,
-        0.34683356581007063
-      ],
-      "LwRedeployComponent": [
-        1.64,
-        0.0
-      ]
-    }
-  },
-  "Future Sales Item Filter": {
-    "CF1": {
-      "component_utility": [
-        6.544764282583774e-13,
-        3.655347629521404e-13
-      ],
-      "criticality": [
-        1.625,
-        0.0
-      ],
-      "importance": [
-        1.0538194444444444,
-        0.17633283229992536
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35000000000000003,
-        5.551115123125783e-17
-      ],
-      "HwRedeployComponent": [
-        2.1382291666666666,
-        0.30433326986924314
-      ],
-      "ReplaceComponent": [
-        2.1382291666666666,
-        0.30433326986924314
-      ],
-      "LwRedeployComponent": [
-        1.5299999999999998,
-        2.220446049250313e-16
-      ]
-    },
-    "CF3": {
-      "component_utility": [
-        1.7181024261185127e-12,
-        7.630882375850911e-13
-      ],
-      "criticality": [
-        3.25,
-        0.0
-      ],
-      "importance": [
-        2.21890243902439,
-        0.39589280421987416
-      ],
-      "reliability": [
-        0.0625,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.1637073170731704,
-        0.3713218473732785
-      ],
-      "ReplaceComponent": [
-        2.1637073170731704,
-        0.3713218473732785
-      ]
-    },
-    "CF2": {
-      "component_utility": [
-        7.043875148466223e-13,
-        3.8873563866100966e-13
-      ],
-      "criticality": [
-        1.625,
-        0.0
-      ],
-      "importance": [
-        1.1184475806451613,
-        0.23570770939521735
-      ],
-      "reliability": [
-        0.03125,
-        0.0
-      ],
-      "RestartComponent": [
-        0.35,
-        0.0
-      ],
-      "HwRedeployComponent": [
-        2.0449193548387092,
-        0.2847508700820543
-      ],
-      "ReplaceComponent": [
-        2.0449193548387092,
-        0.2847508700820543
-      ],
-      "LwRedeployComponent": [
-        1.64,
-        0.0
-      ]
-    }
-  }
 }
