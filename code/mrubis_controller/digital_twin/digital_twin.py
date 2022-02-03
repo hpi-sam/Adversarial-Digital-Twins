@@ -143,27 +143,27 @@ class ShopDigitalTwin:
                 self._read_fix_costs_means[fix][comp, state] = read[fix][0]
                 self._read_fix_costs_stds[fix][comp, state] = read[fix][1]
 
-    def log_table(self, labels, values):
-        data = [[label, val] for (label, val) in zip(labels, values)]
-        table = wandb.Table(data=data, columns = ["label", "value"])
-        wandb.log({"my_bar_chart_id" : wandb.plot.bar(table, "label", "value", title="Custom Bar Chart")})
-
     def set_initial_state(self, inital_state: InitialState) -> None:
         assert len(inital_state.components) == len(Components.list())
         self._healthy_shop_utility = inital_state.shop_utility
         self.initial_healthy_shop_utility = inital_state.shop_utility
+        for comp in inital_state.components:
+            self.healthy_component_utilities[comp.component_name] = comp.utility
+        self.healthy_component_utilities.to_csv("healthy.csv")
 
     def get_shop_utility(self) -> float:
         if self.is_fixed():
+            print("is fixed")
             return self._healthy_shop_utility
         assert self.current_issues != None
         failed_components = [issue.component_name for issue in self.current_issues]
-        computed_utility = 0.0
+        computed_utility = self._healthy_shop_utility
         for component in Components.list():
             if component in failed_components:
-                computed_utility += self.current_issues[failed_components.index(component)].utility
+                computed_utility -= (self.healthy_component_utilities[component] - self.current_issues[failed_components.index(component)].utility)
             else:
-                computed_utility += self.healthy_component_utilities[component]
+                pass
+                # computed_utility += self.healthy_component_utilities[component]
         return computed_utility
 
     def get_component_utility(self, component: Components) -> float:
@@ -371,10 +371,13 @@ class ShopDigitalTwin:
             self.reliability_stds[idx] = np.std(reliabilities[idx])
 
             self.fix_utility_means[idx] = np.mean(fix_utilities[idx])
-            self.fix_utility_means[idx] = np.std(fix_utilities[idx])
+            self.fix_utility_stds[idx] = np.std(fix_utilities[idx])
 
             self.fix_cost_means.loc[idx] = [np.mean(costs) for costs in fix_lists.loc[idx].to_list()]
             self.fix_cost_stds.loc[idx] = [np.std(costs) for costs in fix_lists.loc[idx].to_list()]
+        
+        fix_utilities.to_csv(f"fix_utilities_{step}.csv")
+        self.fix_utility_means.to_csv(f"fix_utility_means_{step}.csv")
 
         self.utility_means.fillna(0, inplace=True)
         self.utility_stds.fillna(0, inplace=True)
@@ -441,6 +444,7 @@ class ShopDigitalTwin:
         self.current_issues = issues
         for issue in self.current_issues:
             issue.shop_utility = self.get_shop_utility()
+        print(self._healthy_shop_utility - self.get_shop_utility())
         return issues
 
 class DigitalTwin:
