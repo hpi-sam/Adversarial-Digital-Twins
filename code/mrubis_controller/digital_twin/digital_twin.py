@@ -9,7 +9,7 @@ from entities.observation import ShopIssue, Fix, AgentFix, Issue, Observation, I
 from entities.fixes import Fixes
 from entities.component_failure import ComponentFailure
 from entities.components import Components
-
+import sys
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 # TODO initialize probabilities with baisian distribution
@@ -204,10 +204,10 @@ class ShopDigitalTwin:
         self.fix_success -= self.fix_success
         self.fix_probs -= self.fix_probs
 
-    def check_real(self, fix_component: Components) -> bool:
+    def check_real(self, fix_component: Components, rule: Fixes) -> bool:
         # TODO check if the fix might fix the real broken component
         # if not then do the same as the failure propagator
-        return fix_component == self.real_failed_component
+        return fix_component == self.real_failed_component and rule in [f.fix_type for f in self.real_failed_issue.fixes]
 
     def is_fixed(self) -> bool:
         return self._is_fixed
@@ -344,6 +344,7 @@ class ShopDigitalTwin:
                 currentRow = self.propagation_matrix.loc[issue.component_name, issue.failure_type]
                 for other_issue in observation.issues:
                     currentRow[other_issue.component_name][other_issue.failure_type] += 1
+
         # Compute the probability that a fix works on a broken component
         worked_np = self.fix_success.loc['worked'].to_numpy()
         failed_np = self.fix_success.loc['failed'].to_numpy()
@@ -494,7 +495,7 @@ class DigitalTwin:
     def send_rule_to_execute(self, shop_name: str, failure_name: ComponentFailure, predicted_component: Components, predicted_rule: Fixes) -> bool:
         assert self._initialized
         sim = self.shop_simulations[shop_name]
-        if not sim.check_real(predicted_component):
+        if not sim.check_real(predicted_component, predicted_rule):
             return False
         sim.apply_fix(AgentFix(predicted_component, predicted_rule))
         return True
