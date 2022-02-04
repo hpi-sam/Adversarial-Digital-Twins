@@ -164,6 +164,7 @@ class FailureProgagator():
             allowed_rules = self.last_real_issue[shop_name][predicted_component]["rule_names"]
 
         #if predicted_rule not in allowed_rules or (predicted_rule == "ReplaceComponent" and predicted_component != 'Authentication Service'):
+
         if predicted_rule not in allowed_rules or (predicted_rule == "ReplaceComponent"):
             return False
 

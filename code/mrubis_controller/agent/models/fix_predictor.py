@@ -6,39 +6,38 @@ import torch
 class FixPredictor(nn.Module):
     def __init__(self):
         super().__init__()
-        self.input_part = nn.Sequential(
-            nn.Linear(18*19, 256),
-            nn.LeakyReLU(),
-            nn.Linear(256, 128),
-            nn.LeakyReLU()
-        )
+        self.input_dim = 19
+        self.hidden_dim = 16
+        self.batch_size = 1
+        self.num_layers = 2
+
+        self.lstm = nn.LSTM(self.input_dim, self.hidden_dim, self.num_layers, batch_first=True, bidirectional=True)
+
+        #self.utility_output = nn.Linear(self.hidden_dim * 2 * self.num_layers, 1)
         self.utility_output = nn.Sequential(
-            nn.Linear(128, 1)
+            nn.Linear(self.hidden_dim * 2 * self.num_layers, 1)
         )
-        self.fix_output = nn.Sequential(
-            nn.Linear(128, 64),
-            nn.LeakyReLU(),
-            nn.Linear(64, 18*4),
+
+        self.component_output = nn.Sequential(
+            nn.Linear(self.hidden_dim * 2 * self.num_layers, 18),
             nn.Softmax(dim=0)
         )
 
+        # self.fix_output = nn.Sequential(
+        #     nn.Linear(self.hidden_dim * 2 * self.num_layers, 4),
+        #     nn.Softmax(dim=0)
+        # )
+
 
     def forward(self, shop_observation_vector, explore=False):
-        #shop_observation_vector = 2D matrix of length number of components, depth number of states, one 1 per column.
-        # return fix, utility
-        # fix is a 2D matrix with length number of components and depth number of possible fixes.
-        # utility is a float
-
-        # failure_index = np.where(shop_observation_vector[1:] == 1)
-        # all_components_list = Components.list()
-        # all_fixes_list = Fixes.list()
-        # fix = np.zeros((len(all_fixes_list), len(all_components_list)))
-        # fix[0, failure_index[1]] = 1
         if explore:
-            return torch.randn(4, 18), torch.randn(1)
-        hidden_values = self.input_part(torch.flatten(torch.from_numpy(shop_observation_vector).float()))
-        predicted_fix = torch.reshape(self.fix_output(hidden_values), (4, 18))
-        #predicted_utility_gain = self.utility_output(torch.cat([hidden_values, predicted_fix.view(-1)]))
-        predicted_utility_gain = self.utility_output(hidden_values)
+            return torch.randn(18), torch.randn(1)
+        
+        _, (hidden_values, _) = self.lstm(shop_observation_vector)
+        predicted_component = self.component_output(hidden_values.view(self.hidden_dim*2*self.num_layers))
 
-        return predicted_fix, predicted_utility_gain
+        predicted_utility_gain = self.utility_output(hidden_values.view(self.hidden_dim*2*self.num_layers))
+
+        #predicted_fix = self.fix_output(hidden_values.view(self.hidden_dim*2*self.num_layers))
+
+        return predicted_component, predicted_utility_gain#, predicted_fix

@@ -76,12 +76,12 @@ class Trainer():
         self.mrubis_state = {}
         self.mrubis_utilities = {}
         self.utility_loss = torch.nn.MSELoss()
-        self.fix_loss = torch.nn.MSELoss()
-        self.utility_optimizer = torch.optim.RMSprop(self.agent.fix_predictor.parameters(), lr=0.0001) # torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.002)
+        self.fix_loss = torch.nn.CrossEntropyLoss()
+        self.utility_optimizer = torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.003) # torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.002)
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.utility_optimizer, step_size=1000, gamma=0.1)
         
 
-    def train(self, max_runs=500, num_exploration=50):
+    def train(self, max_runs=500, num_exploration=0):
         #os.environ['WANDB_MODE'] = 'offline'
         wandb.init(project="test-project", entity="adversial-digital-twins") 
         wandb.config.update({
@@ -146,10 +146,9 @@ class Trainer():
                     image = predicted_fix_vector.cpu().detach().numpy()
                     image -= np.min(image)
                     image /= np.max(image)
-                    image *= 255
                     wandb.log({
                         "agent prediction": {
-                            "prediction matrix": wandb.Image(image)
+                            "prediction matrix": wandb.Image(image.reshape((1,-1)))
                         }
                     }, commit=False)
                     predicted_utilities.append(predicted_utility.item())
@@ -162,7 +161,6 @@ class Trainer():
                     top_counter = 0
                     while True:
                         shop_name, failure_name, predicted_component, predicted_rule = self.vector_to_fix(predicted_fix_vector, current_observation, top_counter)
-
                         logging.debug(f"We predicted fix: {shop_name, failure_name, predicted_component, predicted_rule}")
 
                         # send the fix to mRubis
@@ -261,10 +259,9 @@ class Trainer():
                     image = predicted_fix_vector.cpu().detach().numpy()
                     image -= np.min(image)
                     image /= np.max(image)
-                    image *= 255
                     wandb.log({
                         "agent prediction": {
-                            "prediction matrix": wandb.Image(image)
+                            "prediction matrix": wandb.Image(image.reshape((1,-1)))
                         }
                     }, commit=False)
                     predicted_utilities.append(predicted_utility.item())
@@ -277,7 +274,7 @@ class Trainer():
                     top_counter = 0
                     while True:
                         shop_name, failure_name, predicted_component, predicted_rule, agent_fix = self.vector_to_digital_twin_fix(predicted_fix_vector, current_observation[0], top_counter)
-
+                        
                         logging.debug(f"We predicted fix: {shop_name, failure_name, predicted_component, predicted_rule}")
 
                         # send the fix to mRubis
@@ -334,26 +331,25 @@ class Trainer():
             predicted_utility = predicted_fixes_w_gradients[shop_name][1]
 
             utility_scaling_factor = 10**(-5)
-            new_utility_loss = self.utility_loss(predicted_utility, torch.tensor([utility_difference*utility_scaling_factor])) * (0.9**right_components_picked[shop_name]['attempts'])
+            new_utility_loss = self.utility_loss(predicted_utility, torch.tensor([utility_difference*utility_scaling_factor])) #* (0.9**right_components_picked[shop_name]['attempts'])
             utility_loss += new_utility_loss
             utility_gain+=utility_difference
 
             predicted_fix = predicted_fixes_w_gradients[shop_name][0]
-            acceptance_threshold = 1000
+            #acceptance_threshold = 1000
             avg_attempts += right_components_picked[shop_name]['attempts']
             all_rule_costs += right_components_picked[shop_name]['rule_cost']
             correct_attempt_index = torch.topk(predicted_fix.view(-1), right_components_picked[shop_name]['attempts'])[1][-1].item()
-            idx_1, idx_2 = correct_attempt_index // predicted_fix.shape[1], correct_attempt_index % predicted_fix.shape[1]
-            label = torch.zeros(predicted_fix.shape)
+            #idx_1, idx_2 = correct_attempt_index // predicted_fix.shape[1], correct_attempt_index % predicted_fix.shape[1]
+            label = torch.LongTensor([correct_attempt_index])
 
-            if utility_difference > acceptance_threshold:
+            # if utility_difference > acceptance_threshold:
                 #label[:,idx_2] = 1.0
-                label[idx_1,idx_2] = 10.0
-            else:
-                label[:,idx_2] = 1.0
-                label[idx_1,idx_2] = 0.0
-
-            new_fix_loss = self.fix_loss(predicted_fix, label)
+            #label[correct_attempt_index] = 1.0
+            # else:
+            #     label[:,idx_2] = 1.0
+            #     label[idx_1,idx_2] = 0.0
+            new_fix_loss = self.fix_loss(predicted_fix.float().view(1,-1), label)
             fix_loss += new_fix_loss
 
         # Counter is the number of failed shops
@@ -364,11 +360,11 @@ class Trainer():
         utility_gain /= counter
         all_rule_costs /= counter
         avg_attempts /= counter
-        loss = (utility_loss + 2*fix_loss -(utility_gain * utility_scaling_factor)) * all_rule_costs# + avg_attempts/20
+        loss = 12*utility_loss + fix_loss + ((100000 - utility_gain) * utility_scaling_factor) #+ all_rule_costs # + avg_attempts/20
 
         print(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
         #logging.info(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
-        wandb.log({"loss": loss/counter}, commit=False)
+        wandb.log({"loss": loss}, commit=False)
         wandb.log({"utility loss": utility_loss}, commit=False)
         wandb.log({"fix loss": fix_loss}, commit=False)
         wandb.log({"digital twin": int(digitial_twin)}, commit=False)
@@ -461,7 +457,7 @@ class Trainer():
                     rule_cost_vector[all_fixes_list.index(rule_name)-1, index] = rule_costs[failed_components.index(component)][i]
 
         numberic_vector = np.array([padded_criticalities, padded_connectivities, padded_reliabilities, padded_importances, padded_provided_interfaces, padded_required_interfaces, padded_adts, padded_perf_maxes, padded_sat_points, padded_replicas, padded_requests])
-        return np.concatenate([failed_vector.reshape(-1), rule_cost_vector.reshape(-1), numberic_vector.reshape(-1)])
+        return torch.tensor(np.concatenate([failed_vector.reshape(-1), rule_cost_vector.reshape(-1), numberic_vector.reshape(-1)]).reshape((1,18,19))).float()
     
     # ToDo ändere dieses epische naming
     def digital_twin_observation_to_vector2(self, observation: List[ShopIssue]):
@@ -520,7 +516,7 @@ class Trainer():
                     rule_cost_vector[all_fixes_list.index(rule_name)-1, index] = rule_costs[failed_components.index(component)][i]
 
         numberic_vector = np.array([padded_criticalities, padded_connectivities, padded_reliabilities, padded_importances, padded_provided_interfaces, padded_required_interfaces, padded_adts, padded_perf_maxes, padded_sat_points, padded_replicas, padded_requests])
-        return np.concatenate([failed_vector.reshape(-1), rule_cost_vector.reshape(-1), numberic_vector.reshape(-1)])
+        return torch.tensor(np.concatenate([failed_vector.reshape(-1), rule_cost_vector.reshape(-1), numberic_vector.reshape(-1)]).reshape((1,18,19))).float()
        
 
     def digital_twin_observation_to_vector(self, observations: List[ShopIssue]):
@@ -538,13 +534,13 @@ class Trainer():
 
     def vector_to_fix(self, fix_vector, observation, top_k):
         all_components_list = Components.list()
-        all_fixes_list = Fixes.list()
+        #all_fixes_list = Fixes.list()
 
         max_index = torch.topk(fix_vector.view(-1), top_k+1)[1][-1].item()
 
-        idx_1, idx_2 = max_index // fix_vector.shape[1], max_index % fix_vector.shape[1]
-        predicted_component = all_components_list[int(idx_2)]
-        predicted_rule = all_fixes_list[int(idx_1)]
+        #idx_1, idx_2 = max_index // fix_vector.shape[1], max_index % fix_vector.shape[1]
+        predicted_component = all_components_list[int(max_index)]
+        predicted_rule = Fixes.HW_REDEPLOY_COMPONENT.value#all_fixes_list[int(idx_1)]
         shop_name = list(observation.keys())[0]
         failure_name = list(list(observation.values())[0].values())[0]['failure_name']
         agentfix = AgentFix(failure_name, predicted_rule)
@@ -556,9 +552,9 @@ class Trainer():
 
         max_index = torch.topk(fix_vector.view(-1), top_k+1)[1][-1].item()
 
-        idx_1, idx_2 = max_index // fix_vector.shape[1], max_index % fix_vector.shape[1]
-        predicted_component = all_components_list[int(idx_2)]
-        predicted_rule = all_fixes_list[int(idx_1)]
+        #idx_1, idx_2 = max_index // fix_vector.shape[1], max_index % fix_vector.shape[1]
+        predicted_component = all_components_list[int(max_index)]
+        predicted_rule = Fixes.HW_REDEPLOY_COMPONENT.value#all_fixes_list[int(idx_1)]
         shop_name = observation.shop
         failure_name = observation.failure_type
         agentfix = AgentFix(failure_name, predicted_rule)
