@@ -6,7 +6,7 @@ import torch
 class FixPredictor(nn.Module):
     def __init__(self):
         super().__init__()
-        self.input_dim = 19
+        self.input_dim = 18
         self.hidden_dim = 16
         self.batch_size = 1
         self.num_layers = 2
@@ -23,21 +23,21 @@ class FixPredictor(nn.Module):
             nn.Softmax(dim=0)
         )
 
-        # self.fix_output = nn.Sequential(
-        #     nn.Linear(self.hidden_dim * 2 * self.num_layers, 4),
-        #     nn.Softmax(dim=0)
-        # )
+        self.fix_output = nn.Sequential(
+            nn.Linear(self.hidden_dim * 2 * self.num_layers, 3),
+            nn.Softmax(dim=0)
+        )
 
 
     def forward(self, shop_observation_vector, explore=False):
         if explore:
-            return torch.randn(18), torch.randn(1)
+            return torch.randn(18), torch.randn(1), torch.randn(3)
         
         _, (hidden_values, _) = self.lstm(shop_observation_vector)
         predicted_component = self.component_output(hidden_values.view(self.hidden_dim*2*self.num_layers))
 
         predicted_utility_gain = self.utility_output(hidden_values.view(self.hidden_dim*2*self.num_layers))
 
-        #predicted_fix = self.fix_output(hidden_values.view(self.hidden_dim*2*self.num_layers))
+        predicted_fix = self.fix_output(hidden_values.view(self.hidden_dim*2*self.num_layers))
 
-        return predicted_component, predicted_utility_gain#, predicted_fix
+        return predicted_component, predicted_utility_gain, predicted_fix
