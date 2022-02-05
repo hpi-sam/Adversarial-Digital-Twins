@@ -115,7 +115,7 @@ class FPHMM():
                 logging.debug(fixes)
                 if "ReplaceComponent" in fixes: # and component != Components.AUTHENTICATION_SERVICE.value:
                     logging.debug("Found ReplaceComponent")
-                    index = fixes.index(Fixes.REPLACE_COMPONENT.value)
+                    index = fixes.index("ReplaceComponent")
                     fixes.pop(index)
                     costs.pop(index)
                     logging.debug(fixes)

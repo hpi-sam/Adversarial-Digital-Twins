@@ -3,7 +3,7 @@ from typing import List
 
 class Fixes(enum.Enum):
     HW_REDEPLOY_COMPONENT = "HwRedeployComponent"
-    REPLACE_COMPONENT = "ReplaceComponent"
+    #REPLACE_COMPONENT = "ReplaceComponent"
     RESTART_COMPONENT = "RestartComponent"
     LW_REDEPLOY_COMPONENT = "LwRedeployComponent"
 
