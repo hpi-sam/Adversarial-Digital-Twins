@@ -153,7 +153,7 @@ class ShopDigitalTwin:
 
     def get_shop_utility(self) -> float:
         if self.is_fixed():
-            print("is fixed")
+            #print("is fixed")
             return self._healthy_shop_utility
         assert self.current_issues != None
         failed_components = [issue.component_name for issue in self.current_issues]
@@ -377,8 +377,8 @@ class ShopDigitalTwin:
             self.fix_cost_means.loc[idx] = [np.mean(costs) for costs in fix_lists.loc[idx].to_list()]
             self.fix_cost_stds.loc[idx] = [np.std(costs) for costs in fix_lists.loc[idx].to_list()]
         
-        fix_utilities.to_csv(f"fix_utilities_{step}.csv")
-        self.fix_utility_means.to_csv(f"fix_utility_means_{step}.csv")
+        #fix_utilities.to_csv(f"fix_utilities_{step}.csv")
+        #self.fix_utility_means.to_csv(f"fix_utility_means_{step}.csv")
 
         self.utility_means.fillna(0, inplace=True)
         self.utility_stds.fillna(0, inplace=True)
@@ -445,7 +445,7 @@ class ShopDigitalTwin:
         self.current_issues = issues
         for issue in self.current_issues:
             issue.shop_utility = self.get_shop_utility()
-        print(self._healthy_shop_utility - self.get_shop_utility())
+        #print(self._healthy_shop_utility - self.get_shop_utility())
         return issues
 
 class DigitalTwin:
