@@ -17,6 +17,7 @@ import torch
 import os
 import json
 import wandb
+import random
 
 logging.basicConfig(filename='training.log', filemode='w', level=logging.DEBUG)
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
@@ -91,6 +92,9 @@ class Trainer():
 
     def train(self, max_runs=500, num_exploration=0):
         #os.environ['WANDB_MODE'] = 'offline'
+        torch.manual_seed(0)
+        random.seed(0)
+        np.random.seed(0)
         wandb.init(project="test-project", entity="adversial-digital-twins") 
         wandb.config.update({
             "learning_rate": 0.01,
@@ -105,7 +109,7 @@ class Trainer():
         observation_batch: List[Observation] = []
         explore = True
         while run_counter < max_runs:
-            if run_counter != 0 and run_counter % 50 == 0:
+            if run_counter != 0 and run_counter % 200 == 0:
                 self.train_real = not self.train_real
                 logging.info(f"train real: {self.train_real}")
             if run_counter == num_exploration:
