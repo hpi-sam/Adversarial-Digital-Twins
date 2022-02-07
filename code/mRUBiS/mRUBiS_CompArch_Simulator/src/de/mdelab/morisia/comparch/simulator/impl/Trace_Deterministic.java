@@ -29,6 +29,12 @@ public class Trace_Deterministic implements InjectionStrategy {
 
 	}
 
+		
+	public void setArchitecture(Architecture eArchitecture) {
+		this.eArchitecture = eArchitecture;
+	};
+
+
 	@Override
 	public List<Injection<? extends ArchitecturalElement>> getInjections(
 			int runCount) {
