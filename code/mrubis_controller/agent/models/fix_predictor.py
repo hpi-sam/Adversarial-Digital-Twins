@@ -29,14 +29,14 @@ class FixPredictor(nn.Module):
         )
 
         self.fix_output = nn.Sequential(
-            nn.Linear(self.hidden_dim * 2 * self.num_layers, 3),
+            nn.Linear(self.hidden_dim * 2 * self.num_layers, 5),
             nn.Softmax(dim=0)
         )
 
 
     def forward(self, shop_observation_vector, explore=False):
         if explore:
-            return torch.randn(18), torch.randn(1), torch.randn(3)
+            return torch.randn(18), torch.randn(1), torch.randn(5)
         
         _, (hidden_values, _) = self.lstm(shop_observation_vector)
         predicted_component = self.component_output(hidden_values.view(self.hidden_dim*2*self.num_layers))
