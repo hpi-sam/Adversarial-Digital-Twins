@@ -27,7 +27,7 @@ public class ArchitectureUtilCal {
 		for (Component component : shop.getComponents()) {
 			shopUtility+=computeComponentUtility(component);
 		}
-		System.out.println("\n shop utility: " + shopUtility);
+		// System.out.println("\n shop utility: " + shopUtility);
 		return shopUtility;
 	}
 
