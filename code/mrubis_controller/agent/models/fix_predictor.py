@@ -14,7 +14,7 @@ class FixPredictor(nn.Module):
         self.input_dim = 20
         self.hidden_dim = 16
         self.batch_size = 1
-        self.num_layers = 2
+        self.num_layers = 3
 
         self.lstm = nn.LSTM(self.input_dim, self.hidden_dim, self.num_layers, batch_first=True, bidirectional=True)
 

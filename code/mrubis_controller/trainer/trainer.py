@@ -350,11 +350,13 @@ class Trainer():
         counter = 0
         utility_gain = 0
         all_rule_costs = 0
+        number_failed_components = 0
         for shop_name, utility_difference in utility_differences.items():
             counter+=1
 
             rule_costs = right_components_picked[shop_name]['rule_costs']
             rule_names = right_components_picked[shop_name]['rule_names']
+            number_failed_components += len(rule_names)
             chosen_rule = right_components_picked[shop_name]['right_rule']
 
             avg_attempts += right_components_picked[shop_name]['attempts']
@@ -389,6 +391,7 @@ class Trainer():
         utility_gain /= counter
         all_rule_costs /= counter
         avg_attempts /= counter
+        number_failed_components /= counter
         loss = 20*utility_loss + 5*rule_loss + fix_loss + ((100000 - utility_gain) * utility_scaling_factor) #+ all_rule_costs # + avg_attempts/20
 
         print(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
@@ -400,6 +403,7 @@ class Trainer():
         wandb.log({"digital twin": int(digitial_twin)}, commit=False)
         wandb.log({"avg utility gain": utility_gain}, commit=False)
         wandb.log({"avg rule costs": all_rule_costs}, commit=False)
+        wandb.log({"avg number failed components": number_failed_components}, commit=True)
         wandb.log({"average needed attempts": avg_attempts})
         loss.backward()
         self.optimizer.step()
@@ -567,19 +571,27 @@ class Trainer():
         all_rules_list = Fixes.list()
         rule_names, _ = get_rule_info(observation)
         failed_components = get_failed_components(observation)
-
-        component_index = torch.topk(component_vector.view(-1), top_k + 1)[1][-1].item()
+        try:
+            component_index = torch.argsort(component_vector.view(-1), descending=True)[top_k].item()
+        except Exception as e:
+            print(e)
+            print(rule_names)
+            print(failed_components)
+            print(all_components_list)
+            print(component_vector)
+            print(rule_vector)
+            sys.exit()
         # print(component_vector.size())
         # try:
         #     component_index = torch.topk(component_vector.view(-1), top_k + 1)[1][-1].item()
         # except:
         #     component_index = component_vector.view(-1).argmin().item()
         predicted_component = all_components_list[int(component_index)]
-        try:
+        if predicted_component in failed_components:
             mask = torch.BoolTensor([1 if rule in rule_names[failed_components.index(predicted_component)] else 0 for rule in all_rules_list])
-            rule_index = (rule_vector == (torch.max(torch.masked_select(rule_vector, mask)))).nonzero().item()
+            rule_index = torch.where(mask, rule_vector.float(), torch.tensor([-1]*len(mask), dtype=torch.float)).argmax().item()
             predicted_rule = all_rules_list[int(rule_index)]
-        except Exception as e:
+        else:
             predicted_rule = Fixes.HW_REDEPLOY_COMPONENT.value  
         shop_name = list(observation.keys())[0]
         failure_name = list(list(observation.values())[0].values())[0]['failure_name']
@@ -591,16 +603,28 @@ class Trainer():
         failed_components = [obs.component_name for obs in observations]
         rule_names = [[fix.fix_type for fix in obs.fixes] for obs in observations]
 
-        component_index = torch.topk(component_vector.view(-1), top_k+1)[1][-1].item()
-        predicted_component = all_components_list[int(component_index)]
-
         try:
+            component_index = torch.argsort(component_vector.view(-1), descending=True)[top_k].item()
+        except Exception as e:
+            print(e)
+            print(rule_names)
+            print(failed_components)
+            print(all_components_list)
+            print(component_vector)
+            print(rule_vector)
+            sys.exit()
+        # print(component_vector.size())
+        # try:
+        #     component_index = torch.topk(component_vector.view(-1), top_k + 1)[1][-1].item()
+        # except:
+        #     component_index = component_vector.view(-1).argmin().item()
+        predicted_component = all_components_list[int(component_index)]
+        if predicted_component in failed_components:
             mask = torch.BoolTensor([1 if rule in rule_names[failed_components.index(predicted_component)] else 0 for rule in all_rules_list])
-            rule_index = (rule_vector == (torch.max(torch.masked_select(rule_vector, mask)))).nonzero().item()
+            rule_index = torch.where(mask, rule_vector.float(), torch.tensor([-1]*len(mask), dtype=torch.float)).argmax().item()
             predicted_rule = all_rules_list[int(rule_index)]
-        except:
+        else:
             predicted_rule = Fixes.HW_REDEPLOY_COMPONENT.value  
-        
         shop_name = observations[0].shop
         failure_name = observations[0].failure_type
         agentfix = AgentFix(failure_name, predicted_rule)

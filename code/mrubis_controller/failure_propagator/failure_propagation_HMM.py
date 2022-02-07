@@ -39,7 +39,7 @@ class FPHMM():
                             self.sample_params[shop_name][comp][state]["reliability"] = [0.0, 0.0]
                             self.sample_params[shop_name][comp][state]["criticality"] = [0.0, 0.0]
                             self.sample_params[shop_name][comp][state]["importance"] = [0.0, 0.0]
-                        for fix in Fixes.list():
+                        for fix in set(Fixes.list() + ["ReplaceComponent"]):
                             if fix not in self.sample_params[shop_name][comp][state]:
                                 self.sample_params[shop_name][comp][state][fix] = [0.0, 0.0]
         with open("rule_costs.json", "w") as read_handle:
@@ -71,6 +71,7 @@ class FPHMM():
                 choice = random.random()
                 if choice < probabilities[index]:
                     new_failed_components[new_component] = errorId
+        # return {**failed_components, **new_failed_components}
         if new_failed_components == {}:
             return failed_components
         return {**failed_components, **self.propagate_failures(new_failed_components)}
@@ -86,6 +87,9 @@ class FPHMM():
         failure_type = issues[shop_name][component_name]["failure_name"]
         failed_components = {component_name: failure_type}
         failed_components = self.propagate_failures(failed_components)
+        failed_comonent_rules = list_string_regex.findall(issues[shop_name][component_name]["rule_names"])
+        # print(failed_components)
+        # print(failed_comonent_rules)
         #print(failed_components)
         del failed_components[component_name]
 
@@ -101,9 +105,9 @@ class FPHMM():
             issues[shop_name][failed_component]["criticality"] = np.random.normal(*sample_params["criticality"])
             issues[shop_name][failed_component]["importance"] = np.random.normal(*sample_params["importance"])
             issues[shop_name][failed_component]["reliability"] = np.random.normal(*sample_params["reliability"])
-            issues[shop_name][failed_component]["rule_names"] = list(sample_params.keys())[4:]
+            issues[shop_name][failed_component]["rule_names"] = failed_comonent_rules
             issues[shop_name][failed_component]["rule_costs"] = [np.random.normal(*sample_params[rule_name]) for rule_name in issues[shop_name][failed_component]["rule_names"]]
-        
+
         for failed_component in issues[shop_name].keys():
             issues[shop_name][failed_component]["shop_utility"] = shop_utility
 
