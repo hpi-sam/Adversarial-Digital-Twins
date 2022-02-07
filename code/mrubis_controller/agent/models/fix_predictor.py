@@ -3,9 +3,14 @@
 # start with single layer
 import torch.nn as nn
 import torch
+import numpy
+import random
 class FixPredictor(nn.Module):
     def __init__(self):
         super().__init__()
+        torch.manual_seed(0)
+        random.seed(0)
+        numpy.random.seed(0)
         self.input_dim = 18
         self.hidden_dim = 16
         self.batch_size = 1
