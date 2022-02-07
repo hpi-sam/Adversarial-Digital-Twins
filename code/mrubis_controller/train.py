@@ -14,6 +14,7 @@ if __name__ == "__main__":
     fix_predictor = FixPredictor()
     ranking_predictor = RankingPredictor()
     agent = Agent(fix_predictor, ranking_predictor)
+    # torch.save(agent.fix_predictor.state_dict(), 'modelweights.pth')
     agent.fix_predictor.load_state_dict(torch.load('modelweights.pth'))
     trainer = Trainer(agent=agent, digital_twin=DigitalTwin())
-    trainer.train(max_runs=1000)
+    trainer.train(max_runs=10000)

@@ -90,7 +90,7 @@ class Trainer():
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1000, gamma=0.1)
         
 
-    def train(self, max_runs=500, num_exploration=0):
+    def train(self, max_runs=500, num_exploration=0, num_synchronization=100000000000):
         #os.environ['WANDB_MODE'] = 'offline'
         torch.manual_seed(0)
         random.seed(0)
@@ -109,7 +109,7 @@ class Trainer():
         observation_batch: List[Observation] = []
         explore = True
         while run_counter < max_runs:
-            if run_counter != 0 and run_counter % 200 == 0:
+            if run_counter != 0 and run_counter % num_synchronization == 0:
                 self.train_real = not self.train_real
                 logging.info(f"train real: {self.train_real}")
             if run_counter == num_exploration:
@@ -372,9 +372,9 @@ class Trainer():
 
             predicted_rule = predicted_fixes_w_gradients[shop_name][2]
             rule_label = []
-            for i, rule in enumerate(all_rules):
+            for rule in all_rules:
                 if rule in rule_names:
-                    rule_label.append(min(rule_costs)/rule_costs[i])
+                    rule_label.append(min(rule_costs)/rule_costs[rule_names.index(rule)])
                 else:
                     rule_label.append(0)
             rule_loss += self.rule_loss(predicted_rule, torch.tensor(rule_label))
@@ -487,7 +487,7 @@ class Trainer():
                     rule_cost_vector[all_fixes_list.index(rule_name)-1, index] = rule_costs[failed_components.index(component)][i]
 
         numberic_vector = np.array([padded_criticalities, padded_connectivities, padded_reliabilities, padded_importances, padded_provided_interfaces, padded_required_interfaces, padded_adts, padded_perf_maxes, padded_sat_points, padded_replicas, padded_requests])
-        return torch.tensor(np.concatenate([failed_vector.reshape(-1), rule_cost_vector.reshape(-1), numberic_vector.reshape(-1)]).reshape((1,18,18))).float()
+        return torch.tensor(np.concatenate([failed_vector.reshape(-1), rule_cost_vector.reshape(-1), numberic_vector.reshape(-1)]).reshape((1,18,20))).float()
     
     # ToDo ändere dieses epische naming
     def digital_twin_observation_to_vector2(self, observation: List[ShopIssue]):
@@ -546,7 +546,7 @@ class Trainer():
                     rule_cost_vector[all_fixes_list.index(rule_name)-1, index] = rule_costs[failed_components.index(component)][i]
 
         numberic_vector = np.array([padded_criticalities, padded_connectivities, padded_reliabilities, padded_importances, padded_provided_interfaces, padded_required_interfaces, padded_adts, padded_perf_maxes, padded_sat_points, padded_replicas, padded_requests])
-        return torch.tensor(np.concatenate([failed_vector.reshape(-1), rule_cost_vector.reshape(-1), numberic_vector.reshape(-1)]).reshape((1,18,18))).float()
+        return torch.tensor(np.concatenate([failed_vector.reshape(-1), rule_cost_vector.reshape(-1), numberic_vector.reshape(-1)]).reshape((1,18,20))).float()
        
 
     def digital_twin_observation_to_vector(self, observations: List[ShopIssue]):
@@ -562,19 +562,24 @@ class Trainer():
                 failed_vector[all_failures_list.index(ComponentFailure.GOOD.value), index] = 1
         return failed_vector
 
-    def vector_to_fix(self, component_vector, rule_vector, observation, top_k):
+    def vector_to_fix(self, component_vector: torch.Tensor, rule_vector, observation, top_k):
         all_components_list = Components.list()
         all_rules_list = Fixes.list()
         rule_names, _ = get_rule_info(observation)
         failed_components = get_failed_components(observation)
 
-        component_index = torch.topk(component_vector.view(-1), top_k+1)[1][-1].item()
+        component_index = torch.topk(component_vector.view(-1), top_k + 1)[1][-1].item()
+        # print(component_vector.size())
+        # try:
+        #     component_index = torch.topk(component_vector.view(-1), top_k + 1)[1][-1].item()
+        # except:
+        #     component_index = component_vector.view(-1).argmin().item()
         predicted_component = all_components_list[int(component_index)]
         try:
             mask = torch.BoolTensor([1 if rule in rule_names[failed_components.index(predicted_component)] else 0 for rule in all_rules_list])
             rule_index = (rule_vector == (torch.max(torch.masked_select(rule_vector, mask)))).nonzero().item()
             predicted_rule = all_rules_list[int(rule_index)]
-        except:
+        except Exception as e:
             predicted_rule = Fixes.HW_REDEPLOY_COMPONENT.value  
         shop_name = list(observation.keys())[0]
         failure_name = list(list(observation.values())[0].values())[0]['failure_name']

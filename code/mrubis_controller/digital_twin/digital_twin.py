@@ -14,7 +14,8 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 # TODO initialize probabilities with baisian distribution
 class ShopDigitalTwin:
-    def __init__(self) -> None:
+    def __init__(self, shop_name=None) -> None:
+        self.name = shop_name
         self.build_propagation_matrix()
         self.build_utility_series()
         self.build_criticality_series()
@@ -101,7 +102,7 @@ class ShopDigitalTwin:
 
     def read_sampled_rule_costs(self):
         with open("rule_costs.json", "r") as read_handle:
-            self.sampled_rule_costs = json.load(read_handle)
+            self.sampled_rule_costs = json.load(read_handle)[self.name]
         for comp in Components.list():
             for state in ComponentFailure.list():
                 if state == ComponentFailure.GOOD.value:
@@ -456,7 +457,7 @@ class DigitalTwin:
 
     def set_initial_state(self, initial_states: Dict[str, InitialState]) -> None:
         for shop_name, initial_state in initial_states.items():
-            self.shop_simulations[shop_name] = ShopDigitalTwin()
+            self.shop_simulations[shop_name] = ShopDigitalTwin(shop_name)
             self.shop_simulations[shop_name].set_initial_state(initial_state)
             self._initialized = True
 

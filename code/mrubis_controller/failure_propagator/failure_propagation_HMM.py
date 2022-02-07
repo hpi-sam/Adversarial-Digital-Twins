@@ -23,23 +23,25 @@ class FPHMM():
         with open("rule_costs.json", "r") as read_handle:
 
             self.sample_params = json.load(read_handle)
-            for comp in Components.list():
-                for state in ComponentFailure.list():
-                    if state == ComponentFailure.GOOD.value:
-                        continue
-                    if comp not in self.sample_params:
-                        print(comp, " is missing")
-                        self.sample_params[comp] = {}
-                    if state not in self.sample_params[comp]:
-                        print(comp, state, " is missing")
-                        self.sample_params[comp][state] = {}
-                        self.sample_params[comp][state]["component_utility"] = [0.0, 0.0]
-                        self.sample_params[comp][state]["reliability"] = [0.0, 0.0]
-                        self.sample_params[comp][state]["criticality"] = [0.0, 0.0]
-                        self.sample_params[comp][state]["importance"] = [0.0, 0.0]
-                    for fix in Fixes.list():
-                        if fix not in self.sample_params[comp][state]:
-                            self.sample_params[comp][state][fix] = [0.0, 0.0]
+            shop_names = list(self.sample_params.keys())
+            for shop_name in shop_names:
+                for comp in Components.list():
+                    for state in ComponentFailure.list():
+                        if state == ComponentFailure.GOOD.value:
+                            continue
+                        if comp not in self.sample_params[shop_name]:
+                            print(comp, " is missing")
+                            self.sample_params[shop_name][comp] = {}
+                        if state not in self.sample_params[shop_name][comp]:
+                            print(comp, state, " is missing")
+                            self.sample_params[shop_name][comp][state] = {}
+                            self.sample_params[shop_name][comp][state]["component_utility"] = [0.0, 0.0]
+                            self.sample_params[shop_name][comp][state]["reliability"] = [0.0, 0.0]
+                            self.sample_params[shop_name][comp][state]["criticality"] = [0.0, 0.0]
+                            self.sample_params[shop_name][comp][state]["importance"] = [0.0, 0.0]
+                        for fix in Fixes.list():
+                            if fix not in self.sample_params[shop_name][comp][state]:
+                                self.sample_params[shop_name][comp][state][fix] = [0.0, 0.0]
         with open("rule_costs.json", "w") as read_handle:
             json.dump(self.sample_params, read_handle, indent=4)
         print("Wrote file")
@@ -90,7 +92,7 @@ class FPHMM():
         shop_utility = float(issues[shop_name][component_name]["shop_utility"])
 
         for failed_component, failure_type in failed_components.items():
-            sample_params = self.sample_params[failed_component][failure_type]
+            sample_params = self.sample_params[shop_name][failed_component][failure_type]
             issues[shop_name][failed_component] = self.initial_shop_states[shop_name][failed_component]
             issues[shop_name][failed_component]["failure_name"] = failure_type
             shop_utility -= float(issues[shop_name][failed_component]["component_utility"])
