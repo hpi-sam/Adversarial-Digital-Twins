@@ -16,7 +16,7 @@ list_float_regex  = re.compile(r"[\[(?:\,\s)]?([\d\.]+)[\]\,]")
 
 class FPHMM():
     def __init__(self, config_path: str ='transition_matrix.csv'):
-        self.components = np.array(Components.list()).flat
+        self.components = np.array(Components.list())
         self.transition_matrix = pd.read_csv(config_path)
         self.transition_matrix = self.transition_matrix.set_index('Sources')
     
@@ -62,15 +62,16 @@ class FPHMM():
 
     def propagate_failures(self, failed_components: Dict[str, str]):
         matrix = self.transition_matrix
-        all_failed_components = deepcopy(failed_components)
+        new_failed_components = {}
         for component, errorId in failed_components.items():
             probabilities = matrix.loc[component]
             for index, new_component in enumerate(self.components):
                 choice = random.random()
                 if choice < probabilities[index]:
-                    all_failed_components[new_component] = errorId
-
-        return all_failed_components
+                    new_failed_components[new_component] = errorId
+        if new_failed_components == {}:
+            return failed_components
+        return {**failed_components, **self.propagate_failures(new_failed_components)}
 
     def create_observation(self, issues):
         shop_name = list(issues.keys())[0]
