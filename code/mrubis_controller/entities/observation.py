@@ -11,6 +11,14 @@ class Component:
     importance: float
     criticality: float
     reliability: float
+    connectivity: float
+    provided_interface: float
+    required_interface: float
+    adt: float
+    perf_max: float
+    sat_point: float
+    replica: float
+    request: float
 
 @dataclass
 class AgentFix:

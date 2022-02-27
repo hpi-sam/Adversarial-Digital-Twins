@@ -5,7 +5,7 @@ from filelock import warnings
 import pandas as pd
 import numpy as np
 import wandb
-from entities.observation import ShopIssue, Fix, AgentFix, Issue, Observation, InitialState
+from entities.observation import ShopIssue, Fix, AgentFix, Issue, Observation, InitialState, Component
 from entities.fixes import Fixes
 from entities.component_failure import ComponentFailure
 from entities.components import Components
@@ -148,6 +148,7 @@ class ShopDigitalTwin:
         assert len(inital_state.components) == len(Components.list())
         self._healthy_shop_utility = inital_state.shop_utility
         self.initial_healthy_shop_utility = inital_state.shop_utility
+        self.initial_components = {comp.component_name: comp for comp in inital_state.components}
         for comp in inital_state.components:
             self.healthy_component_utilities[comp.component_name] = comp.utility
         self.healthy_component_utilities.to_csv("healthy.csv")
@@ -436,7 +437,27 @@ class ShopDigitalTwin:
                         )
                     ))
             issues.append(
-                Issue(component_name=component, utility=utility, criticality=criticality, importance=importance, reliability=reliability, failure_type=failure, fixes=fixes, shop_utility=0.0)
+                # Use initial state to set certain information as we reset
+                # the environment in every run
+                # If no reset -> Handle CF5 seperately (replicas property)
+                Issue(
+                    component_name=component,
+                    utility=utility,
+                    criticality=criticality,
+                    importance=importance,
+                    reliability=reliability,
+                    failure_type=failure,
+                    fixes=fixes,
+                    connectivity=self.initial_components[component].connectivity,
+                    provided_interface=self.initial_components[component].provided_interface,
+                    required_interface=self.initial_components[component].required_interface,
+                    adt=self.initial_components[component].adt,
+                    perf_max=self.initial_components[component].perf_max,
+                    sat_point=self.initial_components[component].sat_point,
+                    replica=self.initial_components[component].replica,
+                    request=self.initial_components[component].request,
+                    shop_utility=0.0
+                )
             )
             # Store the issue that was selected to be the initial failed component
             if component == failed_component:

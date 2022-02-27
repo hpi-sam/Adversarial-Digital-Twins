@@ -4,6 +4,8 @@ from time import time
 from typing import Dict, List, Union
 
 import re
+
+from tqdm import tqdm
 from agent.agent import Agent
 from digital_twin.digital_twin import DigitalTwin
 from entities.observation import AgentFix, ShopIssue, Observation, Issue, Fix, AppliedFix, InitialState, Component
@@ -38,7 +40,15 @@ def map_observation(mrubis_observation: Dict) -> Observation:
             shop_utility=0.0,
             criticality=float(details["criticality"]),
             importance=float(details["importance"]),
-            reliability=float(details["reliability"])
+            reliability=float(details["reliability"]),
+            connectivity=float(details["connectivity"]),
+            provided_interface=float(details["provided_interface"]),
+            required_interface=float(details["required_interface"]),
+            adt=float(details["adt"]),
+            perf_max=float(details["perf_max"]),
+            sat_point=float(details["sat_point"]),
+            replica=float(details["replica"]),
+            request=float(details["request"])
         )
         issues.append(issue)
     return Observation(
@@ -56,7 +66,15 @@ def map_initial_state(initial_state: Dict[str, Dict[str, Union[str, float]]]) ->
             utility=float(c_details["component_utility"]),
             criticality=float(c_details["criticality"]),
             importance=float(c_details["importance"]),
-            reliability=float(c_details["reliability"])
+            reliability=float(c_details["reliability"]),
+            connectivity=float(c_details["connectivity"]),
+            provided_interface=float(c_details["provided_interface"]),
+            required_interface=float(c_details["required_interface"]),
+            adt=float(c_details["adt"]),
+            perf_max=float(c_details["perf_max"]),
+            sat_point=float(c_details["sat_point"]),
+            replica=float(c_details["replica"]),
+            request=float(c_details["request"])
         ) for c_name, c_details in shop_details.items()]
         shop_state = InitialState(
             shop_name=shop_name,
@@ -89,8 +107,12 @@ class Trainer():
         self.optimizer = torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.003) # torch.optim.Adam(self.agent.fix_predictor.parameters(), lr=0.002)
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1000, gamma=0.1)
         
+    def reset(self):
+        self.train_real = True
+        self.mrubis_state = {}
+        self.mrubis_utilities = {}
 
-    def train(self, max_runs=500, num_exploration=0, num_synchronization=100000000000):
+    def train(self, max_runs=500, num_exploration=0, num_synchronization=1000000):
         #os.environ['WANDB_MODE'] = 'offline'
         torch.manual_seed(0)
         random.seed(0)
@@ -99,8 +121,9 @@ class Trainer():
         wandb.config.update({
             "learning_rate": 0.01,
             "epochs": max_runs,
-            "batch_size": 1
-        })
+            "batch_size": 1,
+            "num_synchronization": num_synchronization
+        }, allow_val_change=True)
         run_counter = 0
         self._get_initial_observation()
         for shop_name, state in self.mrubis_state.items():
@@ -108,15 +131,16 @@ class Trainer():
 
         observation_batch: List[Observation] = []
         explore = True
-        while run_counter < max_runs:
+        pbar = tqdm(total=max_runs, desc="Run")
+        for run_counter in range(max_runs):
+            pbar.update()
             if run_counter != 0 and run_counter % num_synchronization == 0:
                 self.train_real = not self.train_real
-                logging.info(f"train real: {self.train_real}")
             if run_counter == num_exploration:
                 explore = False
-
+            pbar.set_postfix({**(pbar.postfix if isinstance(pbar.postfix, dict) else {}), "real": self.train_real, "explore": explore})
             if self.train_real:
-                logging.info(f"RUN {run_counter}")
+                # logging.info(f"RUN {run_counter}")
                 number_of_issues = 1
                 num_issues_handled = 0
                 predicted_utilities = []
@@ -240,8 +264,6 @@ class Trainer():
                 if len(observation_batch) != 0:
                     self.train_digital_twin(observation_batch, step=run_counter)
                     observation_batch = []
-                logging.info(f"RUN {run_counter}")
-                logging.info("Using DigitalTwin")
                 predicted_utilities = []
 
                 # shop_name -> (fix vector, predicted utility)
@@ -327,10 +349,9 @@ class Trainer():
                 # self._update_current_state(state_after_action)
                 #TODO: Get reward & train predictors
                 #TODO: Think of digital twin training logic
-                run_counter+=1
                 self.train_agent(predicted_fixes_w_gradients, utility_differences, right_components_picked, True)
 
-    def train_agent(self, predicted_fixes_w_gradients, utility_differences, right_components_picked, digitial_twin = False):
+    def train_agent(self, predicted_fixes_w_gradients, utility_differences, right_components_picked, digitial_twin = False, pbar=None):
         # -------
         #   Optimzation step:
         # LOOP:
@@ -393,8 +414,10 @@ class Trainer():
         avg_attempts /= counter
         number_failed_components /= counter
         loss = 20*utility_loss + 5*rule_loss + fix_loss + ((100000 - utility_gain) * utility_scaling_factor) #+ all_rule_costs # + avg_attempts/20
-
-        print(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
+        
+        if pbar is not None:
+            pbar.set_postfix({**(pbar.postfix if isinstance(pbar.postfix, dict) else {}), "loss": loss.item(), "ut_loss": utility_loss.item(), "f_loss": fix_loss.item(), "att": avg_attempts})
+        logging.debug(f"Current loss: {loss/counter}, Utility loss: {utility_loss/counter}, Fix loss: {fix_loss/counter}, Average needed attempts: {avg_attempts/counter}, Average Utility Gain: {utility_gain/counter}")
         #logging.info(f"Current loss: {loss}, Utility loss: {utility_loss}, Fix loss: {fix_loss}")
         wandb.log({"loss": loss}, commit=False)
         wandb.log({"utility loss": utility_loss}, commit=False)
@@ -503,16 +526,16 @@ class Trainer():
         rule_names = [[fix.fix_type for fix in obs.fixes] for obs in observation]
 
         criticalities = [issue.criticality for issue in observation]
-        connectivities = [self.inital_state[issue.shop][issue.component_name]["connectivity"] for issue in observation]
+        connectivities = [issue.connectivity for issue in observation]
         reliabilities = [issue.reliability for issue in observation]
         importances = [issue.importance for issue in observation]
-        provided_interfaces = [self.inital_state[issue.shop][issue.component_name]["provided_interface"] for issue in observation]
-        required_interfaces = [self.inital_state[issue.shop][issue.component_name]["required_interface"] for issue in observation]
-        adts = [self.inital_state[issue.shop][issue.component_name]["adt"] for issue in observation]
-        perf_maxes = [self.inital_state[issue.shop][issue.component_name]["perf_max"] for issue in observation]
-        sat_points = [self.inital_state[issue.shop][issue.component_name]["sat_point"] for issue in observation]
-        replicas = [self.inital_state[issue.shop][issue.component_name]["replica"] for issue in observation]
-        requests = [self.inital_state[issue.shop][issue.component_name]["request"] for issue in observation]
+        provided_interfaces = [issue.provided_interface for issue in observation]
+        required_interfaces = [issue.required_interface for issue in observation]
+        adts = [issue.adt for issue in observation]
+        perf_maxes = [issue.perf_max for issue in observation]
+        sat_points = [issue.sat_point for issue in observation]
+        replicas = [issue.replica for issue in observation]
+        requests = [issue.request for issue in observation]
         rule_costs = [[fix.fix_cost for fix in obs.fixes] for obs in observation]
 
         padded_criticalities =np.zeros(len(all_components_list))
