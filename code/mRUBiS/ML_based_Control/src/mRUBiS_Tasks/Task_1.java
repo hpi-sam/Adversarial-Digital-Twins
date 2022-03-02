@@ -250,7 +250,26 @@ public class Task_1 {
 
 		while (!simulator.isSimulationCompleted()) { // = number of RUNS
 			run++;
+			architectureResource = EnvSetUp.loadFreshInstance("model/enriched/mRUBiS-10shop_enriched.comparch");
+			architecture = (Architecture) architectureResource.getContents().get(0);
 
+
+			// EMF Delete Optimization
+			if (useOptimization) {
+				((OptimizedMSLDMInstanceFacade) interpreter.getFacadeFactory().getInstanceFacade())
+				.initialize(Collections.singleton(architecture));
+			}
+
+			annotations = architecture.getAnnotations();
+			if (annotations == null) {
+				annotations = ComparchFactory.eINSTANCE.createAnnotations();
+				architecture.setAnnotations(annotations);
+			}
+
+
+			// attach event listener
+			architecture.eAdapters().add(new EventListener());
+			((Trace_Deterministic)strategy).setArchitecture(architecture);
 			// call the simulator to inject issues.
 			simulator.injectIssues();
 

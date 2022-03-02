@@ -29,6 +29,12 @@ public class Trace_Deterministic implements InjectionStrategy {
 
 	}
 
+		
+	public void setArchitecture(Architecture eArchitecture) {
+		this.eArchitecture = eArchitecture;
+	};
+
+
 	@Override
 	public List<Injection<? extends ArchitecturalElement>> getInjections(
 			int runCount) {
@@ -48,7 +54,7 @@ public class Trace_Deterministic implements InjectionStrategy {
 				
 				injections.add(new Injection<Component>(IssueType.CF1, this
 						.getComponent(2, 11)));
-				injections.add(new Injection<Component>(IssueType.CF1, this
+				injections.add(new Injection<Component>(IssueType.CF5, this
 						.getComponent(5, 13)));
 				injections.add(new Injection<Component>(IssueType.CF3, this
 						.getComponent(7, 15)));
@@ -140,7 +146,7 @@ public class Trace_Deterministic implements InjectionStrategy {
 				} else if (runCount%10 == 5) {
 					System.out.print("\n 5");
 				
-						injections.add(new Injection<Component>(IssueType.CF1, this
+						injections.add(new Injection<Component>(IssueType.CF5, this
 						.getComponent(8, 9)));
 					Component component = this.getComponent(1, 6);
 					injections.add(new Injection<ProvidedInterface>(IssueType.CF2,
@@ -160,16 +166,14 @@ public class Trace_Deterministic implements InjectionStrategy {
 			
 		} else if (runCount%10 == 7) {
 			System.out.print("\n 7");
-			injections.add(new Injection<Component>(IssueType.CF3, this
+			injections.add(new Injection<Component>(IssueType.CF5, this
 					.getComponent(2, 10)));
-				injections.add(new Injection<Component>(IssueType.CF3, this
+				injections.add(new Injection<Component>(IssueType.CF5, this
 						.getComponent(6, 14)));
-				injections.add(new Injection<Component>(IssueType.CF1, this
+				injections.add(new Injection<Component>(IssueType.CF5, this
 						.getComponent(5, 3)));
-				injections.add(new Injection<Component>(IssueType.CF3, this
+				injections.add(new Injection<Component>(IssueType.CF5, this
 						.getComponent(9, 7)));
-				injections.add(new Injection<ProvidedInterface>(IssueType.CF2, this
-						.getComponent(8, 7).getProvidedInterfaces().get(0)));
 			
 			} else if (runCount%10 == 8) {
 				System.out.print("\n 8");
@@ -188,7 +192,7 @@ public class Trace_Deterministic implements InjectionStrategy {
 				injections.add(new Injection<ProvidedInterface>(IssueType.CF2, this
 						.findMostCriticalComponent(5).getProvidedInterfaces()
 						.get(0)));
-				injections.add(new Injection<Component>(IssueType.CF3, this
+				injections.add(new Injection<Component>(IssueType.CF5, this
 						.findLeastCriticalComponent(2)));
 			
 			}  

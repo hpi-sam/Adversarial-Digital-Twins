@@ -23,10 +23,11 @@ public class ArchitectureUtilCal {
 
 	public static double computeShopUtility(Tenant shop) {
 		double shopUtility = 0;
+		// System.out.println("\n shop: " + shop.getName() + " num comps: " + shop.getComponents().size());
 		for (Component component : shop.getComponents()) {
 			shopUtility+=computeComponentUtility(component);
 		}
-		//System.out.println("\n shop utility: " + shopUtility);
+		// System.out.println("\n shop utility: " + shopUtility);
 		return shopUtility;
 	}
 
@@ -75,7 +76,7 @@ public class ArchitectureUtilCal {
 	//	System.out.println("\n Component utility: " + componentUtility);
 		componentUtility=componentUtility-computeUtilityDrop(component);
 		
-		//System.out.printf("\n -----Component Utility of "+component.getType().getName()+"  is  "+componentUtility);
+		// System.out.printf("\n -----Component Utility of "+component.getType().getName()+"  is  "+componentUtility);
 		
 		{
 			
@@ -93,7 +94,7 @@ public class ArchitectureUtilCal {
 			
 		}
 		
-			//System.out.println("\n\n !! Drop in Component " +component.getType().getName()+"Detected: " + utilityDrop);
+		// System.out.println("\n\n !! Drop in Component " +component.getType().getName()+"Detected: " + utilityDrop);
 		return utilityDrop;
 	}
 
